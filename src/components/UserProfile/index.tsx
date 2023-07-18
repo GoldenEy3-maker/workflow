@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
@@ -15,9 +16,11 @@ const UserProfile: React.FC<UserProfileProps> = ({
   return (
     <div className={cls([className, styles.userProfile])} {...props}>
       <div className={styles.img}>
-        <img
+        <Image
           src={image ?? "/images/avatar-placeholder.png"}
           alt="Фото профиля"
+          fill
+          sizes="50px"
         />
       </div>
       <span>{name}</span>

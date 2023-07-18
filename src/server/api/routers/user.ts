@@ -54,8 +54,6 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ input, ctx: { prisma } }) => {
       const { fullName, ...restInput } = input
 
-      await prisma.user.deleteMany()
-
       const alreadyExistUser = await prisma.user.findUnique({
         where: {
           email: input.email,
@@ -68,9 +66,6 @@ export const userRouter = createTRPCRouter({
       const hashedPassword = await bcrypt.hash(input.password, 10)
 
       const [lastName, firstName, middleName] = fullName.split(" ")
-
-      if (!lastName || !firstName || middleName === undefined)
-        throw ApiError.BadRequest("Некорректное полное имя!")
 
       const activateToken = tokenService.generateActivateToken({
         ...restInput,
@@ -134,7 +129,14 @@ export const userRouter = createTRPCRouter({
         throw ApiError.BadRequest("Такой пользователь уже активирован!")
 
       const newUser = await prisma.user.create({
-        data: activateTokenPayload
+        data: {
+          email: activateTokenPayload.email,
+          firstName: activateTokenPayload.firstName,
+          lastName: activateTokenPayload.lastName,
+          password: activateTokenPayload.password,
+          role: activateTokenPayload.role,
+          birthDate: new Date(activateTokenPayload.birthDate),
+        },
       })
 
       return { ...newUser }

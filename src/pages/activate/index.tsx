@@ -21,7 +21,7 @@ const useQueryToGetToken = (callback: (token: string) => void) => {
     if (!token || Array.isArray(token)) return
 
     callback(token)
-  }, [router.query, callback])
+  }, [router.query])
 }
 
 const ActivateUser: NextPageWithLayout = () => {

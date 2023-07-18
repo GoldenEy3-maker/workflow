@@ -1,3 +1,4 @@
+import Image from "next/image"
 import type { FilePreviewState } from "~/hooks/fileReader.hook"
 import { cls } from "~/utils/helpers"
 import Button from "../Button"
@@ -30,13 +31,15 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
       <label htmlFor={props.id}>
         <div className={styles.preview}>
-          <img
+          <Image
             src={
               previews
                 ? previews[0]?.base64
                 : currentImage ?? "/images/avatar-placeholder.png"
             }
             alt="Фото профиля"
+            fill
+            sizes="12.5rem"
           />
         </div>
 

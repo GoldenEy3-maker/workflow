@@ -50,6 +50,7 @@
 }
 
 .preview {
+  position: relative;
   background-color: hsl(var(--placeholder-hsl));
 
   border: 1px solid hsl(var(--outline-variant-hsl));
@@ -57,7 +58,7 @@
 
   overflow: hidden;
 
-  max-width: 12.5rem;
+  width: 12.5rem;
   aspect-ratio: 1;
 
   img {
