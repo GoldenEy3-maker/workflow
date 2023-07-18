@@ -41,3 +41,10 @@ export const getProdUrl = () => {
 export const getDevUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
+
+export const getBaseUrl = () => {
+  if (typeof window !== "undefined") return ""
+
+  return getProdUrl() ?? getDevUrl()
+}
+

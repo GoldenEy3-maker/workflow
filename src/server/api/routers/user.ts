@@ -7,7 +7,7 @@ import imageService from "~/services/image.service"
 import mailService from "~/services/mail.service"
 import tokenService from "~/services/token.service"
 import { CookieKeys } from "~/utils/enums"
-import { getDevUrl, getProdUrl } from "~/utils/helpers"
+import { getBaseUrl, getDevUrl, getProdUrl } from "~/utils/helpers"
 import { authedProcedure, createTRPCRouter, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -82,7 +82,7 @@ export const userRouter = createTRPCRouter({
 
       await mailService.sendLink(
         input.email,
-        `${getProdUrl() ?? getDevUrl()}/activate?token=${activateToken}`
+        `${getBaseUrl()}/activate?token=${activateToken}`
       )
 
       return activateToken

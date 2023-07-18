@@ -4,13 +4,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
 import superjson from "superjson"
 import { type AppRouter } from "~/server/api/root"
 import { useAuthStore } from "~/store/auth"
-import { getDevUrl, getProdUrl } from "./helpers"
-
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""
-
-  return getProdUrl() ?? getDevUrl()
-}
+import { getBaseUrl } from "./helpers"
 
 export const api = createTRPCNext<AppRouter>({
   config() {
@@ -31,7 +25,7 @@ export const api = createTRPCNext<AppRouter>({
 
             if (response.status === 401) {
               const refreshResponse = await fetch(
-                `${getProdUrl() ?? getDevUrl()}/api/refresh_token`,
+                `${getBaseUrl()}/api/refresh_token`,
                 {
                   method: "POST",
                   credentials: "include",
