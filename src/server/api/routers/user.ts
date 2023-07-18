@@ -54,6 +54,8 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ input, ctx: { prisma } }) => {
       const { fullName, ...restInput } = input
 
+      await prisma.user.deleteMany()
+
       const alreadyExistUser = await prisma.user.findUnique({
         where: {
           email: input.email,
@@ -112,8 +114,12 @@ export const userRouter = createTRPCRouter({
     Cookies.remove(CookieKeys.RefreshToken)
   }),
   activate: publicProcedure
-    .input(z.string())
+    .input(z.string().nullable())
     .mutation(async ({ input, ctx: { prisma } }) => {
+      const token = input
+
+      if (!token) throw ApiError.BadRequest("Отсутствует откен активации!")
+
       const activateTokenPayload = tokenService.verifyActivateToken(input)
 
       if (!activateTokenPayload)

@@ -30,12 +30,13 @@ const SignIn: NextPageWithLayout = () => {
   const router = useRouter()
 
   const signInMut = api.user.signIn.useMutation({
-    onSuccess(data) {
+    async onSuccess(token) {
       toast.success("Авторизация прошла успешно!")
 
-      useAuthStore.setState({ token: data })
+      useAuthStore.setState({ token })
 
-      void router.push(PagePaths.Home)
+      const bol = await router.push(PagePaths.Home)
+      console.log("🚀 ~ file: index.tsx:39 ~ onSuccess ~ bol:", bol)
     },
     onError(e) {
       console.log("🚀 ~ file: index.tsx:41 ~ onError ~ e:", e)

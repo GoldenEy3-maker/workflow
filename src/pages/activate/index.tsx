@@ -1,6 +1,5 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Button from "~/components/Button"
 import Link from "~/components/Link"
 import LoadingSpin from "~/components/Loading/Spin"
 import AuthLayout from "~/layouts/Auth"
@@ -10,24 +9,25 @@ import { cls } from "~/utils/helpers"
 import { type NextPageWithLayout } from "~/utils/types"
 import styles from "./styles.module.scss"
 
-const useQueryToGetToken = (callback: (token: string) => void) => {
+const useQueryToGetToken = (callback: (token: string | null) => void) => {
   const router = useRouter()
 
   useEffect(() => {
-    const token = router.query
-      ? router.query[QueryKeys.ActivateUser.Token]
-      : null
+    let token: string | string[] | undefined | null =
+      router.query[QueryKeys.ActivateUser.Token]
 
-    if (!token || Array.isArray(token)) return
+    if (!token || Array.isArray(token)) token = null
 
     callback(token)
   }, [router.query])
 }
 
 const ActivateUser: NextPageWithLayout = () => {
-  const router = useRouter()
-
-  const userActivateMut = api.user.activate.useMutation()
+  const userActivateMut = api.user.activate.useMutation({
+    onError(error) {
+      console.log("🚀 ~ file: index.tsx:33 ~ onError ~ error:", error)
+    },
+  })
 
   useQueryToGetToken((token) => userActivateMut.mutate(token))
 
@@ -39,11 +39,10 @@ const ActivateUser: NextPageWithLayout = () => {
         <>
           <div
             className={cls([styles.icon], {
-              [styles._danger]:
-                userActivateMut.isError || userActivateMut.isIdle,
+              [styles._danger]: userActivateMut.isError,
             })}
           >
-            {userActivateMut.isError || userActivateMut.isIdle ? (
+            {userActivateMut.isError ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="4em"
@@ -68,8 +67,6 @@ const ActivateUser: NextPageWithLayout = () => {
             <p>
               {userActivateMut.isError
                 ? userActivateMut.error.message
-                : userActivateMut.isIdle
-                ? "Отсутсвует токен активации!"
                 : "Ваш аккаунт успешно активирован!"}
             </p>
           </div>
@@ -78,14 +75,6 @@ const ActivateUser: NextPageWithLayout = () => {
               <Link href={PagePaths.SignUp} title="Зарегистрироваться">
                 Зарегистрироваться
               </Link>
-            ) : userActivateMut.isIdle ? (
-              <Button
-                variant="elevated"
-                onClick={() => router.back()}
-                title="Вернуться назад"
-              >
-                Вернуться назад
-              </Button>
             ) : (
               <Link href={PagePaths.SignIn} title="Войти">
                 Войти

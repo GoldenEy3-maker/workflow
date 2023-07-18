@@ -11,15 +11,20 @@ import styles from "./styles.module.scss"
 
 const MainLayout: React.FC<React.PropsWithChildren> = (props) => {
   const router = useRouter()
-  const currentUserQuery = api.user.getCurrent.useQuery()
+  const currentUserQuery = api.user.getCurrent.useQuery(undefined, {
+    retry: false,
+  })
 
   useEffect(() => {
-    useAuthStore.setState({ user: currentUserQuery.data })
-  }, [currentUserQuery.data])
-
-  if (currentUserQuery.error) {
-    void router.push(PagePaths.SignIn)
-  }
+    if (!currentUserQuery.isLoading && currentUserQuery.error)
+      void router.push(PagePaths.SignIn)
+    else useAuthStore.setState({ user: currentUserQuery.data })
+  }, [
+    currentUserQuery.data,
+    currentUserQuery.error,
+    currentUserQuery.isLoading,
+    router,
+  ])
 
   return (
     <>
