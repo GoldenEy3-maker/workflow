@@ -1,9 +1,24 @@
-import { type AppType } from "next/app";
-import { api } from "~/utils/api";
-import "~/styles/globals.css";
+import { type AppProps } from "next/app"
+import "react-loading-skeleton/dist/skeleton.css"
+import { SkeletonThemeProvider } from "~/components/SkeletonTheme"
+import ToastContainer from "~/components/ToastContainer"
+import "~/styles/global.scss"
+import { api } from "~/utils/api"
+import { type NextPageWithLayout } from "~/utils/types"
 
-const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
-};
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
 
-export default api.withTRPC(MyApp);
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout || ((page) => page)
+
+  return (
+    <SkeletonThemeProvider>
+      <div className="wrapper">{getLayout(<Component {...pageProps} />)}</div>
+      <ToastContainer />
+    </SkeletonThemeProvider>
+  )
+}
+
+export default api.withTRPC(MyApp)

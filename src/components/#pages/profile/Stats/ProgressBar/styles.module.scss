@@ -1,0 +1,54 @@
+@use "sass:math";
+
+.progressCircle {
+  --_progress-clr: var(--primary-hsl);
+
+  position: relative;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: var(--title-l-fs);
+  color: hsla(var(--_progress-clr));
+
+  &.danger {
+    --_progress-clr: var(--danger-hsl);
+  }
+
+  &.success {
+    --_progress-clr: var(--success-hsl);
+  }
+
+  svg {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    .bg {
+      stroke-width: 8px;
+      stroke: hsl(var(--surface-container-high-hsl));
+    }
+
+    .progress {
+      stroke-width: 8px;
+      stroke: hsla(var(--_progress-clr));
+      stroke-linecap: round;
+      rotate: -90deg;
+      transform-origin: 50% 50%;
+      animation: progress 2s ease-in-out;
+    }
+  }
+}
+
+@keyframes progress {
+  from {
+    stroke-dashoffset: var(--_anim-from);
+  }
+
+  to {
+    stroke-dashoffset: var(--_anim-to);
+  }
+}

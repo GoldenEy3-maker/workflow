@@ -1,0 +1,17 @@
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  span {
+    flex-shrink: 0;
+  }
+
+  p {
+    font-size: var(--display-s-fs);
+  }
+
+  b {
+    color: hsl(var(--primary-hsl));
+  }
+}

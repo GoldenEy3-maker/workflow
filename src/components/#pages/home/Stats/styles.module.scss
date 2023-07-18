@@ -1,0 +1,97 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  row-gap: 2rem;
+}
+
+.item {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  padding-inline: 2rem;
+
+  border-left: 2px dashed hsl(var(--outline-hsl));
+
+  &:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+
+  &Header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &Title {
+    font-size: var(--title-l-fs);
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &Progress {
+    --_clr: var(--primary-hsl);
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--large-shape);
+    background-color: hsl(var(--primary-container-hsl));
+
+    p {
+      font-size: var(--body-m-fs);
+      line-height: 100%;
+      color: hsl(var(--_clr));
+    }
+
+    span {
+      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      rotate: 180deg;
+
+      svg {
+        fill: hsl(var(--_clr));
+      }
+    }
+
+    &._success {
+      --_clr: var(--success-hsl);
+      background-color: hsl(var(--success-container-hsl));
+    }
+
+    &._danger {
+      --_clr: var(--danger-hsl);
+      background-color: hsl(var(--danger-container-hsl));
+
+      span {
+        rotate: 0deg;
+      }
+    }
+  }
+
+  &Value {
+    font-size: var(--headline-l-fs);
+    color: hsl(var(--primary-hsl));
+    font-weight: 500;
+  }
+
+  &Extra {
+    font-size: var(--body-m-fs);
+  }
+}

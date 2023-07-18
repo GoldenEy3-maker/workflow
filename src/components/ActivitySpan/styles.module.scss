@@ -1,0 +1,13 @@
+.activitySpan {
+  &._danger {
+    color: hsl(var(--danger-hsl));
+  }
+
+  &._warning {
+    color: hsl(var(--warning-hsl));
+  }
+
+  &._success {
+    color: hsl(var(--primary-hsl));
+  }
+}

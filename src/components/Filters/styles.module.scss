@@ -1,0 +1,145 @@
+.root {
+  position: relative;
+}
+
+.content {
+  --_gap: 1em;
+  --_label-inline-pd: 0.7em;
+  --_content-inline-pd: 0.3em;
+
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--_gap);
+
+  opacity: 0;
+  visibility: hidden;
+
+  width: max-content;
+  min-width: 15em;
+
+  background-color: hsl(var(--surface-container-high-hsl));
+
+  border-radius: var(--medium-shape);
+
+  overflow: hidden;
+
+  padding: 0.7em var(--_content-inline-pd);
+
+  transition: 200ms ease;
+
+  &[aria-hidden="false"] {
+    top: 120%;
+
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.group {
+  &:not(:last-child) {
+    &:after {
+      content: "";
+
+      display: block;
+      width: calc(100% - var(--_content-inline-pd) * 2);
+      height: 1px;
+
+      margin: var(--_gap) auto 0;
+
+      background-color: hsl(var(--outline-variant-hsl));
+    }
+  }
+
+  legend {
+    font-size: var(--body-m-fs);
+    color: hsl(var(--primary-hsl));
+    margin-bottom: 0.4em;
+
+    padding-inline: var(--_label-inline-pd);
+  }
+
+  &Container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+  }
+}
+
+.checkbox {
+  display: flex;
+
+  input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+
+    &:focus ~ label {
+      background-color: hsl(var(--primary-container-high-hsl));
+    }
+
+    &:checked ~ label {
+      span {
+        background-color: hsl(var(--primary-hsl));
+        border-color: hsl(var(--primary-hsl));
+
+        svg {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  label {
+    flex: 1;
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 0.7em var(--_label-inline-pd);
+
+    border-radius: var(--small-shape);
+
+    transition: 200ms ease;
+
+    p {
+      user-select: none;
+    }
+
+    span {
+      --_border: 2px;
+
+      flex-shrink: 0;
+
+      width: calc(1em + var(--_border) * 2);
+      height: calc(1em + var(--_border) * 2);
+      border-radius: 3px;
+      border: var(--_border) solid hsl(var(--outline-hsl));
+
+      transition: 200ms ease;
+
+      svg {
+        opacity: 0;
+        visibility: hidden;
+
+        transition: 200ms ease;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: hsl(var(--primary-container-highest-hsl)) !important;
+      }
+    }
+  }
+}

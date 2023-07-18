@@ -1,0 +1,15 @@
+.page {
+  display: grid;
+  place-items: center;
+  padding-block: var(--safe-area-pd);
+
+  min-height: 100svh;
+}
+
+.wrapper {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background-color: hsl(var(--surface-container-hsl));
+  border-radius: var(--medium-shape);
+}

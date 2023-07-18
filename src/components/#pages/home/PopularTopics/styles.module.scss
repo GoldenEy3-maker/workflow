@@ -1,0 +1,25 @@
+.list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &Wrapper {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    span {
+      font-size: 32px;
+    }
+  }
+}
+.value {
+  color: hsl(var(--primary-hsl));
+}

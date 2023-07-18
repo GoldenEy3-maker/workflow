@@ -1,0 +1,40 @@
+.link {
+  --_clr: var(--primary-hsl);
+  --_bg-clr: var(--primary-container-hsl);
+
+  position: relative;
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+
+  border-radius: 40px;
+
+  color: hsl(var(--_clr));
+
+  background-color: hsl(var(--_bg-clr));
+
+  transition: 200ms ease;
+
+  svg {
+    fill: hsl(var(--_clr));
+  }
+
+  &:focus {
+    --_bg-clr: var(--primary-container-high-hsl);
+    background-color: hsl(var(--_bg-clr));
+
+    outline: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      --_bg-clr: var(--primary-container-highest-hsl);
+      background-color: hsl(var(--_bg-clr));
+    }
+  }
+}

@@ -1,0 +1,43 @@
+.root {
+
+
+}
+
+.head {
+  border-bottom: 1px solid hsl(var(--outline-hsl));
+  padding-bottom: 0.5rem;
+
+  .cell {
+    color: hsl(0, 0%, 60%);
+  }
+}
+
+.body {
+  padding-top: 1rem;
+
+  display: grid;
+  gap: 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--_template);
+  gap: 1rem;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  overflow: hidden;
+
+  &:first-child {
+    justify-content: flex-start;
+  }
+
+  //&:last-child {
+  //  justify-content: flex-end;
+  //}
+}

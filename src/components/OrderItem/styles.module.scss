@@ -1,0 +1,146 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding: 2rem;
+
+  background-color: hsl(var(--surface-container-hsl));
+  border-radius: var(--large-shape);
+
+  &._extended {
+    background-color: hsl(var(--surface-hsl));
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 1.5em;
+
+  ._extended & {
+    align-items: flex-start;
+  }
+}
+
+.title {
+  flex: 1;
+
+  font-size: var(--title-l-fs);
+  font-weight: 500;
+  color: hsl(var(--primary-hsl));
+
+  &:not(._extended &) {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.extraInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.price {
+  font-size: var(--body-extra-fs);
+  white-space: nowrap;
+}
+
+.verified {
+  flex-shrink: 0;
+
+  svg {
+    fill: hsl(var(--success-hsl));
+  }
+
+  &._warning {
+    svg {
+      fill: hsl(var(--warning-hsl));
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+
+  &Item {
+    display: flex;
+    align-items: center;
+    // gap: 0.5rem;
+
+    color: hsl(0, 0%, 60%);
+
+    svg {
+      fill: hsl(0, 0%, 60%);
+    }
+
+    &:not(:last-child) {
+      &:after {
+        content: "";
+
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        margin-inline: 1.5rem;
+
+        background-color: hsl(0, 0%, 60%);
+      }
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.description {
+  &:not(._extended &) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  a {
+    color: hsl(var(--primary-hsl));
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  ul {
+    li {
+      list-style: inside;
+    }
+  }
+
+  ol {
+    list-style-position: inside;
+  }
+}

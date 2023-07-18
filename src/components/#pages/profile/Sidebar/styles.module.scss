@@ -1,0 +1,93 @@
+.sidebar {
+  position: sticky;
+  top: 1rem;
+  left: 0;
+
+  height: 100%;
+
+  flex: 0 1 20em;
+  max-width: 20em;
+
+  background-color: hsl(var(--surface-container-hsl));
+
+  border-radius: var(--medium-shape);
+
+  display: grid;
+  gap: 1rem;
+
+  padding: 1.5rem 2rem;
+  overflow: hidden;
+}
+
+.userInfo {
+  display: grid;
+  place-items: center;
+}
+
+.info {
+  display: grid;
+  gap: 0.3rem;
+
+  margin-top: 1em;
+  text-align: center;
+}
+
+.role {
+  color: hsl(var(--on-surface-variant-hsl));
+  font-weight: 500;
+}
+
+.fullName {
+  font-size: var(--title-l-fs);
+}
+
+.groupInfo {
+  hr {
+    width: 10rem;
+    margin-inline: auto;
+    height: 2px;
+    border-radius: 40px;
+    margin-bottom: 1em;
+
+    background-color: hsl(var(--outline-variant-hsl));
+  }
+
+  .list {
+    display: grid;
+    gap: 0.8em;
+
+    li {
+      --_clr: var(--primary-hsl);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      overflow: hidden;
+
+      &.success {
+        --_clr: var(--success-hsl);
+      }
+
+      &.danger {
+        --_clr: var(--danger-hsl);
+      }
+
+      span,
+      a {
+        color: hsl(var(--_clr));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      a {
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}

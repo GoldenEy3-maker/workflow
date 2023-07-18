@@ -1,0 +1,31 @@
+.chart {
+  flex: 0 1 1000px;
+}
+
+.tooltip {
+  pointer-events: none;
+
+  opacity: 1;
+
+  position: absolute;
+
+  background-color: hsla(274, 10%, 20%, 0.7);
+  backdrop-filter: blur(6px);
+  border-radius: var(--medium-shape);
+
+  padding: 0.5rem 1rem;
+
+  transform: translate(-50%, -100%);
+
+  transition: 200ms ease;
+
+  will-change: left top;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.content {
+  text-align: center;
+}

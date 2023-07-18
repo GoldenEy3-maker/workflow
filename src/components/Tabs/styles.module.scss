@@ -1,0 +1,84 @@
+.root {
+}
+
+.list {
+  position: relative;
+
+  &Container {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+
+  &Wrapper {
+    position: relative;
+    height: 2px;
+
+    &:after {
+      content: "";
+
+      position: absolute;
+      top: 0;
+      left: var(--offset);
+
+      width: var(--width);
+      height: 100%;
+
+      background-color: hsl(var(--primary-hsl));
+
+      transition: 200ms ease;
+    }
+  }
+}
+
+.item {
+  display: flex;
+
+  label {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+
+    transition: 200ms ease;
+  }
+
+  input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  &:focus-within {
+    label {
+      background-color: hsl(var(--surface-container-high-hsl));
+    }
+  }
+
+  &._active {
+    label {
+      color: hsl(var(--primary-hsl));
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    label:hover {
+      background-color: hsl(var(--surface-container-highest-hsl));
+    }
+
+    &._active {
+      label:hover {
+        background-color: hsl(var(--primary-container-hsl));
+      }
+    }
+  }
+}

@@ -1,37 +1,20 @@
-/**
- * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
- * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
- *
- * We also create a few inference helpers for input and output types.
- */
-import { httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
-import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
-import superjson from "superjson";
-import { type AppRouter } from "~/server/api/root";
+import { httpBatchLink, loggerLink } from "@trpc/client"
+import { createTRPCNext } from "@trpc/next"
+import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
+import superjson from "superjson"
+import { type AppRouter } from "~/server/api/root"
+import { useAuthStore } from "~/store/auth"
+import { getDevUrl, getProdUrl } from "./helpers"
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
-};
+  if (typeof window !== "undefined") return ""
 
-/** A set of type-safe react-query hooks for your tRPC API. */
+  return getProdUrl() ?? getDevUrl()
+}
+
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
-      /**
-       * Transformer used for data de-serialization from the server.
-       *
-       * @see https://trpc.io/docs/data-transformers
-       */
-      transformer: superjson,
-
-      /**
-       * Links used to determine request flow from client to server.
-       *
-       * @see https://trpc.io/docs/links
-       */
       links: [
         loggerLink({
           enabled: (opts) =>
@@ -40,28 +23,60 @@ export const api = createTRPCNext<AppRouter>({
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          async fetch(url, options) {
+            const response = await fetch(url, {
+              ...options,
+              credentials: "include",
+            })
+
+            if (response.status === 401) {
+              const refreshResponse = await fetch(
+                `${getProdUrl() ?? getDevUrl()}/api/refresh_token`,
+                {
+                  method: "POST",
+                  credentials: "include",
+                }
+              )
+
+              if (!refreshResponse.ok) {
+                return response
+              }
+
+              const refreshData = (await refreshResponse.json()) as {
+                accessToken: string
+              }
+
+              useAuthStore.setState({ token: refreshData.accessToken })
+
+              return await fetch(url, {
+                ...options,
+                credentials: "include",
+                headers: {
+                  ...options?.headers,
+                  authorization: `Bearer ${refreshData.accessToken}`,
+                },
+              })
+            }
+
+            return response
+          },
+          headers() {
+            const token = useAuthStore.getState().token
+
+            if (token)
+              return {
+                authorization: `Bearer ${token}`,
+              }
+
+            return {}
+          },
         }),
       ],
-    };
+      transformer: superjson,
+    }
   },
-  /**
-   * Whether tRPC should await queries when server rendering pages.
-   *
-   * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
-   */
   ssr: false,
-});
+})
 
-/**
- * Inference helper for inputs.
- *
- * @example type HelloInput = RouterInputs['example']['hello']
- */
-export type RouterInputs = inferRouterInputs<AppRouter>;
-
-/**
- * Inference helper for outputs.
- *
- * @example type HelloOutput = RouterOutputs['example']['hello']
- */
-export type RouterOutputs = inferRouterOutputs<AppRouter>;
+export type RouterInputs = inferRouterInputs<AppRouter>
+export type RouterOutputs = inferRouterOutputs<AppRouter>

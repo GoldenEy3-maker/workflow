@@ -1,0 +1,25 @@
+@import "./var.scss";
+@import "./default.scss";
+@import "./components/rippleEffect.scss";
+
+.wrapper {
+  display: flex;
+}
+
+._container {
+  width: 100%;
+  height: 100%;
+  max-width: var(--container-mw);
+  padding-inline: var(--container-pdi);
+  margin-inline: auto;
+}
+
+.page-title {
+  font-size: var(--display-s-fs);
+  font-weight: 500;
+}
+
+.rich-text {
+  color: hsl(var(--primary-hsl));
+  font-weight: 500;
+}

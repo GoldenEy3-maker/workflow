@@ -1,0 +1,68 @@
+.root {
+  max-width: 18rem;
+
+  &.withGroups {
+    max-width: 40rem;
+  }
+}
+
+.inputs {
+  display: grid;
+  gap: 1rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  margin-top: 1.5rem;
+
+  &._flexEnd {
+    justify-content: flex-end;
+  }
+}
+
+.group {
+  display: flex;
+  gap: 1rem;
+}
+
+.response {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  transition: 200ms ease;
+
+  &Message {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+
+    color: hsl(var(--primary-hsl));
+    text-align: center;
+
+    white-space: pre-wrap;
+
+    overflow: hidden;
+
+    ._dangerMessage & {
+      color: hsl(var(--danger-hsl));
+    }
+
+    ._warningMessage & {
+      color: hsl(var(--warning-hsl));
+    }
+
+    ._successMessage & {
+      color: hsl(var(--success-hsl));
+    }
+  }
+
+  &[aria-hidden="false"] {
+    grid-template-rows: 1fr;
+
+    margin-top: 0.5rem;
+  }
+}
