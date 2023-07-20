@@ -1,5 +1,5 @@
 import { cls } from "~/utils/helpers"
-import styles from "./form.module.scss"
+import styles from "./styles.module.scss"
 
 export const Inputs: React.FC<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>

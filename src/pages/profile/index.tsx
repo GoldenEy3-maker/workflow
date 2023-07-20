@@ -1,24 +1,24 @@
 import Resume from "~/components/#pages/profile/Resume"
-import ProfileSidebar from "~/components/#pages/profile/Sidebar"
 import Stats from "~/components/#pages/profile/Stats"
 import MainLayout from "~/layouts/Main"
+import ProfileLayout from "~/layouts/Profile"
 import { type NextPageWithLayout } from "~/utils/types"
-import styles from "./styles.module.scss"
 
 const Profile: NextPageWithLayout = () => {
   return (
-    <main className={styles.profile}>
-      <ProfileSidebar />
-      <div className={styles.wrapper}>
-        <Stats />
-        <Resume />
-      </div>
-    </main>
+    <>
+      <Stats />
+      <Resume />
+    </>
   )
 }
 
 Profile.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>
+  return (
+    <MainLayout>
+      <ProfileLayout>{page}</ProfileLayout>
+    </MainLayout>
+  )
 }
 
 export default Profile

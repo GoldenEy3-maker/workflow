@@ -5,6 +5,7 @@ export const PagePaths = {
   SignIn: "/sign-in",
   SignUp: "/sign-up",
   Profile: "/profile",
+  CreateResume: "/profile/resume/create",
   Orders: "/orders",
   Favorite: "/favorites",
   ActivateUser: "/activate",
@@ -20,9 +21,8 @@ export const QueryKeys = {
     Tab: "tab",
   },
   ActivateUser: {
-    Token: "token"
-  }
-
+    Token: "token",
+  },
 } as const
 
 export const CookieKeys = {

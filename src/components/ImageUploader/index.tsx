@@ -28,7 +28,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className={cls([className, styles.uploader])}>
       <input type="file" {...props} />
-
       <label htmlFor={props.id}>
         <div className={styles.preview}>
           <Image
@@ -39,10 +38,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             }
             alt="Фото профиля"
             fill
-            sizes="12.5rem"
+            sizes="100vw"
           />
         </div>
-
         <Button
           variant="filled"
           clrType="danger"
@@ -61,7 +59,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </svg>
         </Button>
-
         <Button
           className={styles.submit}
           type="submit"

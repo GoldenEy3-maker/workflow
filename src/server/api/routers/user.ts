@@ -54,8 +54,6 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ input, ctx: { prisma } }) => {
       const { fullName, ...restInput } = input
 
-      await prisma.user.deleteMany()
-
       const alreadyExistUser = await prisma.user.findUnique({
         where: {
           email: input.email,

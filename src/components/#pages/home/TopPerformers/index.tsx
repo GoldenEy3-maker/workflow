@@ -9,7 +9,7 @@ const TopPerformers: React.FC = () => {
     <Section.Root>
       <Section.Header>
         <Section.Title>Топ исполнители месяца</Section.Title>
-        <Link href="#" title="Посмотреть всех">Посмотреть всех</Link>
+        <Link variant="elevated" href="#" title="Посмотреть всех">Посмотреть всех</Link>
       </Section.Header>
       <Section.Content>
         <Table.Root template="1fr 0.5fr 0.5fr 0.5fr">

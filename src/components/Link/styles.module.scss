@@ -1,6 +1,6 @@
 .link {
   --_clr: var(--primary-hsl);
-  --_bg-clr: var(--primary-container-hsl);
+  --_bg-clr: transparent;
 
   position: relative;
   overflow: hidden;
@@ -20,21 +20,45 @@
 
   transition: 200ms ease;
 
+  &.elevated {
+    --_bg-clr: var(--primary-container-hsl);
+  }
+
+  &.filled {
+    --ripple-hsl: var(--surface-hsl);
+    --_clr: var(--on-primary-hsl);
+    --_bg-clr: var(--primary-hsl);
+  }
+
   svg {
     fill: hsl(var(--_clr));
   }
 
   &:focus {
-    --_bg-clr: var(--primary-container-high-hsl);
-    background-color: hsl(var(--_bg-clr));
+    --_bg-clr: var(--primary-container-hsl);
 
     outline: none;
+
+    &.elevated {
+      --_bg-clr: var(--primary-container-high-hsl);
+    }
+
+    &.filled {
+      --_bg-clr: var(--primary-low-hsl);
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      --_bg-clr: var(--primary-container-highest-hsl);
-      background-color: hsl(var(--_bg-clr));
+      --_bg-clr: var(--primary-container-high-hsl);
+
+      &.elevated {
+        --_bg-clr: var(--primary-container-highest-hsl);
+      }
+
+      &.filled {
+        --_bg-clr: var(--primary-lowest-hsl);
+      }
     }
   }
 }

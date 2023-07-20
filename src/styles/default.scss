@@ -45,6 +45,14 @@ a:hover {
   text-decoration: none;
 }
 
+::-webkit-scrollbar {
+  width: 0.625rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary-lowest-hsl));
+}
+
 ::-moz-selection {
   color: hsl(var(--surface-hsl));
   background: hsl(var(--primary-hsl));

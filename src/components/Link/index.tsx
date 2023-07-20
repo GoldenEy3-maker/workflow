@@ -1,10 +1,12 @@
 import NextLink, { type LinkProps as NextLinkProps } from "next/link"
-import { forwardRef, useRef } from "react"
+import { forwardRef } from "react"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
-export type LinkProps = Omit<
+export type LinkProps = {
+  variant?: "elevated" | "filled"
+} & Omit<
   React.DetailedHTMLProps<
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
     HTMLAnchorElement
@@ -24,6 +26,7 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(
       className,
       children,
       onPointerDown,
+      variant, 
       ...props
     },
     ref
@@ -41,7 +44,10 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         legacyBehavior
       >
         <a
-          className={cls([className, styles.link])}
+          className={cls([className, styles.link], {
+            [styles.elevated ?? ""]: variant === "elevated",
+            [styles.filled ?? ""]: variant === "filled",
+          })}
           onPointerDown={(event) => {
             rippleEffectEvent(event)
 

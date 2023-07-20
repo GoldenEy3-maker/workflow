@@ -8,7 +8,7 @@ export type ButtonProps = {
   variant?: "elevated" | "filled"
   clrType?: "danger" | "success" | "warning"
   isIcon?: boolean
-  children?: ReactNode
+  isLoading?: boolean
 } & DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
@@ -16,7 +16,7 @@ export type ButtonProps = {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { children, className, onPointerDown, variant, clrType, isIcon, ...props },
+    { children, className, isLoading, onPointerDown, variant, clrType, isIcon, ...props },
     ref
   ) => {
     const rippleEffectEvent = useRippleEffect()
@@ -41,7 +41,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }}
         {...props}
       >
-        {isSubmitDisabled ? (
+        {isLoading || isSubmitDisabled ? (
           <span className={styles.loader}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         ) : null}
-        {isSubmitDisabled && isIcon ? null : children}
+        {isLoading || isSubmitDisabled && isIcon ? null : children}
       </button>
     )
   }

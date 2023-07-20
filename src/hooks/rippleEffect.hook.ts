@@ -8,6 +8,8 @@ export const useRippleEffect = () => {
     const target = event.currentTarget
     const nestedInteractionNodes = target.querySelectorAll("button, input, a")
 
+    if ((target as HTMLButtonElement | HTMLInputElement).disabled) return
+
     if (nestedInteractionNodes.length) {
       const isClickedOnNestedInteractionNode = Array.from(
         nestedInteractionNodes

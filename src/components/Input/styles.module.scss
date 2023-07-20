@@ -1,14 +1,13 @@
 .customInput {
   --_icons-size: 1.5rem;
-  --_icons-padding-inner: 0.5rem;
-  --_icons-padding-outer: 1rem;
   --_padding-left: 1rem;
   --_padding-right: 1rem;
   --_padding-top: 1.5rem;
-  --_add-inline-padding: 0.3rem;
+  --_add-inline-padding: 0rem;
   --_padding-bottom: 0.6rem;
 
-  max-width: 20em;
+  position: relative;
+  width: 20em;
 
   label {
     position: absolute;
@@ -43,16 +42,22 @@
   }
 
   &._withLeading {
+    --_leading-padding-inner: 0.7rem;
+    --_leading-padding-outer: 1rem;
+
     --_padding-left: calc(
-      var(--_icons-padding-inner) + var(--_icons-padding-outer) +
-        var(--_icons-size) + var(--_add-inline-padding)
+      var(--_leading-padding-inner) + var(--_leading-padding-outer) +
+        var(--_icons-size)
     );
   }
 
   &._withTrailing {
+    --_trailing-padding-inner: 0.2rem;
+    --_trailing-padding-outer: 0.5rem;
+
     --_padding-right: calc(
-      var(--_icons-padding-inner) + var(--_icons-padding-outer) +
-        var(--_icons-size) + var(--_add-inline-padding)
+      var(--_trailing-padding-inner) + var(--_trailing-padding-outer) +
+        var(--_icons-size) + 1rem
     );
   }
 
@@ -60,20 +65,16 @@
     label {
       top: 0.4rem;
       font-size: var(--body-s-fs);
-      color: hsla(var(--on-surface-hsl), 0.7);
+      color: hsl(var(--on-surface-variant-hsl));
     }
 
     input {
       color: hsl(var(--on-surface-hsl));
-
-      &::placeholder {
-        color: hsla(var(--on-surface-hsl), 0.5);
-      }
     }
 
     &._disabled {
       input {
-        color: hsl(var(--on-surface-hsl), 0.5);
+        color: hsl(var(--on-surface-variant-hsl));
       }
     }
   }
@@ -84,11 +85,11 @@
     }
 
     label {
-      color: hsl(var(--on-surface-hsl), 0.5);
+      color: hsl(var(--on-surface-variant-hsl));
     }
 
     svg {
-      fill: hsl(var(--on-surface-hsl), 0.5);
+      fill: hsl(var(--on-surface-variant-hsl));
     }
   }
 
@@ -109,6 +110,73 @@
 
     label {
       color: hsl(var(--primary-hsl));
+    }
+  }
+}
+
+.options {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+
+  width: 100%;
+
+  background-color: hsl(var(--surface-container-hsl));
+  border: 1px solid hsl(var(--outline-hsl));
+  border-radius: var(--medium-shape);
+
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateX(-50%) scale(0.9);
+
+  transform-origin: center;
+
+  transition: 200ms ease;
+
+  &[aria-hidden="false"] {
+    top: 110%;
+
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+  }
+
+  &Wrapper {
+    overflow: auto;
+    padding: 0.3em;
+    display: grid;
+    gap: 0.2em;
+    max-height: 10.7rem;
+  }
+}
+
+.option {
+  position: relative;
+  overflow: hidden;
+
+  border-radius: var(--small-shape);
+  text-align: left;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  padding: 0.5em 1em;
+
+  transition: 200ms ease;
+
+  &:focus {
+    outline: none;
+
+    background-color: hsl(var(--primary-container-hsl));
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: hsl(var(--primary-container-high-hsl));
     }
   }
 }
@@ -159,7 +227,7 @@
 
   height: 100%;
 
-  padding-inline: var(--_icons-padding-outer) var(--_icons-padding-inner);
+  padding-inline: var(--_leading-padding-outer) var(--_leading-padding-inner);
 
   svg {
     width: var(--_icons-size);
@@ -180,10 +248,16 @@
 
   height: 100%;
 
-  padding-inline: var(--_icons-padding-inner) var(--_icons-padding-outer);
+  padding-inline: var(--_trailing-padding-inner) var(--_trailing-padding-outer);
 
   svg {
     width: var(--_icons-size);
     height: var(--_icons-size);
+  }
+
+  &._rotated {
+    span {
+      transform: rotate(180deg);
+    }
   }
 }

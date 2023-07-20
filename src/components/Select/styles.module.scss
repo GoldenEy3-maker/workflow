@@ -12,7 +12,11 @@
 
 .trigger {
   display: flex;
-  font-weight: 400;
+  font-weight: normal;
+
+  button {
+    padding: 0.5em 1.5em;
+  }
 
   input {
     width: 0;
@@ -51,7 +55,7 @@
 
   max-width: 15em;
 
-  padding: 0.5rem 0.3rem;
+  padding: 0.3em;
 
   background-color: hsl(var(--surface-container-high-hsl));
 
@@ -77,7 +81,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
 
-    padding: 0.7rem 1rem;
+    padding: 0.5em 1em;
 
     transition: 200ms ease;
 

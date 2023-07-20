@@ -20,7 +20,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           src={image ?? "/images/avatar-placeholder.png"}
           alt="Фото профиля"
           fill
-          sizes="50px"
+          sizes="100vw"
         />
       </div>
       <span>{name}</span>
