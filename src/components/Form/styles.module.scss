@@ -1,13 +1,14 @@
 .root {
-  max-width: 18rem;
+  // max-width: 18rem;
 
   &.withGroups {
-    max-width: 40rem;
+    // max-width: 40rem;
   }
 }
 
 .inputs {
   display: grid;
+  // place-items: center;
   gap: 1rem;
 }
 
@@ -25,7 +26,8 @@
 }
 
 .group {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 

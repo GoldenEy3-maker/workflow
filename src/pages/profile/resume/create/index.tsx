@@ -1,10 +1,10 @@
-import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { BiAward } from "react-icons/bi"
 import { MdOutlineGrade } from "react-icons/md"
 import * as Form from "~/components/Form"
 import Input from "~/components/Input"
 import * as Section from "~/components/Section"
+import SlateEditor from "~/components/Slate"
 import MainLayout from "~/layouts/Main"
 import ProfileLayout from "~/layouts/Profile"
 import { api } from "~/utils/api"
@@ -98,6 +98,7 @@ const CreateResume: NextPageWithLayout = () => {
                 )}
               />
             </Form.Group>
+            <SlateEditor/>
           </Form.Inputs>
         </Form.Root>
       </Section.Content>

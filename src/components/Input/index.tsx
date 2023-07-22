@@ -149,11 +149,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 clrType={isOptionsEmpty ? "danger" : undefined}
                 isLoading={isOptionsLoading}
                 disabled={isOptionsLoading}
-                onClick={() =>
-                  isOptionsEmpty
-                    ? optionsReset && optionsReset()
-                    : setIsOptionsActive((prev) => !prev)
-                }
+                onClick={() => {
+                  if (isOptionsEmpty) {
+                    optionsReset && optionsReset()
+                    inputRef.current?.focus()
+
+                    return
+                  }
+
+                  setIsOptionsActive((prev) => !prev)
+                  inputRef.current?.focus()
+                }}
               >
                 {options.length > 0 ? (
                   <span>
