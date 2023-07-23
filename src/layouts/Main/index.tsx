@@ -1,8 +1,13 @@
+import { createServerSideHelpers } from "@trpc/react-query/server"
+import { type GetStaticProps } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
+import superjson from "superjson"
 import Header from "~/components/Header"
 import Sidebar from "~/components/Sidebar"
+import { appRouter } from "~/server/api/root"
+import { createTRPCContext } from "~/server/api/trpc"
 import { useAuthStore } from "~/store/auth"
 import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
@@ -11,6 +16,7 @@ import styles from "./styles.module.scss"
 
 const MainLayout: React.FC<React.PropsWithChildren> = (props) => {
   const router = useRouter()
+
   const currentUserQuery = api.user.getCurrent.useQuery(undefined, {
     retry: false,
   })

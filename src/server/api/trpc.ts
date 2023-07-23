@@ -1,4 +1,4 @@
-import { initTRPC } from "@trpc/server"
+import { initTRPC, type inferAsyncReturnType } from "@trpc/server"
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next"
 import superjson from "superjson"
 import { ZodError } from "zod"
@@ -6,15 +6,25 @@ import { prisma } from "~/server/db"
 import ApiError from "~/server/exeptions"
 import tokenService from "~/services/token.service"
 
-export const createTRPCContext = ({ req, res }: CreateNextContextOptions) => {
+export const createTRPCContextInner = () => {
   return {
     prisma,
-    req,
-    res,
   }
 }
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+export const createTRPCContext = (opts: Partial<CreateNextContextOptions>) => {
+  const contextInner = createTRPCContextInner()
+
+  return {
+    ...contextInner,
+    req: opts.req,
+    res: opts.res,
+  }
+}
+
+export type Context = inferAsyncReturnType<typeof createTRPCContext>
+
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -32,8 +42,20 @@ export const createTRPCRouter = t.router
 export const publicProcedure = t.procedure
 export const middleware = t.middleware
 
-const isAuthed = middleware(async ({ next, ctx: { req, prisma } }) => {
-  const accessToken = req.headers.authorization?.split(" ")[1]
+const isApi = middleware((opts) => {
+  if (!opts.ctx.req || !opts.ctx.res)
+    throw ApiError.ServerError("Отсутствуют части api процедуры!")
+
+  return opts.next({
+    ctx: {
+      req: opts.ctx.req,
+      res: opts.ctx.res,
+    },
+  })
+})
+
+const isAuthed = middleware(async (opts) => {
+  const accessToken = opts.ctx.req?.headers.authorization?.split(" ")[1]
 
   if (!accessToken) throw ApiError.Unauthorized()
 
@@ -49,9 +71,10 @@ const isAuthed = middleware(async ({ next, ctx: { req, prisma } }) => {
 
   if (!user) throw ApiError.Unauthorized()
 
-  return next({
+  return opts.next({
     ctx: { user },
   })
 })
 
+export const apiProcedure = t.procedure.use(isApi)
 export const authedProcedure = t.procedure.use(isAuthed)

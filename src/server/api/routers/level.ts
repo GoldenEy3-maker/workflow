@@ -1,25 +1,9 @@
-import { z } from "zod"
-import { authedProcedure, createTRPCRouter } from "../trpc"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const levelRouter = createTRPCRouter({
-  getAll: authedProcedure
-    .input(
-      z
-        .object({
-          filterValue: z.string().optional(),
-        })
-        .optional()
-    )
-    .query(async ({ input, ctx }) => {
-      const levels = await ctx.prisma.level.findMany({
-        where: {
-          value: {
-            contains: input?.filterValue ?? "",
-            mode: "insensitive",
-          },
-        },
-      })
+  getAll: publicProcedure.query(async (opts) => {
+    const levels = await opts.ctx.prisma.level.findMany()
 
-      return levels
-    }),
+    return levels
+  }),
 })

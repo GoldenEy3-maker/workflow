@@ -7,12 +7,17 @@ import imageService from "~/services/image.service"
 import mailService from "~/services/mail.service"
 import tokenService from "~/services/token.service"
 import { CookieKeys } from "~/utils/enums"
-import { getBaseUrl, getDevUrl, getProdUrl } from "~/utils/helpers"
-import { authedProcedure, createTRPCRouter, publicProcedure } from "../trpc"
+import { getBaseUrl } from "~/utils/helpers"
+import {
+  apiProcedure,
+  authedProcedure,
+  createTRPCRouter,
+  publicProcedure,
+} from "../trpc"
 
 export const userRouter = createTRPCRouter({
-  getCurrent: authedProcedure.query(({ ctx: { user } }) => {
-    return { ...user }
+  getCurrent: authedProcedure.query((opts) => {
+    return { ...opts.ctx.user }
   }),
   uploadAvatar: authedProcedure
     .input(
@@ -21,18 +26,19 @@ export const userRouter = createTRPCRouter({
         fileName: z.string(),
       })
     )
-    .mutation(async ({ input, ctx: { user, prisma } }) => {
+    .mutation(async (opts) => {
       const uploadedPath = await imageService.uploadAvatar({
-        base64: input.base64,
-        fileName: input.fileName,
-        userId: user.id,
+        base64: opts.input.base64,
+        fileName: opts.input.fileName,
+        userId: opts.ctx.user.id,
       })
 
-      if (user.avatar) await imageService.deleteAvatar(user.avatar)
+      if (opts.ctx.user.avatar)
+        await imageService.deleteAvatar(opts.ctx.user.avatar)
 
-      const updatedUser = await prisma.user.update({
+      const updatedUser = await opts.ctx.prisma.user.update({
         where: {
-          id: user.id,
+          id: opts.ctx.user.id,
         },
         data: {
           avatar: uploadedPath.path,
@@ -51,19 +57,19 @@ export const userRouter = createTRPCRouter({
         role: z.nativeEnum(Role),
       })
     )
-    .mutation(async ({ input, ctx: { prisma } }) => {
-      const { fullName, ...restInput } = input
+    .mutation(async (opts) => {
+      const { fullName, ...restInput } = opts.input
 
-      const alreadyExistUser = await prisma.user.findUnique({
+      const alreadyExistUser = await opts.ctx.prisma.user.findUnique({
         where: {
-          email: input.email,
+          email: opts.input.email,
         },
       })
 
       if (alreadyExistUser)
         throw ApiError.BadRequest("Такой пользователь уже существует!")
 
-      const hashedPassword = await bcrypt.hash(input.password, 10)
+      const hashedPassword = await bcrypt.hash(opts.input.password, 10)
 
       const [lastName, firstName, middleName] = fullName.split(" ")
 
@@ -76,35 +82,38 @@ export const userRouter = createTRPCRouter({
       })
 
       await mailService.sendLink(
-        input.email,
+        opts.input.email,
         `${getBaseUrl()}/activate?token=${activateToken}`
       )
 
       return activateToken
     }),
-  signIn: publicProcedure
+  signIn: apiProcedure
     .input(
       z.object({
         email: z.string(),
         password: z.string(),
       })
     )
-    .mutation(async ({ input, ctx: { prisma, req, res } }) => {
-      const user = await prisma.user.findUnique({
+    .mutation(async (opts) => {
+      const user = await opts.ctx.prisma.user.findUnique({
         where: {
-          email: input.email,
+          email: opts.input.email,
         },
       })
 
       if (!user) throw ApiError.BadRequest("Неверный логин или пароль!")
 
-      const isPwdMatched = await bcrypt.compare(input.password, user.password)
+      const isPwdMatched = await bcrypt.compare(
+        opts.input.password,
+        user.password
+      )
 
       if (!isPwdMatched) throw ApiError.BadRequest("Неверный логин или пароль!")
 
       const { accessToken, refreshToken } = tokenService.generateTokens(user)
 
-      tokenService.sendRefreshToken(refreshToken, req, res)
+      tokenService.sendRefreshToken(refreshToken, opts.ctx.req, opts.ctx.res)
 
       return accessToken
     }),
@@ -113,17 +122,17 @@ export const userRouter = createTRPCRouter({
   }),
   activate: publicProcedure
     .input(z.string().nullable())
-    .mutation(async ({ input, ctx: { prisma } }) => {
-      const token = input
+    .mutation(async (opts) => {
+      const token = opts.input
 
       if (!token) throw ApiError.BadRequest("Отсутствует откен активации!")
 
-      const activateTokenPayload = tokenService.verifyActivateToken(input)
+      const activateTokenPayload = tokenService.verifyActivateToken(token)
 
       if (!activateTokenPayload)
         throw ApiError.BadRequest("Невалидный токен активации аккаунта!")
 
-      const alreadyExistUser = await prisma.user.findUnique({
+      const alreadyExistUser = await opts.ctx.prisma.user.findUnique({
         where: {
           email: activateTokenPayload.email,
         },
@@ -132,7 +141,7 @@ export const userRouter = createTRPCRouter({
       if (alreadyExistUser)
         throw ApiError.BadRequest("Такой пользователь уже активирован!")
 
-      const newUser = await prisma.user.create({
+      const newUser = await opts.ctx.prisma.user.create({
         data: {
           email: activateTokenPayload.email,
           firstName: activateTokenPayload.firstName,

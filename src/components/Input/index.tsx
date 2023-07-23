@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -17,7 +18,6 @@ export type InputProps = {
   validError?: string | string[]
   options?: string[]
   optionHandler?: (value: string) => void
-  isOptionsLoading?: boolean
   optionsReset?: () => void
 } & React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -34,7 +34,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       validError,
       options,
       optionHandler,
-      isOptionsLoading,
       optionsReset,
       onFocus,
       onBlur,
@@ -51,13 +50,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const rippleEffectEvent = useRippleEffect()
 
-    const isOptionsEmpty = options?.length === 0 && !isOptionsLoading
+    const isOptionsEmpty = options?.length === 0
 
     const inputFocusHandler: React.FocusEventHandler<HTMLInputElement> = (
       event
     ) => {
       setIsActive(true)
       setIsFocus(true)
+      setIsOptionsActive(true)
 
       if (onFocus) onFocus(event)
     }
@@ -97,6 +97,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         if (!props.value) setIsActive(false)
       }
     }
+
+    const filterOptions = useCallback(
+      (options: string[]) => {
+        const inputValue = props.value
+
+        if (typeof inputValue !== "string") return options
+
+        return options.filter((value) =>
+          value.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      },
+      [props.value]
+    )
 
     useImperativeHandle(ref, () => inputRef.current!, [])
 
@@ -147,8 +160,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 type="button"
                 isIcon
                 clrType={isOptionsEmpty ? "danger" : undefined}
-                isLoading={isOptionsLoading}
-                disabled={isOptionsLoading}
                 onClick={() => {
                   if (isOptionsEmpty) {
                     optionsReset && optionsReset()
@@ -158,7 +169,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   }
 
                   setIsOptionsActive((prev) => !prev)
-                  inputRef.current?.focus()
+                  // inputRef.current?.focus()
                 }}
               >
                 {options.length > 0 ? (
@@ -194,7 +205,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {options && options.length > 0 ? (
           <div className={styles.options} aria-hidden={!isOptionsActive}>
             <div className={styles.optionsWrapper}>
-              {options.map((option, i) => (
+              {filterOptions(options).map((option, i) => (
                 <button
                   type="button"
                   key={i}

@@ -2,9 +2,17 @@ import { useCallback, useState } from "react"
 import {
   AiOutlineBold,
   AiOutlineItalic,
+  AiOutlineOrderedList,
   AiOutlineUnderline,
+  AiOutlineUnorderedList,
 } from "react-icons/ai"
-import { Editor, Element, Transforms, createEditor } from "slate"
+import {
+  RiAlignCenter,
+  RiAlignJustify,
+  RiAlignLeft,
+  RiAlignRight,
+} from "react-icons/ri"
+import { createEditor } from "slate"
 import {
   Editable,
   Slate,
@@ -15,9 +23,46 @@ import {
 import slateEditorService from "~/services/slateEditor.service"
 import Button from "../Button"
 import styles from "./styles.module.scss"
+import { AlignValues } from "./types"
 
 const DefaultElement = (props: RenderElementProps) => {
-  return <p {...props.attributes}>{props.children}</p>
+  return (
+    <p
+      style={{ textAlign: props.element.align ?? "left" }}
+      {...props.attributes}
+    >
+      {props.children}
+    </p>
+  )
+}
+
+const ListItemElement = (props: RenderElementProps) => {
+  return (
+    <li
+      style={{
+        textAlign: props.element.align ?? "left",
+      }}
+      {...props.attributes}
+    >
+      {props.children}
+    </li>
+  )
+}
+
+const NumberedListElement = (props: RenderElementProps) => {
+  return (
+    <ol style={{paddingLeft: "1.2em"}} {...props.attributes}>
+      {props.children}
+    </ol>
+  )
+}
+
+const BulletedListElement = (props: RenderElementProps) => {
+  return (
+    <ul style={{ paddingLeft: "1.2em" }} {...props.attributes}>
+      {props.children}
+    </ul>
+  )
 }
 
 const Leaf = (props: RenderLeafProps) => {
@@ -40,6 +85,12 @@ const SlateEditor: React.FC = () => {
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
+      case "numbered-list":
+        return <NumberedListElement {...props} />
+      case "bulleted-list":
+        return <BulletedListElement {...props} />
+      case "list-item":
+        return <ListItemElement {...props} />
       default:
         return <DefaultElement {...props} />
     }
@@ -65,7 +116,7 @@ const SlateEditor: React.FC = () => {
             <Button
               type="button"
               isIcon
-              onClick={() => slateEditorService.toggleBoldMark(editor)}
+              onClick={() => slateEditorService.toggleMark(editor, "bold")}
             >
               <AiOutlineBold />
             </Button>
@@ -74,7 +125,7 @@ const SlateEditor: React.FC = () => {
             <Button
               type="button"
               isIcon
-              onClick={() => slateEditorService.toggleItalicMark(editor)}
+              onClick={() => slateEditorService.toggleMark(editor, "italic")}
             >
               <AiOutlineItalic />
             </Button>
@@ -83,9 +134,76 @@ const SlateEditor: React.FC = () => {
             <Button
               type="button"
               isIcon
-              onClick={() => slateEditorService.toggleUnderlineMark(editor)}
+              onClick={() => slateEditorService.toggleMark(editor, "underline")}
             >
               <AiOutlineUnderline />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                slateEditorService.changeAlign(editor, AlignValues.Left)
+              }
+            >
+              <RiAlignLeft />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                slateEditorService.changeAlign(editor, AlignValues.Right)
+              }
+            >
+              <RiAlignRight />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                slateEditorService.changeAlign(editor, AlignValues.Center)
+              }
+            >
+              <RiAlignCenter />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                slateEditorService.changeAlign(editor, AlignValues.Justify)
+              }
+            >
+              <RiAlignJustify />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                // TODO: fix bug with untoggling list as fist element in editable area
+                slateEditorService.toggleBlock(editor, "numbered-list")
+              }
+            >
+              <AiOutlineOrderedList />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() =>
+                slateEditorService.toggleBlock(editor, "bulleted-list")
+              }
+            >
+              <AiOutlineUnorderedList />
             </Button>
           </div>
         </div>
@@ -119,15 +237,15 @@ const SlateEditor: React.FC = () => {
 
                 case "KeyB":
                   event.preventDefault()
-                  slateEditorService.toggleBoldMark(editor)
+                  slateEditorService.toggleMark(editor, "bold")
                   break
                 case "KeyI":
                   event.preventDefault()
-                  slateEditorService.toggleItalicMark(editor)
+                  slateEditorService.toggleMark(editor, "italic")
                   break
                 case "KeyU":
                   event.preventDefault()
-                  slateEditorService.toggleUnderlineMark(editor)
+                  slateEditorService.toggleMark(editor, "underline")
                   break
               }
             }}

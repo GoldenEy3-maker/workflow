@@ -1,37 +1,91 @@
-import { Editor } from "slate"
-import { type CustomEditor } from "../components/Slate/types"
+import { Editor, Element, Transforms } from "slate"
+import { type ValueOf } from "~/utils/types"
+import {
+  AlignValues,
+  ListTypes,
+  type CustomEditor,
+  type CustomElement,
+  type CustomText,
+} from "../components/Slate/types"
 
 export default new (class SlateEditorService {
-  isBoldMark(editor: CustomEditor) {
+  isMarkActive(editor: CustomEditor, format: keyof Omit<CustomText, "text">) {
     const marks = Editor.marks(editor)
-    return marks ? marks.bold === true : false
+    return marks ? marks[format] === true : false
   }
 
-  isItalicMark(editor: CustomEditor) {
-    const marks = Editor.marks(editor)
-    return marks ? marks.italic === true : false
+  isBlockActive(
+    editor: CustomEditor,
+    format: ValueOf<CustomElement>,
+    blockType: keyof Omit<CustomElement, "children"> = "type"
+  ) {
+    if (!editor.selection) return false
+
+    const [match] = Array.from(
+      Editor.nodes(editor, {
+        at: Editor.unhangRange(editor, editor.selection),
+        match: (n) =>
+          !Editor.isEditor(n) &&
+          Element.isElement(n) &&
+          n[blockType] === format,
+      })
+    )
+
+    return !!match
   }
 
-  isUnderlineMark(editor: CustomEditor) {
-    const marks = Editor.marks(editor)
-    return marks ? marks.underline === true : false
+  toggleBlock(editor: CustomEditor, format: ValueOf<CustomElement>) {
+    const isFormatAlignValues = Object.values(AlignValues).includes(
+      format as AlignValues
+    )
+
+    const isActive = this.isBlockActive(
+      editor,
+      format,
+      isFormatAlignValues ? "align" : "type"
+    )
+
+    const isList = Object.values(ListTypes).includes(format as ListTypes)
+
+    Transforms.unwrapNodes(editor, {
+      match: (n) =>
+        !Editor.isEditor(n) &&
+        Element.isElement(n) &&
+        Object.values(ListTypes).includes(n.type) &&
+        !isFormatAlignValues,
+      split: true,
+    })
+
+    Transforms.setNodes(
+      editor,
+      isFormatAlignValues
+        ? { align: isActive ? undefined : (format as AlignValues) }
+        : {
+            type: isActive
+              ? "paragraph"
+              : isList
+              ? "list-item"
+              : (format as ListTypes),
+          }
+    )
+
+    if (!isActive && isList) {
+      const block: CustomElement = { type: format as ListTypes, children: [] }
+      Transforms.wrapNodes(editor, block)
+    }
   }
 
-  toggleBoldMark(editor: CustomEditor) {
-    this.isBoldMark(editor)
-      ? Editor.removeMark(editor, "bold")
-      : Editor.addMark(editor, "bold", true)
+  toggleMark(editor: CustomEditor, format: keyof Omit<CustomText, "text">) {
+    this.isMarkActive(editor, format)
+      ? Editor.removeMark(editor, format)
+      : Editor.addMark(editor, format, true)
   }
 
-  toggleItalicMark(editor: CustomEditor) {
-    this.isItalicMark(editor)
-      ? Editor.removeMark(editor, "italic")
-      : Editor.addMark(editor, "italic", true)
-  }
-
-  toggleUnderlineMark(editor: CustomEditor) {
-    this.isUnderlineMark(editor)
-      ? Editor.removeMark(editor, "underline")
-      : Editor.addMark(editor, "underline", true)
+  changeAlign(editor: CustomEditor, align: AlignValues) {
+    Transforms.setNodes(
+      editor,
+      { align: align },
+      { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
+    )
   }
 })()
