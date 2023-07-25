@@ -50,8 +50,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const rippleEffectEvent = useRippleEffect()
 
-    const isOptionsEmpty = options?.length === 0
-
     const inputFocusHandler: React.FocusEventHandler<HTMLInputElement> = (
       event
     ) => {
@@ -111,6 +109,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       [props.value]
     )
 
+    const filteredOptions = options ? filterOptions(options) : undefined
+
     useImperativeHandle(ref, () => inputRef.current!, [])
 
     useEffect(() => {
@@ -150,7 +150,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={inputRef}
             {...props}
           />
-          {options && !trailingIcon ? (
+          {filteredOptions && !trailingIcon ? (
             <div
               className={cls([styles.trailing], {
                 [styles._rotated ?? ""]: isOptionsActive,
@@ -159,9 +159,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Button
                 type="button"
                 isIcon
-                clrType={isOptionsEmpty ? "danger" : undefined}
+                clrType={filteredOptions.length === 0 ? "danger" : undefined}
                 onClick={() => {
-                  if (isOptionsEmpty) {
+                  if (filteredOptions.length === 0) {
                     optionsReset && optionsReset()
                     inputRef.current?.focus()
 
@@ -169,10 +169,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   }
 
                   setIsOptionsActive((prev) => !prev)
-                  // inputRef.current?.focus()
                 }}
               >
-                {options.length > 0 ? (
+                {filteredOptions.length > 0 ? (
                   <span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -202,10 +201,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className={styles.errorMessage}>
           <p>{validError}</p>
         </div>
-        {options && options.length > 0 ? (
+        {filteredOptions && filteredOptions.length > 0 ? (
           <div className={styles.options} aria-hidden={!isOptionsActive}>
             <div className={styles.optionsWrapper}>
-              {filterOptions(options).map((option, i) => (
+              {filteredOptions.map((option, i) => (
                 <button
                   type="button"
                   key={i}

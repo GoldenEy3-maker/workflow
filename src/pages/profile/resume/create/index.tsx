@@ -5,6 +5,7 @@ import { MdOutlineGrade } from "react-icons/md"
 import Button from "~/components/Button"
 import * as Form from "~/components/Form"
 import Input from "~/components/Input"
+import OptionList from "~/components/OptionList"
 import * as Section from "~/components/Section"
 import SlateEditor from "~/components/Slate"
 import MainLayout from "~/layouts/Main"
@@ -17,12 +18,20 @@ import styles from "./styles.module.scss"
 const FormStateKeys = {
   Speciality: "speciality",
   Level: "level",
+  Bio: "bio",
 } as const
 
+const FormOptionKeys = {
+  Skills: "skills",
+} as const
+
+type FormOptionKeys = ValueOf<typeof FormOptionKeys>
 type FormStateKeys = ValueOf<typeof FormStateKeys>
 
 type FormState = {
   [Key in FormStateKeys]: string
+} & {
+  [Key in FormOptionKeys]: string[]
 }
 
 const CreateResume: NextPageWithLayout = () => {
@@ -30,6 +39,8 @@ const CreateResume: NextPageWithLayout = () => {
     defaultValues: {
       speciality: "",
       level: "",
+      bio: "",
+      skills: [],
     },
   })
 
@@ -42,6 +53,20 @@ const CreateResume: NextPageWithLayout = () => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   })
+
+  const skillQuery = api.skill.getAll.useQuery(undefined, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const changeSkillsHandler = (value: string) => {
+    hookForm.setValue(
+      "skills",
+      hookForm.watch("skills").includes(value)
+        ? hookForm.getValues("skills").filter((skill) => skill !== value)
+        : [...hookForm.getValues("skills"), value]
+    )
+  }
 
   return (
     <Section.Root>
@@ -89,10 +114,20 @@ const CreateResume: NextPageWithLayout = () => {
                 )}
               />
             </Form.Group>
-            <SlateEditor />
+            <SlateEditor
+              onChange={(value) => hookForm.setValue("bio", value)}
+              label="Расскажите о себе"
+            />
+            <OptionList
+              values={skillQuery.data?.map((skill) => skill.value)}
+              label="Укажите свои навыки"
+              currentState={hookForm.getValues("skills")}
+              onChange={changeSkillsHandler}
+              reset={() => hookForm.setValue("skills", [])}
+            />
           </Form.Inputs>
           <Form.Actions flexEnd>
-            <Button variant="elevated">Опубликовать</Button>
+            <Button variant="filled">Опубликовать</Button>
           </Form.Actions>
         </Form.Root>
       </Section.Content>
@@ -105,6 +140,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   await ssg.level.getAll.prefetch()
   await ssg.speciality.getAll.prefetch()
+  await ssg.skill.getAll.prefetch()
 
   return {
     props: {

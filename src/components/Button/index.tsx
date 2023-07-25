@@ -1,4 +1,3 @@
-import type { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from "react"
 import { forwardRef } from "react"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
@@ -9,14 +8,23 @@ export type ButtonProps = {
   clrType?: "danger" | "success" | "warning"
   isIcon?: boolean
   isLoading?: boolean
-} & DetailedHTMLProps<
-  ButtonHTMLAttributes<HTMLButtonElement>,
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { children, className, isLoading, onPointerDown, variant, clrType, isIcon, ...props },
+    {
+      children,
+      className,
+      isLoading,
+      onPointerDown,
+      variant,
+      clrType,
+      isIcon,
+      ...props
+    },
     ref
   ) => {
     const rippleEffectEvent = useRippleEffect()
@@ -53,7 +61,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         ) : null}
-        {isLoading || isSubmitDisabled && isIcon ? null : children}
+        {isLoading || (isSubmitDisabled && isIcon) ? null : children}
       </button>
     )
   }

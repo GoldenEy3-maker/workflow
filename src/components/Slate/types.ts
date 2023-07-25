@@ -13,38 +13,31 @@ export type AlignValues = ValueOf<typeof AlignValues>
 
 export const ListTypes = {
   NumberedList: "numbered-list",
-  BulletedList: "bulleted-list"
+  BulletedList: "bulleted-list",
 } as const
 
 export type ListTypes = ValueOf<typeof ListTypes>
 
+export const ElementTypes = {
+  Paragraph: "paragraph",
+  NumberedList: "numbered-list",
+  BulletedList: "bulleted-list",
+  ListItem: "list-item",
+  Link: "link",
+} as const
+
+export type ElementTypes = ValueOf<typeof ElementTypes>
+
 export type CustomEditor = BaseEditor & ReactEditor
 
-export type ParagraphElement = {
-  type: "paragraph"
+export type CustomElement = {
+  type: ElementTypes
   align?: AlignValues
+  url?: string
   children: Descendant[]
 }
 
-export type NumberedListElement = {
-  type: "numbered-list"
-  align?: AlignValues
-  children: Descendant[]
-}
-
-export type BulletedListElemenet = {
-  type: "bulleted-list"
-  align?: AlignValues
-  children: Descendant[]
-}
-
-export type ListItemElement = {
-  type: "list-item"
-  align?: AlignValues
-  children: Descendant[]
-}
-
-export type CustomElement = ParagraphElement | NumberedListElement | ListItemElement | BulletedListElemenet
+export type EditorFormatting = ElementTypes | AlignValues
 
 export type CustomText = {
   text: string

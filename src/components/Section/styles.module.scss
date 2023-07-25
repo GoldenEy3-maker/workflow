@@ -31,11 +31,6 @@
   align-items: center;
   gap: 0.5em;
 
-  // flex: 1;
-  // text-overflow: ellipsis;
-  // white-space: nowrap;
-  // overflow: hidden;
-
   font-size: var(--headline-m-fs);
   font-weight: 500;
 
@@ -45,8 +40,6 @@
 }
 
 .content {
-  // padding-top: 0.75em;
-
   &._center {
     display: grid;
     place-items: center;

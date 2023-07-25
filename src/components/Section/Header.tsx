@@ -2,19 +2,19 @@ import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
 type HeaderProps = {
-  isCenter?: boolean
+  centered?: boolean
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 
 export const Header: React.FC<HeaderProps> = ({
   className,
   children,
-  isCenter,
+  centered,
   ...props
 }) => {
   return (
     <header
       className={cls([className, styles.header], {
-        [styles._center ?? ""]: !!isCenter,
+        [styles._center ?? ""]: !!centered,
       })}
       {...props}
     >

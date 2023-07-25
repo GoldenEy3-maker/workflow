@@ -1,18 +1,19 @@
-import { useCallback, useState } from "react"
-import {
-  AiOutlineBold,
-  AiOutlineItalic,
-  AiOutlineOrderedList,
-  AiOutlineUnderline,
-  AiOutlineUnorderedList,
-} from "react-icons/ai"
+import Link from "next/link"
+import { useCallback, useMemo } from "react"
 import {
   RiAlignCenter,
   RiAlignJustify,
   RiAlignLeft,
   RiAlignRight,
+  RiBold,
+  RiItalic,
+  RiLink,
+  RiLinkUnlink,
+  RiListOrdered2,
+  RiListUnordered,
+  RiUnderline,
 } from "react-icons/ri"
-import { createEditor } from "slate"
+import { createEditor, type Descendant } from "slate"
 import {
   Editable,
   Slate,
@@ -23,12 +24,14 @@ import {
 import slateEditorService from "~/services/slateEditor.service"
 import Button from "../Button"
 import styles from "./styles.module.scss"
-import { AlignValues } from "./types"
+import { AlignValues, ElementTypes } from "./types"
 
 const DefaultElement = (props: RenderElementProps) => {
   return (
     <p
-      style={{ textAlign: props.element.align ?? "left" }}
+      style={{
+        textAlign: props.element.align ?? "left",
+      }}
       {...props.attributes}
     >
       {props.children}
@@ -51,7 +54,7 @@ const ListItemElement = (props: RenderElementProps) => {
 
 const NumberedListElement = (props: RenderElementProps) => {
   return (
-    <ol style={{paddingLeft: "1.2em"}} {...props.attributes}>
+    <ol style={{ paddingLeft: "1.2em" }} {...props.attributes}>
       {props.children}
     </ol>
   )
@@ -62,6 +65,14 @@ const BulletedListElement = (props: RenderElementProps) => {
     <ul style={{ paddingLeft: "1.2em" }} {...props.attributes}>
       {props.children}
     </ul>
+  )
+}
+
+const LinkElement = (props: RenderElementProps) => {
+  return (
+    <Link href={props.element.url ?? "#"} target="_blank" {...props.attributes}>
+      {props.children}
+    </Link>
   )
 }
 
@@ -80,17 +91,36 @@ const Leaf = (props: RenderLeafProps) => {
   )
 }
 
-const SlateEditor: React.FC = () => {
-  const [editor] = useState(() => withReact(createEditor()))
+type SlateEditorProps = {
+  label: string
+  onChange: (value: string) => void
+  initialValue?: string
+}
+
+const SlateEditor: React.FC<SlateEditorProps> = (props) => {
+  const editor = useMemo(
+    () => slateEditorService.withInlines(withReact(createEditor())),
+    []
+  )
+
+  const initialValue = useMemo(
+    () =>
+      (props.initialValue
+        ? JSON.parse(props.initialValue)
+        : [{ type: "paragraph", children: [{ text: "" }] }]) as Descendant[],
+    [props.initialValue]
+  )
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
-      case "numbered-list":
+      case ElementTypes.NumberedList:
         return <NumberedListElement {...props} />
-      case "bulleted-list":
+      case ElementTypes.BulletedList:
         return <BulletedListElement {...props} />
-      case "list-item":
+      case ElementTypes.ListItem:
         return <ListItemElement {...props} />
+      case ElementTypes.Link:
+        return <LinkElement {...props} />
       default:
         return <DefaultElement {...props} />
     }
@@ -104,12 +134,14 @@ const SlateEditor: React.FC = () => {
     <div className={styles.slateEditor}>
       <Slate
         editor={editor}
-        initialValue={[
-          {
-            children: [{ text: "" }],
-            type: "paragraph",
-          },
-        ]}
+        onChange={(value) => {
+          const isAstChange = editor.operations.some(
+            (op) => "set_selection" !== op.type
+          )
+
+          if (isAstChange) props.onChange(JSON.stringify(value))
+        }}
+        initialValue={initialValue}
       >
         <div className={styles.toolbar}>
           <div className={styles.toolbarItem}>
@@ -118,7 +150,7 @@ const SlateEditor: React.FC = () => {
               isIcon
               onClick={() => slateEditorService.toggleMark(editor, "bold")}
             >
-              <AiOutlineBold />
+              <RiBold />
             </Button>
           </div>
           <div className={styles.toolbarItem}>
@@ -127,7 +159,7 @@ const SlateEditor: React.FC = () => {
               isIcon
               onClick={() => slateEditorService.toggleMark(editor, "italic")}
             >
-              <AiOutlineItalic />
+              <RiItalic />
             </Button>
           </div>
           <div className={styles.toolbarItem}>
@@ -136,7 +168,7 @@ const SlateEditor: React.FC = () => {
               isIcon
               onClick={() => slateEditorService.toggleMark(editor, "underline")}
             >
-              <AiOutlineUnderline />
+              <RiUnderline />
             </Button>
           </div>
           <div className={styles.toolbarItem}>
@@ -189,10 +221,13 @@ const SlateEditor: React.FC = () => {
               isIcon
               onClick={() =>
                 // TODO: fix bug with untoggling list as fist element in editable area
-                slateEditorService.toggleBlock(editor, "numbered-list")
+                slateEditorService.toggleBlock(
+                  editor,
+                  ElementTypes.NumberedList
+                )
               }
             >
-              <AiOutlineOrderedList />
+              <RiListOrdered2 />
             </Button>
           </div>
           <div className={styles.toolbarItem}>
@@ -200,15 +235,44 @@ const SlateEditor: React.FC = () => {
               type="button"
               isIcon
               onClick={() =>
-                slateEditorService.toggleBlock(editor, "bulleted-list")
+                slateEditorService.toggleBlock(
+                  editor,
+                  ElementTypes.BulletedList
+                )
               }
             >
-              <AiOutlineUnorderedList />
+              <RiListUnordered />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() => {
+                const url = window.prompt("Paste URL here:")
+
+                if (!url) return
+
+                slateEditorService.insertLink(editor, url)
+              }}
+            >
+              <RiLink />
+            </Button>
+          </div>
+          <div className={styles.toolbarItem}>
+            <Button
+              type="button"
+              isIcon
+              onClick={() => {
+                slateEditorService.unwrapLink(editor)
+              }}
+            >
+              <RiLinkUnlink />
             </Button>
           </div>
         </div>
         <div className={styles.wrapper}>
-          <p className={styles.label}>Расскажите о себе</p>
+          <p className={styles.label}>{props.label}</p>
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
