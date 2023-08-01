@@ -52,13 +52,6 @@ export const resumeRouter = createTRPCRouter({
       return resume
     }),
   delete: authedProcedure.mutation(async (opts) => {
-    // await opts.ctx.prisma.resumeSkill.deleteMany({
-    //   where: {
-    //     resume: {
-    //       authorId: opts.ctx.user.id,
-    //     },
-    //   },
-    // })
     const deletedResume = await opts.ctx.prisma.resume.delete({
       where: {
         authorId: opts.ctx.user.id,

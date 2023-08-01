@@ -7,7 +7,6 @@
 
   display: flex;
   flex-direction: column;
-  // align-items: center;
   gap: var(--safe-area-pd);
 
   overflow: auto;
@@ -27,8 +26,6 @@
 
   &Item {
     a {
-      --_clr: var(--on-surface-hsl);
-
       position: relative;
       overflow: hidden;
 
@@ -39,30 +36,26 @@
       padding: 0.7em 1.5em;
       border-radius: var(--medium-shape);
 
-      // font-size: var(--title-l-fs);
       font-size: var(--body-extra-fs);
-      color: hsl(var(--_clr));
+      color: hsl(var(--on-surface-hsl));
 
       transition: 200ms ease;
 
       svg {
         font-size: 1.75rem;
-        fill: hsl(var(--_clr));
 
         transition: 200ms ease;
       }
 
       &:focus {
-        --_clr: var(--primary-hsl);
-
         outline: none;
         background-color: hsl(var(--primary-container-hsl));
+        color: hsl(var(--primary-hsl));
       }
 
       @media (hover: hover) and (pointer: fine) {
         &:hover {
-          --_clr: var(--primary-hsl);
-
+          color: hsl(var(--primary-hsl));
           background-color: hsl(var(--primary-container-high-hsl));
         }
       }

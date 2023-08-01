@@ -1,4 +1,4 @@
-import { type FieldError } from "react-hook-form"
+import { MdAdd, MdRemove } from "react-icons/md"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import Button from "../Button"
 import styles from "./styles.module.scss"
@@ -41,25 +41,7 @@ const OptionList: React.FC<OptionListProps> = (props) => {
               <label htmlFor={opt} onPointerDown={rippleEffectEvent}>
                 {opt}
                 <span>
-                  {props.value.includes(opt) ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="1em"
-                      viewBox="0 -960 960 960"
-                      width="1em"
-                    >
-                      <path d="M200-440v-80h560v80H200Z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="1em"
-                      viewBox="0 -960 960 960"
-                      width="1em"
-                    >
-                      <path d="M440-200v-240H200v-80h240v-240h80v240h240v80H520v240h-80Z" />
-                    </svg>
-                  )}
+                  {props.value.includes(opt) ? <MdRemove /> : <MdAdd />}
                 </span>
               </label>
             </div>

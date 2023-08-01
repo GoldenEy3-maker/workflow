@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { MdClose, MdKeyboardArrowDown } from "react-icons/md"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
 import Button from "../Button"
@@ -142,7 +143,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={styles.leading}>{leadingIcon}</div>
           ) : null}
           {label ? <label htmlFor={props.id}>{label}</label> : null}
-
           <input
             onFocus={inputFocusHandler}
             onBlur={inputBlurHandler}
@@ -175,27 +175,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   setIsOptionsActive((prev) => !prev)
                 }}
               >
-                {filteredOptions.length > 0 ? (
-                  <span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="1em"
-                      viewBox="0 -960 960 960"
-                      width="1em"
-                    >
-                      <path d="M480-345 240-585l43-43 197 198 197-197 43 43-240 239Z" />
-                    </svg>
-                  </span>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 -960 960 960"
-                    width="1em"
-                  >
-                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                  </svg>
-                )}
+                <span>
+                  {filteredOptions.length > 0 ? (
+                    <MdKeyboardArrowDown />
+                  ) : (
+                    <MdClose />
+                  )}
+                </span>
               </Button>
             </div>
           ) : trailingIcon ? (

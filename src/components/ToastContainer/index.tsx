@@ -1,4 +1,5 @@
 import toast, { ToastBar, Toaster } from "react-hot-toast"
+import { MdClose } from "react-icons/md"
 import Button from "../Button"
 import styles from "./styles.module.scss"
 
@@ -34,14 +35,7 @@ const ToastContainer = () => {
                   isIcon
                   onClick={() => toast.dismiss(t.id)}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1.2em"
-                    viewBox="0 -960 960 960"
-                    width="1.2em"
-                  >
-                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                  </svg>
+                  <MdClose fontSize="1.2em" />
                 </Button>
               )}
             </>

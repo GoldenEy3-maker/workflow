@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { useCallback, useMemo, useState } from "react"
-import { type FieldError } from "react-hook-form"
 import {
   RiAlignCenter,
   RiAlignJustify,

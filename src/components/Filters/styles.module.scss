@@ -131,6 +131,7 @@
       svg {
         opacity: 0;
         visibility: hidden;
+        fill: hsl(var(--on-primary-hsl));
 
         transition: 200ms ease;
       }

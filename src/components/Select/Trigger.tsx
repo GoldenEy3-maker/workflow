@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { MdKeyboardArrowDown } from "react-icons/md"
 import Button from "~/components/Button"
 import { useSelectContext } from "~/components/Select/context"
 import { cls } from "~/utils/helpers"
@@ -33,14 +34,7 @@ export const Trigger: React.FC<
       >
         <p>{value}</p>
         <span className={styles.icon}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            viewBox="0 -960 960 960"
-            width="24"
-          >
-            <path d="M480-345 240-585l43-43 197 198 197-197 43 43-240 239Z" />
-          </svg>
+          <MdKeyboardArrowDown fontSize="1.5em" />
         </span>
       </Button>
     </div>

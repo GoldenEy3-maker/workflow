@@ -1,5 +1,4 @@
-import toast from "react-hot-toast"
-import { MdDeleteOutline, MdEdit } from "react-icons/md"
+import { MdDeleteOutline } from "react-icons/md"
 import Stats from "~/components/#pages/profile/Stats"
 import Button from "~/components/Button"
 import Link from "~/components/Link"

@@ -39,8 +39,6 @@
   }
 
   &Progress {
-    --_clr: var(--primary-hsl);
-
     flex-shrink: 0;
 
     display: flex;
@@ -49,11 +47,11 @@
     padding: 0.3rem 0.5rem;
     border-radius: var(--large-shape);
     background-color: hsl(var(--primary-container-hsl));
+    color: hsl(var(--primary-hsl));
 
     p {
       font-size: var(--body-m-fs);
       line-height: 100%;
-      color: hsl(var(--_clr));
     }
 
     span {
@@ -62,26 +60,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
-      rotate: 180deg;
-
-      svg {
-        fill: hsl(var(--_clr));
-      }
     }
 
     &._success {
-      --_clr: var(--success-hsl);
+      color: hsl(var(--success-hsl));
       background-color: hsl(var(--success-container-hsl));
     }
 
     &._danger {
-      --_clr: var(--danger-hsl);
+      color: hsl(var(--danger-hsl));
       background-color: hsl(var(--danger-container-hsl));
-
-      span {
-        rotate: 0deg;
-      }
     }
   }
 
