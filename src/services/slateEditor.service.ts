@@ -1,5 +1,5 @@
 import isUrl from "is-url"
-import { Editor, Element, Range, Transforms } from "slate"
+import { Editor, Element, Range, Transforms, type Descendant } from "slate"
 import {
   AlignValues,
   ElementTypes,

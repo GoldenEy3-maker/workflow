@@ -23,6 +23,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "cookies-next": "^2.1.2",
     "date-fns": "^2.30.0",
+    "dayjs": "^1.11.9",
     "html-react-parser": "^4.0.0",
     "is-url": "^1.2.4",
     "js-cookie": "^3.0.5",
@@ -37,6 +38,7 @@
     "react-icons": "^4.10.1",
     "react-input-mask": "^3.0.0-alpha.2",
     "react-loading-skeleton": "^3.3.1",
+    "sharp": "^0.32.4",
     "slate": "^0.94.1",
     "slate-react": "^0.97.2",
     "superjson": "1.12.2",
@@ -62,7 +64,8 @@
     "eslint-config-next": "^13.4.2",
     "prisma": "^5.0.0",
     "sass": "^1.63.6",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "zod-prisma": "^0.5.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.15.0"

@@ -5,7 +5,7 @@ import { env } from "~/env.mjs"
 import { useModal } from "~/hooks/modal.hook"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import SignOutModal from "~/modals/SignOut"
-import { useSignOutModalStore } from "~/modals/SignOut/store"
+import { useSignOutModalStore } from "~/store/#modals/signOut"
 import { useAuthStore } from "~/store/auth"
 import { PagePaths } from "~/utils/enums"
 import Button from "../Button"
@@ -13,7 +13,8 @@ import Logo from "../Logo"
 import styles from "./styles.module.scss"
 
 const Sidebar: React.FC = () => {
-  const user = useAuthStore((state) => state.user)
+  const authStore = useAuthStore()
+  const signOutModalStore = useSignOutModalStore()
 
   const rippleEffectEvent = useRippleEffect()
   const [openModal] = useModal()
@@ -22,7 +23,7 @@ const Sidebar: React.FC = () => {
     <>
       <SignOutModal />
       <aside className={styles.sidebar}>
-        {user ? (
+        {authStore.user ? (
           <>
             <Logo />
             <nav className={styles.nav}>
@@ -140,11 +141,11 @@ const Sidebar: React.FC = () => {
             <div className={styles.profile}>
               <div className={styles.profileWrapper}>
                 <UserProfile
-                  name={user.firstName}
+                  name={authStore.user.firstName}
                   image={
-                    user.avatar
+                    authStore.user.avatar
                       ? env.NEXT_PUBLIC_SUPABASE_STORAGE_AVATARS_URL +
-                        user.avatar
+                        authStore.user.avatar
                       : undefined
                   }
                   className={styles.userProfile}
@@ -152,11 +153,7 @@ const Sidebar: React.FC = () => {
               </div>
               <Button
                 isIcon
-                onClick={() =>
-                  openModal(() =>
-                    useSignOutModalStore.setState({ state: true })
-                  )
-                }
+                onClick={() => openModal(() => signOutModalStore.open())}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

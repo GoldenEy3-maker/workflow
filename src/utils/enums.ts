@@ -6,6 +6,7 @@ export const PagePaths = {
   SignUp: "/sign-up",
   Profile: "/profile",
   CreateResume: "/profile/resume/create",
+  EditResume: "/profile/resume/edit",
   Orders: "/orders",
   Favorite: "/favorites",
   ActivateUser: "/activate",

@@ -182,15 +182,13 @@
   }
 }
 
-.errorMessage {
+.validError {
   display: grid;
   grid-template-rows: 0fr;
 
   transition: 200ms ease;
 
   p {
-    overflow: hidden;
-
     color: hsl(var(--danger-hsl));
 
     font-size: var(--body-m-fs);

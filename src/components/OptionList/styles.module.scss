@@ -1,13 +1,19 @@
 .wrapper {
   max-width: 40em;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: 1em;
+}
 
-  margin-bottom: 0.7em;
+.validError {
+  color: hsl(var(--danger-hsl));
 }
 
 .label {

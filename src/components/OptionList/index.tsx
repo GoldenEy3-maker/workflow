@@ -1,13 +1,15 @@
+import { type FieldError } from "react-hook-form"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import Button from "../Button"
 import styles from "./styles.module.scss"
 
 type OptionListProps = {
   label: string
-  values: string[] | undefined
-  currentState: string[]
+  options: string[] | undefined
+  value: string[]
   onChange: (value: string) => void
   reset: () => void
+  validError?: string
 }
 
 const OptionList: React.FC<OptionListProps> = (props) => {
@@ -21,22 +23,25 @@ const OptionList: React.FC<OptionListProps> = (props) => {
           Очистить
         </Button>
       </header>
+      {props.validError ? (
+        <p className={styles.validError}>{props.validError}</p>
+      ) : null}
       <div className={styles.list}>
-        {props.values &&
-          props.values.length > 0 &&
-          props.values.map((value) => (
-            <div key={value} className={styles.item}>
+        {props.options &&
+          props.options.length > 0 &&
+          props.options.map((opt) => (
+            <div key={opt} className={styles.item}>
               <input
                 type="checkbox"
-                checked={props.currentState.includes(value)}
-                onChange={() => props.onChange(value)}
-                id={value}
-                name={value}
+                checked={props.value.includes(opt)}
+                onChange={() => props.onChange(opt)}
+                id={opt}
+                name={opt}
               />
-              <label htmlFor={value} onPointerDown={rippleEffectEvent}>
-                {value}
+              <label htmlFor={opt} onPointerDown={rippleEffectEvent}>
+                {opt}
                 <span>
-                  {props.currentState.includes(value) ? (
+                  {props.value.includes(opt) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       height="1em"

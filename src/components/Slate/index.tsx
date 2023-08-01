@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
+import { type FieldError } from "react-hook-form"
 import {
   RiAlignCenter,
   RiAlignJustify,
@@ -22,6 +23,7 @@ import {
   type RenderLeafProps,
 } from "slate-react"
 import slateEditorService from "~/services/slateEditor.service"
+import { cls } from "~/utils/helpers"
 import Button from "../Button"
 import styles from "./styles.module.scss"
 import { AlignValues, ElementTypes } from "./types"
@@ -92,24 +94,30 @@ const Leaf = (props: RenderLeafProps) => {
 }
 
 type SlateEditorProps = {
-  label: string
-  onChange: (value: string) => void
-  initialValue?: string
+  label?: string
+  onChange?: (value: string) => void
+  initialValue?: string | Descendant[]
+  validError?: string
+  value?: string
+  name?: string
+  onBlur?: React.FocusEventHandler
+  readonly?: boolean
+  reduced?: boolean
 }
 
 const SlateEditor: React.FC<SlateEditorProps> = (props) => {
-  const editor = useMemo(
-    () => slateEditorService.withInlines(withReact(createEditor())),
-    []
+  const [editor] = useState(() =>
+    slateEditorService.withInlines(withReact(createEditor()))
   )
 
-  const initialValue = useMemo(
-    () =>
-      (props.initialValue
-        ? JSON.parse(props.initialValue)
-        : [{ type: "paragraph", children: [{ text: "" }] }]) as Descendant[],
-    [props.initialValue]
-  )
+  const initialValue = useMemo<Descendant[]>(() => {
+    if (props.initialValue)
+      return typeof props.initialValue === "string"
+        ? (JSON.parse(props.initialValue) as Descendant[])
+        : props.initialValue
+
+    return [{ type: "paragraph", children: [{ text: "" }] }]
+  }, [props.initialValue])
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
@@ -131,10 +139,18 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
   }, [])
 
   return (
-    <div className={styles.slateEditor}>
+    <div
+      className={cls([styles.slateEditor], {
+        [styles._notValid ?? ""]: !!props.validError,
+        [styles._readonly ?? ""]: !!props.readonly,
+        [styles._reduced ?? ""]: !!props.reduced,
+      })}
+    >
       <Slate
         editor={editor}
         onChange={(value) => {
+          if (!props.onChange) return
+
           const isAstChange = editor.operations.some(
             (op) => "set_selection" !== op.type
           )
@@ -143,140 +159,159 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
         }}
         initialValue={initialValue}
       >
-        <div className={styles.toolbar}>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() => slateEditorService.toggleMark(editor, "bold")}
-            >
-              <RiBold />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() => slateEditorService.toggleMark(editor, "italic")}
-            >
-              <RiItalic />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() => slateEditorService.toggleMark(editor, "underline")}
-            >
-              <RiUnderline />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                slateEditorService.changeAlign(editor, AlignValues.Left)
-              }
-            >
-              <RiAlignLeft />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                slateEditorService.changeAlign(editor, AlignValues.Right)
-              }
-            >
-              <RiAlignRight />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                slateEditorService.changeAlign(editor, AlignValues.Center)
-              }
-            >
-              <RiAlignCenter />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                slateEditorService.changeAlign(editor, AlignValues.Justify)
-              }
-            >
-              <RiAlignJustify />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                // TODO: fix bug with untoggling list as fist element in editable area
-                slateEditorService.toggleBlock(
-                  editor,
-                  ElementTypes.NumberedList
-                )
-              }
-            >
-              <RiListOrdered2 />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() =>
-                slateEditorService.toggleBlock(
-                  editor,
-                  ElementTypes.BulletedList
-                )
-              }
-            >
-              <RiListUnordered />
-            </Button>
-          </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() => {
-                const url = window.prompt("Paste URL here:")
+        {!props.readonly ? (
+          <div className={styles.toolbar}>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() => slateEditorService.toggleMark(editor, "bold")}
+              >
+                <RiBold />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() => slateEditorService.toggleMark(editor, "italic")}
+              >
+                <RiItalic />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.toggleMark(editor, "underline")
+                }
+              >
+                <RiUnderline />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.changeAlign(editor, AlignValues.Left)
+                }
+              >
+                <RiAlignLeft />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.changeAlign(editor, AlignValues.Right)
+                }
+              >
+                <RiAlignRight />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.changeAlign(editor, AlignValues.Center)
+                }
+              >
+                <RiAlignCenter />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.changeAlign(editor, AlignValues.Justify)
+                }
+              >
+                <RiAlignJustify />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  // TODO: fix bug with untoggling list as fist element in editable area
+                  slateEditorService.toggleBlock(
+                    editor,
+                    ElementTypes.NumberedList
+                  )
+                }
+              >
+                <RiListOrdered2 />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() =>
+                  slateEditorService.toggleBlock(
+                    editor,
+                    ElementTypes.BulletedList
+                  )
+                }
+              >
+                <RiListUnordered />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() => {
+                  const url = window.prompt("Paste URL here:")
 
-                if (!url) return
+                  if (!url) return
 
-                slateEditorService.insertLink(editor, url)
-              }}
-            >
-              <RiLink />
-            </Button>
+                  slateEditorService.insertLink(editor, url)
+                }}
+              >
+                <RiLink />
+              </Button>
+            </div>
+            <div className={styles.toolbarItem}>
+              <Button
+                type="button"
+                isIcon
+                clrType={!!props.validError ? "danger" : undefined}
+                onClick={() => {
+                  slateEditorService.unwrapLink(editor)
+                }}
+              >
+                <RiLinkUnlink />
+              </Button>
+            </div>
           </div>
-          <div className={styles.toolbarItem}>
-            <Button
-              type="button"
-              isIcon
-              onClick={() => {
-                slateEditorService.unwrapLink(editor)
-              }}
-            >
-              <RiLinkUnlink />
-            </Button>
-          </div>
-        </div>
+        ) : null}
         <div className={styles.wrapper}>
           <p className={styles.label}>{props.label}</p>
           <Editable
+            value={props.value}
+            name={props.name}
             renderElement={renderElement}
             renderLeaf={renderLeaf}
             className={styles.editable}
+            onBlur={props.onBlur}
+            readOnly={props.readonly}
             onKeyDown={(event) => {
               if (!event.ctrlKey) return
 
@@ -315,6 +350,9 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
             }}
           />
         </div>
+        {props.validError ? (
+          <p className={styles.validError}>{props.validError}</p>
+        ) : null}
       </Slate>
     </div>
   )

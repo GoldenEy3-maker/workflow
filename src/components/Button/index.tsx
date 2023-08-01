@@ -61,7 +61,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         ) : null}
-        {isLoading || (isSubmitDisabled && isIcon) ? null : children}
+        {(isLoading && isIcon) || (isSubmitDisabled && isIcon)
+          ? null
+          : children}
       </button>
     )
   }

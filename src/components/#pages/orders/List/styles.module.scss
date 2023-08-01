@@ -1,0 +1,20 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loadingSkeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  background-color: hsl(var(--surface-container-hsl));
+  padding: 2em;
+  border-radius: var(--medium-shape);
+}
+
+.loadingSkeletonStatsContainer {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}

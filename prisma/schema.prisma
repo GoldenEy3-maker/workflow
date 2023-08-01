@@ -2,6 +2,27 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "zod-prisma"
+  output   = "./zod" // (default) the directory where generated zod schemas will be saved
+
+  relationModel = true // (default) Create and export both plain and related models.
+  // relationModel         = "default" // Do not export model without relations.
+  // relationModel         = false // Do not generate related model
+
+  modelCase = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
+  // modelCase             = "camelCase" // Output models using camel case (ex. userModel, postModel)
+
+  modelSuffix = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
+
+  // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
+  useDecimalJs = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+
+  // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
+  prismaJsonNullability = true // (default) uses prisma's scheme for JSON field nullability
+  // prismaJsonNullability = false // allows null assignment to optional JSON fields
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -40,7 +61,7 @@ model Resume {
   specialityId String
   level        Level            @relation(fields: [levelId], references: [id])
   levelId      String
-  details      String?
+  details      String
   resumeSkills ResumeSkill[]
   author       User             @relation(fields: [authorId], references: [id])
   authorId     String           @unique
@@ -51,28 +72,28 @@ model Resume {
 
 model ResumeSkill {
   id       String @id @default(uuid())
-  resume   Resume @relation(fields: [resumeId], references: [id])
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   resumeId String
   skill    Skill  @relation(fields: [skillId], references: [id])
   skillId  String
 }
 
 model Skill {
-  id      String        @id @default(uuid())
-  value   String
-  resumes ResumeSkill[]
+  id         String        @id @default(uuid())
+  value      String
+  attackedBy ResumeSkill[]
 }
 
 model Level {
-  id     String   @id @default(uuid())
-  value  String
-  resume Resume[]
+  id         String   @id @default(uuid())
+  value      String
+  attackedBy Resume[]
 }
 
 model Speciality {
-  id     String   @id @default(uuid())
-  value  String
-  resume Resume[]
+  id         String   @id @default(uuid())
+  value      String
+  attackedBy Resume[]
 }
 
 enum Role {

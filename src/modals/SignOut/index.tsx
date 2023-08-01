@@ -1,30 +1,28 @@
 import { useRouter } from "next/router"
-import { useRef } from "react"
 import toast from "react-hot-toast"
 import Button from "~/components/Button"
 import * as Modal from "~/components/Modal"
 import { useModal } from "~/hooks/modal.hook"
 import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
-import { useSignOutModalStore } from "./store"
+import { useSignOutModalStore } from "../../store/#modals/signOut"
 
 const SignOutModal: React.FC = () => {
   const [, closeModal] = useModal()
   const router = useRouter()
-  const state = useSignOutModalStore()
+  const signOutModalStore = useSignOutModalStore()
   const signOutMut = api.user.signOut.useMutation({
-    onError(e) {
-      console.log("🚀 ~ file: index.tsx:18 ~ onError ~ e:", e)
-      toast.error(e.message)
+    onError(error) {
+      console.log("🚀 ~ file: index.tsx:18 ~ onError ~ error:", error.message)
+      toast.error(error.message)
     },
-    async onSuccess() {
-      await router.push(PagePaths.SignIn)
+    onSuccess() {
+      void router.push(PagePaths.SignIn)
     },
   })
-  const rootRef = useRef<HTMLDivElement>(null)
 
   return (
-    <Modal.Root ref={rootRef} aria-hidden={!state.state}>
+    <Modal.Root aria-hidden={!signOutModalStore.isOpen}>
       <Modal.Wrapper>
         <Modal.Header>
           <Modal.Title>Вы действительно уверены?</Modal.Title>
@@ -42,7 +40,7 @@ const SignOutModal: React.FC = () => {
             disabled={signOutMut.isLoading}
             onClick={() =>
               closeModal(() => {
-                useSignOutModalStore.setState({ state: false })
+                signOutModalStore.close()
               })
             }
           >
@@ -57,7 +55,7 @@ const SignOutModal: React.FC = () => {
             onClick={() => {
               signOutMut.mutate()
 
-              closeModal(() => useSignOutModalStore.setState({ state: false }))
+              closeModal(() => signOutModalStore.close())
             }}
           >
             Да, выйти

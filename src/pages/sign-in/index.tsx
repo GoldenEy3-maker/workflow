@@ -44,11 +44,7 @@ const SignIn: NextPageWithLayout = () => {
     },
   })
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormState>({
+  const hookForm = useForm<FormState>({
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -64,7 +60,7 @@ const SignIn: NextPageWithLayout = () => {
       </h1>
       <Form.Root
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        onSubmit={handleSubmit((data) => {
+        onSubmit={hookForm.handleSubmit((data) => {
           toast.dismiss()
           signInMut.mutate(data)
         })}
@@ -72,7 +68,7 @@ const SignIn: NextPageWithLayout = () => {
         <Form.Inputs>
           <Controller
             name="email"
-            control={control}
+            control={hookForm.control}
             rules={{
               required: {
                 value: true,
@@ -98,7 +94,7 @@ const SignIn: NextPageWithLayout = () => {
                 }
                 type="email"
                 id={FormStateKeys.Email}
-                validError={errors.email?.message}
+                validError={hookForm.formState.errors.email?.message}
                 disabled={signInMut.isLoading}
                 {...field}
               />
@@ -106,7 +102,7 @@ const SignIn: NextPageWithLayout = () => {
           />
           <Controller
             name="password"
-            control={control}
+            control={hookForm.control}
             rules={{
               required: {
                 value: true,
@@ -128,7 +124,7 @@ const SignIn: NextPageWithLayout = () => {
                 }
                 type="password"
                 id={FormStateKeys.Password}
-                validError={errors.password?.message}
+                validError={hookForm.formState.errors.password?.message}
                 disabled={signInMut.isLoading}
                 {...field}
               />

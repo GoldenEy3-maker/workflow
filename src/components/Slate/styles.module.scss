@@ -5,13 +5,42 @@
 
   border: 1px solid hsl(var(--outline-hsl));
   border-radius: var(--medium-shape);
+
+  &._notValid {
+    border-color: hsl(var(--danger-hsl));
+  }
+
+  &._readonly {
+    max-width: none;
+    border: none;
+  }
+}
+
+.validError {
+  color: hsl(var(--danger-hsl));
+
+  padding: 0.7em;
+
+  border-top: 1px solid hsl(var(--outline-hsl));
 }
 
 .wrapper {
   position: relative;
   flex: 1;
-
   min-height: 15em;
+
+  ._readonly & {
+    min-height: auto;
+  }
+
+  ._reduced & {
+    max-height: 10em;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
 }
 
 .label {
@@ -22,17 +51,30 @@
   font-size: var(--body-m-fs);
 
   color: hsl(var(--on-surface-variant-hsl));
+
+  ._notValid & {
+    color: hsl(var(--danger-hsl));
+  }
 }
 
 .editable {
   width: 100%;
   height: 100%;
 
+  // display: -webkit-box;
+  // -webkit-box-orient: vertical;
+  // -webkit-line-clamp: 4;
+  // overflow: hidden;
+
   outline: none;
 
   color: hsl(var(--on-surface-hsl));
 
   padding: 2em 1em 1em;
+
+  ._readonly & {
+    padding: 0;
+  }
 }
 
 .toolbar {

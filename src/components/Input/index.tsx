@@ -15,7 +15,7 @@ export type InputProps = {
   label?: string
   leadingIcon?: React.ReactNode
   trailingIcon?: React.ReactNode
-  validError?: string | string[]
+  validError?: string
   options?: string[]
   optionHandler?: (value: string) => void
   optionsReset?: () => void
@@ -159,7 +159,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Button
                 type="button"
                 isIcon
-                clrType={filteredOptions.length === 0 ? "danger" : undefined}
+                clrType={
+                  filteredOptions.length === 0 || !!validError
+                    ? "danger"
+                    : undefined
+                }
                 onClick={() => {
                   if (filteredOptions.length === 0) {
                     optionsReset && optionsReset()
@@ -198,9 +202,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={styles.trailing}>{trailingIcon}</div>
           ) : null}
         </div>
-        <div className={styles.errorMessage}>
-          <p>{validError}</p>
-        </div>
+        {validError ? (
+          <div className={styles.validError}>
+            <p>{validError}</p>
+          </div>
+        ) : null}
         {filteredOptions && filteredOptions.length > 0 ? (
           <div className={styles.options} aria-hidden={!isOptionsActive}>
             <div className={styles.optionsWrapper}>

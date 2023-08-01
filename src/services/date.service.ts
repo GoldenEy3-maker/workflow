@@ -1,4 +1,15 @@
+import dayjs from "dayjs"
+import "dayjs/locale/ru"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.locale("ru")
+dayjs.extend(relativeTime)
+
 export default new (class DateService {
+  fromNow(date: string | Date) {
+    return dayjs(date).fromNow()
+  }
+
   reverseDashedDate(value: string) {
     return value.split("-").reverse().join("-")
   }

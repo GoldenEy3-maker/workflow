@@ -4,17 +4,17 @@ export const cls = (
   cls: (string | undefined)[],
   conditionCls?: Record<string, boolean>
 ) => {
-  const cloneCls = cls.filter((c) => c !== undefined)
+  const filteredCls = cls.filter((c) => c !== undefined)
 
   if (conditionCls) {
-    Object.keys(conditionCls).map((key) => {
+    Object.keys(conditionCls).forEach((key) => {
       if (conditionCls[key]) {
-        cloneCls.push(key)
+        filteredCls.push(key)
       }
     })
   }
 
-  return cloneCls.join(" ")
+  return filteredCls.join(" ")
 }
 
 export const getRandomNumber = (min: number, max: number) => {
@@ -47,4 +47,3 @@ export const getBaseUrl = () => {
 
   return getProdUrl() ?? getDevUrl()
 }
-

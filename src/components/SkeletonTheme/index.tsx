@@ -5,7 +5,7 @@ export const SkeletonThemeProvider: React.FC<React.PropsWithChildren> = (
 ) => {
   return (
     <SkeletonTheme
-      baseColor="hsl(var(--outline-hsl))"
+      baseColor="hsl(var(--outline-variant-hsl))"
       highlightColor="hsl(var(--placeholder-hsl))"
       borderRadius="var(--large-shape)"
     >
