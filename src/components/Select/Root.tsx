@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import {
   SelectContext,
   type SelectContextState,
 } from "~/components/Select/context"
+import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
@@ -26,24 +27,15 @@ export const Root: React.FC<RootProps> = ({
     triggerRef: { current: null },
   })
 
-  const closeOnDocClickHandler = useCallback((event: MouseEvent) => {
-    if (contextState.isOpen === true && !rootRef.current?.contains(event.target as HTMLElement)) {
-      setContextState((state) => ({ ...state, isOpen: false }))
-    }
-  }, [contextState.isOpen])
-
+  const closeHandler = () =>
+    setContextState((state) => ({ ...state, isOpen: false }))
 
   const closeOnBlurHandler: React.FocusEventHandler = (event) => {
-    if (!rootRef.current?.contains(event.relatedTarget as HTMLElement)) {
-      setContextState((state) => ({ ...state, isOpen: false }))
-    }
+    if (!rootRef.current?.contains(event.relatedTarget as HTMLElement))
+      closeHandler()
   }
 
-  useEffect(() => {
-    document.addEventListener("click", closeOnDocClickHandler)
-
-    return () => document.removeEventListener("click", closeOnDocClickHandler)
-  }, [closeOnDocClickHandler])
+  useClickOutside(rootRef, closeHandler, contextState.isOpen === true)
 
   return (
     <SelectContext.Provider value={[contextState, setContextState]}>

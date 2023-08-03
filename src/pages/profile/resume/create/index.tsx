@@ -78,19 +78,6 @@ const CreateResume: NextPageWithLayout = () => {
     },
   })
 
-  const changeSkillsHandler = (
-    currentState: string[],
-    onChange: (value: string[]) => void,
-    value: string
-  ) => {
-    if (currentState.includes(value)) {
-      onChange(currentState.filter((skill) => skill !== value))
-      return
-    }
-
-    onChange([...currentState, value])
-  }
-
   return (
     <Section.Root>
       <Section.Header>
@@ -233,9 +220,7 @@ const CreateResume: NextPageWithLayout = () => {
                   options={skillQuery.data?.map((skill) => skill.value)}
                   label="Укажите свои навыки"
                   value={field.value}
-                  onChange={(value) =>
-                    changeSkillsHandler(field.value, field.onChange, value)
-                  }
+                  onChange={field.onChange}
                   reset={() => field.onChange([])}
                   validError={hookForm.formState.errors.skills?.message}
                 />

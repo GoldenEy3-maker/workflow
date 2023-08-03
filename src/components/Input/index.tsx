@@ -7,6 +7,7 @@ import {
   useState,
 } from "react"
 import { MdClose, MdKeyboardArrowDown } from "react-icons/md"
+import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
 import Button from "../Button"
@@ -84,12 +85,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       if (optionHandler) optionHandler(option)
     }
 
-    const closeOptionsOnDocClick = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as HTMLElement)) {
-        setIsOptionsActive(false)
-      }
-    }
-
     const closeOptionsOnRootBlur = (event: React.FocusEvent) => {
       if (!rootRef.current?.contains(event.relatedTarget as HTMLElement)) {
         setIsOptionsActive(false)
@@ -120,10 +115,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       }
     }, [props.value])
 
-    useEffect(() => {
-      document.addEventListener("click", closeOptionsOnDocClick)
-      return () => document.removeEventListener("click", closeOptionsOnDocClick)
-    }, [])
+    useClickOutside(rootRef, () => setIsOptionsActive(false))
 
     return (
       <div

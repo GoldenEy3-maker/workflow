@@ -1,8 +1,8 @@
 import { type Prisma } from "@prisma/client"
+import dayjs from "dayjs"
 import { AiOutlineEye } from "react-icons/ai"
 import Link from "~/components/Link"
 import SlateEditor from "~/components/Slate"
-import dateService from "~/services/date.service"
 import { PagePaths } from "~/utils/enums"
 import { cls } from "~/utils/helpers"
 import LoadingSkeletItemList from "../Loading/ItemList"
@@ -40,6 +40,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
       {(() => {
         if (props.loading) return <LoadingSkeletItemList />
 
+        // TODO: Handler error state
         if (props.error) return <p>Error</p>
 
         if (props.data)
@@ -74,7 +75,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
               <footer className={styles.footer}>
                 <div className={styles.stats}>
                   <span className={styles.statsItem}>
-                    {dateService.fromNow(props.data.updatedAt)}
+                    {dayjs(props.data.updatedAt).fromNow()}
                   </span>
                   <span className={styles.statsItem}>
                     <AiOutlineEye />

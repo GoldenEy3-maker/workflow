@@ -1,7 +1,7 @@
+import dayjs from "dayjs"
 import parse from "html-react-parser"
 import Link from "next/link"
 import { useState } from "react"
-import dateService from "~/services/date.service"
 import { cls } from "~/utils/helpers"
 import Button from "../Button"
 import styles from "./styles.module.scss"
@@ -21,49 +21,6 @@ type OrderItemsProps = {
 
 const OrderItem: React.FC<OrderItemsProps> = (props) => {
   const [isFavorite, setIsFavorite] = useState(props.isFavorite)
-
-  const renderDateAgo = (date: Date) => {
-    const diff = dateService.dateDiff(new Date(), date)
-    let value = diff.seconds
-    let suffix = "секунд"
-
-    if (diff.seconds < 60) {
-      if (diff.seconds === 1) suffix = "секунда"
-      if (diff.seconds >= 2 && diff.seconds <= 4) suffix = "секунды"
-    } else if (diff.minutes < 60) {
-      value = diff.minutes
-      suffix = "минут"
-
-      if (diff.minutes === 1) suffix = "минута"
-      if (diff.minutes >= 2 && diff.minutes <= 4) suffix = "минуты"
-    } else if (diff.hours < 24) {
-      value = diff.hours
-      suffix = "часов"
-
-      if (diff.hours === 1) suffix = "час"
-      if (diff.hours >= 2 && diff.hours <= 4) suffix = "часа"
-    } else if (diff.days < 30) {
-      value = diff.days
-      suffix = "дней"
-
-      if (diff.days === 1) suffix = "день"
-      if (diff.days >= 2 && diff.days <= 4) suffix = "дня"
-    } else if (diff.months < 12) {
-      value = diff.months
-      suffix = "месяцев"
-
-      if (diff.months === 1) suffix = "месяц"
-      if (diff.months >= 2 && diff.months <= 4) suffix = "месяца"
-    } else {
-      value = diff.years
-      suffix = "лет"
-
-      if (diff.years === 1) suffix = "год"
-      if (diff.years >= 2 && diff.years <= 4) suffix = "года"
-    }
-
-    return `${value} ${suffix}`
-  }
 
   const renderClicks = (value: number) => {
     let suffix = "откликов"
@@ -130,9 +87,7 @@ const OrderItem: React.FC<OrderItemsProps> = (props) => {
       <div className={styles.description}>{parse(props.description)}</div>
       <footer className={styles.footer}>
         <div className={styles.info}>
-          <div className={styles.infoItem}>
-            {renderDateAgo(props.date)} назад
-          </div>
+          <div className={styles.infoItem}>{dayjs(props.date).fromNow()}</div>
           <div className={styles.infoItem}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

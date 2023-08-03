@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { type ParsedUrlQuery } from "querystring"
@@ -17,7 +18,6 @@ import Input from "~/components/Input"
 import Logo from "~/components/Logo"
 import * as Tabs from "~/components/Tabs"
 import AuthLayout from "~/layouts/Auth"
-import dateService from "~/services/date.service"
 import validationService from "~/services/validation.service"
 import { api } from "~/utils/api"
 import { InputMaskPatterns, PagePaths, QueryKeys } from "~/utils/enums"
@@ -184,10 +184,7 @@ const SignUp: NextPageWithLayout = () => {
                 if (!validationService.validateDatePattern(value))
                   return "Невалидная дата!"
 
-                const { years } = dateService.dateDiff(
-                  new Date(),
-                  new Date(value)
-                )
+                const years = dayjs(new Date()).diff(value, "y")
 
                 if (years < 16)
                   return "К сожалению мы не можем предоставить вам аккаунт в силу вашего возраста!"

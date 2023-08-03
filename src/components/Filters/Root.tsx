@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
+import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { cls } from "~/utils/helpers"
 import type { FilterContextState } from "./context"
 import { FilterContext } from "./context"
@@ -13,6 +14,9 @@ export const Root: React.FC<
     isOpen: false,
   })
 
+  const closeHandler = () =>
+    setContextState((state) => ({ ...state, isOpen: false }))
+
   const closeOnBlurHandler: React.FocusEventHandler<HTMLDivElement> = (
     event
   ) => {
@@ -21,22 +25,12 @@ export const Root: React.FC<
       rootRef.current?.contains(event.target as HTMLElement) &&
       !rootRef.current?.contains(event.relatedTarget as HTMLElement)
     )
-      setContextState((state) => ({ ...state, isOpen: false }))
+      closeHandler()
 
     if (onBlur) onBlur(event)
   }
 
-  const closeOnDocClickHandler = (event: MouseEvent) => {
-    if (!rootRef.current?.contains(event.target as HTMLElement)) {
-      setContextState((state) => ({ ...state, isOpen: false }))
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener("click", closeOnDocClickHandler)
-
-    return () => document.removeEventListener("click", closeOnDocClickHandler)
-  }, [])
+  useClickOutside(rootRef, closeHandler)
 
   return (
     <FilterContext.Provider value={[contextState, setContextState]}>

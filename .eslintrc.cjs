@@ -10,13 +10,15 @@ const config = {
       ],
       files: ["*.ts", "*.tsx"],
       parserOptions: {
-        project: path.join(__dirname, "tsconfig.json")
+        project: path.join(__dirname, "tsconfig.json"),
+        tsconfigRootDir: __dirname
       }
     }
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: path.join(__dirname, "tsconfig.json")
+    project: path.join(__dirname, "tsconfig.json"),
+    tsconfigRootDir: __dirname
   },
   plugins: ["@typescript-eslint"],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],

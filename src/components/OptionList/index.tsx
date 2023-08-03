@@ -7,7 +7,7 @@ type OptionListProps = {
   label: string
   options: string[] | undefined
   value: string[]
-  onChange: (value: string) => void
+  onChange: (value: string[]) => void
   reset: () => void
   validError?: string
 }
@@ -34,7 +34,14 @@ const OptionList: React.FC<OptionListProps> = (props) => {
               <input
                 type="checkbox"
                 checked={props.value.includes(opt)}
-                onChange={() => props.onChange(opt)}
+                onChange={() => {
+                  if (props.value.includes(opt)) {
+                    props.onChange(props.value.filter((item) => item !== opt))
+                    return
+                  }
+
+                  props.onChange([...props.value, opt])
+                }}
                 id={opt}
                 name={opt}
               />
