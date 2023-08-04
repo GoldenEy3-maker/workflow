@@ -6,11 +6,10 @@ import TopPerformers from "~/components/#pages/home/TopPerformers"
 import * as Section from "~/components/Section"
 import MainLayout from "~/layouts/Main"
 import { type NextPageWithLayout } from "~/utils/types"
-import styles from "./styles.module.scss"
 
 const Home: NextPageWithLayout = () => {
   return (
-    <main className={styles.home}>
+    <main className="grid gap-4">
       <Stats />
       <Section.Group>
         <Chart />

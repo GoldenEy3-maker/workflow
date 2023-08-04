@@ -6,7 +6,6 @@ import * as Select from "~/components/Select"
 import dateService from "~/services/date.service"
 import { getRandomNumber } from "~/utils/helpers"
 import { type ValueOf } from "~/utils/types"
-import styles from "./styles.module.scss"
 
 const TypeSelectValues = {
   Orders: "Заказов",
@@ -30,7 +29,7 @@ const Chart: React.FC = () => {
     useState<SortSelectValues>("Месяц")
 
   return (
-    <Section.Root className={styles.chart}>
+    <Section.Root className="flex-initial basis-[1000px]">
       <Section.Header>
         <Section.Title>
           <span>Аналитика</span>

@@ -1,7 +1,6 @@
 import { FaFigma, FaReact } from "react-icons/fa"
 import { TbBrandAngular, TbBrandNextjs, TbBrandVue } from "react-icons/tb"
 import * as Section from "~/components/Section"
-import styles from "./styles.module.scss"
 
 const PopularTopics: React.FC = () => {
   return (
@@ -10,51 +9,41 @@ const PopularTopics: React.FC = () => {
         <Section.Title>Популярные темы</Section.Title>
       </Section.Header>
       <Section.Content>
-        <ul className={styles.list}>
-          <li className={styles.item}>
-            <div className={styles.itemWrapper}>
-              <span>
-                <FaReact />
-              </span>
+        <ul className="grid gap-6">
+          <li className="flex items-center gap-4">
+            <div className="flex flex-1 items-center gap-4">
+              <FaReact fontSize="2rem" />
               <p>React</p>
             </div>
-            <span className={styles.value}>90%</span>
+            <span className="text-primary">90%</span>
           </li>
-          <li className={styles.item}>
-            <div className={styles.itemWrapper}>
-              <span>
-                <TbBrandNextjs />
-              </span>
+          <li className="flex items-center gap-4">
+            <div className="flex flex-1 items-center gap-4">
+              <TbBrandNextjs fontSize="2rem" />
               <p>Next</p>
             </div>
-            <span className={styles.value}>90%</span>
+            <span className="text-primary">90%</span>
           </li>
-          <li className={styles.item}>
-            <div className={styles.itemWrapper}>
-              <span>
-                <TbBrandAngular />
-              </span>
+          <li className="flex items-center gap-4">
+            <div className="flex flex-1 items-center gap-4">
+              <TbBrandAngular fontSize="2rem" />
               <p>Angular</p>
             </div>
-            <span className={styles.value}>50%</span>
+            <span className="text-primary">50%</span>
           </li>
-          <li className={styles.item}>
-            <div className={styles.itemWrapper}>
-              <span>
-                <TbBrandVue />
-              </span>
+          <li className="flex items-center gap-4">
+            <div className="flex flex-1 items-center gap-4">
+              <TbBrandVue fontSize="2rem" />
               <p>Vue</p>
             </div>
-            <span className={styles.value}>50%</span>
+            <span className="text-primary">50%</span>
           </li>
-          <li className={styles.item}>
-            <div className={styles.itemWrapper}>
-              <span>
-                <FaFigma />
-              </span>
+          <li className="flex items-center gap-4">
+            <div className="flex flex-1 items-center gap-4">
+              <FaFigma fontSize="2rem" />
               <p>Дизайн</p>
             </div>
-            <span className={styles.value}>50%</span>
+            <span className="text-primary">50%</span>
           </li>
         </ul>
       </Section.Content>

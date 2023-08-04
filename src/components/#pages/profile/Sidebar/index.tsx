@@ -5,7 +5,6 @@ import { useFileReader } from "~/hooks/fileReader.hook"
 import { useAuthStore } from "~/store/auth"
 import { api } from "~/utils/api"
 import { formatRole } from "~/utils/helpers"
-import styles from "./styles.module.scss"
 
 const ProfileSidebar: React.FC = () => {
   const user = useAuthStore((state) => state.user)
@@ -28,10 +27,9 @@ const ProfileSidebar: React.FC = () => {
 
   return (
     <>
-      <aside className={styles.sidebar}>
-        <div className={styles.userInfo}>
+      <aside className="sticky left-0 top-4 grid h-full max-w-[20rem] flex-initial basis-[20rem] gap-4 overflow-hidden rounded-medium-shape bg-surface-container px-8 py-6">
+        <div className="grid place-items-center">
           <ImageUploader
-            className={styles.uploader}
             previews={previews}
             disabled={isLoading || uploadAvatarMut.isLoading}
             reset={reset}
@@ -59,11 +57,13 @@ const ProfileSidebar: React.FC = () => {
               }
             }}
           />
-          <div className={styles.info}>
+          <div className="mt-4 grid gap-[0.3rem] text-center">
             {user ? (
               <>
-                <span className={styles.role}>{formatRole(user.role)}</span>
-                <p className={styles.fullName}>
+                <span className="font-medium text-on-surface-variant">
+                  {formatRole(user.role)}
+                </span>
+                <p className="text-title-l">
                   {user.lastName} {user.firstName} {user.middleName}
                 </p>
               </>
@@ -71,36 +71,43 @@ const ProfileSidebar: React.FC = () => {
           </div>
         </div>
 
-        <div className={styles.groupInfo}>
-          <hr />
-          <ul className={styles.list}>
-            <li className={styles.success}>
-              Выполненные заказы <span>21</span>
+        <div>
+          <hr className="mx-auto mb-4 h-[2px] w-20 rounded-full border-none bg-outline-variant" />
+          <ul className="grid gap-[0.8rem]">
+            <li className="flex items-center justify-between gap-4 overflow-hidden">
+              Выполненные заказы <span className="text-success">21</span>
             </li>
-            <li>
-              Текущие заказы <span>3</span>
+            <li className="flex items-center justify-between gap-4 overflow-hidden">
+              Текущие заказы <span className="text-primary">3</span>
             </li>
-            <li className={styles.danger}>
-              Отмененные заказы <span>1</span>
+            <li className="flex items-center justify-between gap-4 overflow-hidden">
+              Отмененные заказы <span className="text-danger">1</span>
             </li>
           </ul>
         </div>
         {user ? (
-          <div className={styles.groupInfo}>
-            <hr />
-            <ul className={styles.list}>
-              <li>
+          <div>
+            <hr className="mx-auto mb-4 h-[2px] w-20 rounded-full border-none bg-outline-variant" />
+            <ul className="grid gap-[0.8rem]">
+              <li className="flex items-center justify-between gap-4 overflow-hidden">
                 Email
-                <a href={`mailto:${user.email}`}>{user.email}</a>
+                <a
+                  href={`mailto:${user.email}`}
+                  className="truncate text-primary hover:underline"
+                >
+                  {user.email}
+                </a>
               </li>
               {user.tel ? (
-                <li>
-                  Телефон <span>3</span>
+                <li className="flex items-center justify-between gap-4 overflow-hidden">
+                  Телефон <span className="text-primary">{user.tel}</span>
                 </li>
               ) : null}
-              <li>
+              <li className="flex items-center justify-between gap-4 overflow-hidden">
                 Дата рождения
-                <span>{user.birthDate.toLocaleDateString("ru")}</span>
+                <span className="text-primary">
+                  {user.birthDate.toLocaleDateString("ru")}
+                </span>
               </li>
             </ul>
           </div>

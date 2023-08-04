@@ -19,7 +19,6 @@ import { useAuthStore } from "~/store/auth"
 import { PagePaths } from "~/utils/enums"
 import Button from "../Button"
 import Logo from "../Logo"
-import styles from "./styles.module.scss"
 
 const Sidebar: React.FC = () => {
   const authStore = useAuthStore()
@@ -31,93 +30,89 @@ const Sidebar: React.FC = () => {
   return (
     <>
       <SignOutModal />
-      <aside className={styles.sidebar}>
+      <aside className="sticky left-0 top-0 flex h-[100svh] flex-initial basis-[18rem] flex-col gap-safe-area overflow-y-auto overflow-x-hidden p-safe-area">
         {authStore.user ? (
           <>
             <Logo />
-            <nav className={styles.nav}>
-              <div className={styles.navItem}>
+            <nav className="grid gap-1">
+              <div>
                 <Link
                   href={PagePaths.Home}
                   title="Главная"
                   onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
                 >
-                  <span>
-                    <MdOutlineHome />
-                  </span>
+                  <MdOutlineHome fontSize="1.75rem" />
                   <span>Главная</span>
                 </Link>
               </div>
-              <div className={styles.navItem}>
+              <div>
                 <Link
                   href={PagePaths.Orders}
                   title="Заказы"
                   onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
                 >
-                  <span>
-                    <MdOutlineWorkOutline />
-                  </span>
+                  <MdOutlineWorkOutline fontSize="1.75rem" />
                   <span>Заказы</span>
                 </Link>
               </div>
-              <div className={styles.navItem}>
-                <Link href="#" title="Резюме" onPointerDown={rippleEffectEvent}>
-                  <span>
-                    <MdListAlt />
-                  </span>
+              <div>
+                <Link
+                  href="#"
+                  title="Резюме"
+                  onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
+                >
+                  <MdListAlt fontSize="1.75rem" />
                   <span>Резюме</span>
                 </Link>
               </div>
-              <div className={styles.navItem}>
+              <div>
                 <Link
                   href="#"
                   title="Избранное"
                   onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
                 >
-                  <span>
-                    <MdFavoriteBorder />
-                  </span>
+                  <MdFavoriteBorder fontSize="1.7rem" />
                   <span>Избранное</span>
                 </Link>
               </div>
-              <div className={styles.navItem}>
+              <div>
                 <Link
                   href="#"
                   title="История"
                   onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
                 >
-                  <span>
-                    <MdOutlineHistory />
-                  </span>
+                  <MdOutlineHistory fontSize="1.7rem" />
                   <span>История</span>
                 </Link>
               </div>
-              <div className={styles.navItem}>
+              <div>
                 <Link
                   href={PagePaths.Profile}
                   title="Профиль"
                   onPointerDown={rippleEffectEvent}
+                  className="relative flex items-center gap-2 overflow-hidden rounded-medium-shape px-6 py-[0.7rem] text-body-extra text-on-surface outline-none duration-200 hover:bg-primary-container-high hover:text-primary focus:bg-primary-container focus:text-primary"
                 >
-                  <span>
-                    <MdPersonOutline />
-                  </span>
+                  <MdPersonOutline fontSize="1.7rem" />
                   <span>Профиль</span>
                 </Link>
               </div>
             </nav>
-            <div className={styles.profile}>
-              <div className={styles.profileWrapper}>
-                <UserProfile
-                  name={authStore.user.firstName}
-                  image={
-                    authStore.user.avatar
-                      ? env.NEXT_PUBLIC_SUPABASE_STORAGE_AVATARS_URL +
-                        authStore.user.avatar
-                      : undefined
-                  }
-                  className={styles.userProfile}
-                />
-              </div>
+            <div className="mt-auto flex items-center gap-4">
+              <UserProfile
+                name={authStore.user.firstName}
+                image={
+                  authStore.user.avatar
+                    ? env.NEXT_PUBLIC_SUPABASE_STORAGE_AVATARS_URL +
+                      authStore.user.avatar
+                    : undefined
+                }
+                className="flex-1 text-body-extra"
+              />
               <Button
                 isIcon
                 onClick={() => openModal(() => signOutModalStore.open())}
@@ -129,12 +124,7 @@ const Sidebar: React.FC = () => {
         ) : (
           <>
             <Skeleton width="15em" height="3em" />
-            <Skeleton
-              count={4}
-              width="10em"
-              height="1.5em"
-              style={{ display: "grid" }}
-            />
+            <Skeleton count={4} width="10em" height="1.5em" className="grid" />
           </>
         )}
       </aside>

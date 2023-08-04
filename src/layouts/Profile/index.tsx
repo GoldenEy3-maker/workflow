@@ -1,11 +1,10 @@
 import ProfileSidebar from "~/components/#pages/profile/Sidebar"
-import styles from "./styles.module.scss"
 
 const ProfileLayout: React.FC<React.PropsWithChildren> = (props) => {
   return (
-    <div className={styles.profile}>
+    <div className="flex gap-4">
       <ProfileSidebar />
-      <main className={styles.main}>{props.children}</main>
+      <main className="flex flex-1 flex-col gap-4">{props.children}</main>
     </div>
   )
 }

@@ -3,8 +3,8 @@ import styles from "./styles.module.scss"
 
 type ProgressBarProps = {
   value: number
-  isDanger?: boolean
-  isSuccess?: boolean
+  danger?: boolean
+  success?: boolean
   width?: number
   height?: number
 }
@@ -13,8 +13,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
   width,
   height,
-  isDanger,
-  isSuccess,
+  danger,
+  success,
 }) => {
   const w = width ?? 100
   const h = height ?? 100
@@ -24,10 +24,15 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div
-      className={cls([styles.progressCircle], {
-        [styles.danger]: !!isDanger,
-        [styles.success]: !!isSuccess,
-      })}
+      className={cls(
+        [
+          "relative flex items-center justify-center rounded-full text-title-l text-primary",
+        ],
+        {
+          "text-danger": !!danger,
+          "text-success": !!success,
+        }
+      )}
       style={
         {
           width: `${w}px`,
@@ -38,17 +43,18 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       }
     >
       <span>{value}%</span>
-      <svg>
+      <svg className="absolute h-full w-full">
         <circle
-          className={styles.bg}
+          className="stroke-surface-container stroke-[8px]"
           fill="none"
           cy={h / 2}
           cx={w / 2}
           r={radius}
         ></circle>
         <circle
-          className={styles.progress}
+          className="origin-center -rotate-90 stroke-current stroke-[8px]"
           fill="none"
+          strokeLinecap="round"
           cy={w / 2}
           cx={h / 2}
           r={radius}

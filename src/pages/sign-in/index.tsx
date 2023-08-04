@@ -56,7 +56,7 @@ const SignIn: NextPageWithLayout = () => {
   return (
     <>
       <Logo isMinimized={true} />
-      <h1 className={cls([styles.title, "page-title _centered"])}>
+      <h1 className={cls([styles.title, "text-display-l font-medium"])}>
         Авторизация
       </h1>
       <Form.Root

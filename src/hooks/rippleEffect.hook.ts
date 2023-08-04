@@ -1,10 +1,11 @@
-import type { PointerEventHandler } from "react"
-
 export const useRippleEffect = () => {
   const animationDuration = 600
   const minAnimationDuration = 200
 
-  const rippleEffectEvent: PointerEventHandler<HTMLElement> = (event) => {
+  const rippleEffectEvent = (
+    event: React.PointerEvent<HTMLElement>,
+    bg?: string
+  ) => {
     const target = event.currentTarget
     const nestedInteractionNodes = target.querySelectorAll("button, input, a")
 
@@ -31,7 +32,15 @@ export const useRippleEffect = () => {
     ripple.style.top = `${y}px`
     ripple.style.width = ripple.style.height = `${diameter}px`
 
-    ripple.classList.add("ripple-element")
+    ripple.classList.add("absolute")
+    ripple.classList.add("pointer-events-none")
+    ripple.classList.add("select-none")
+    ripple.classList.add("rounded-full")
+    ripple.classList.add("block")
+    ripple.classList.add("opacity-[0.15]")
+    ripple.classList.add(bg ?? "bg-primary")
+    ripple.classList.add("animate-ripple")
+
     ripple.dataset.rippleElement = "true"
 
     target.insertBefore(ripple, target.firstChild)
@@ -48,9 +57,9 @@ export const useRippleEffect = () => {
       ripple.style.opacity = "0"
       ripple.style.transition = `opacity ${remainingTime}ms linear`
 
-      setTimeout(() => {
-        ripple.remove()
-      }, remainingTime)
+      // setTimeout(() => {
+      //   ripple.remove()
+      // }, remainingTime)
 
       target.removeEventListener("pointerup", handleFadeOutRipple)
       target.removeEventListener("pointercancel", handleFadeOutRipple)

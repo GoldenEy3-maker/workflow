@@ -6,8 +6,6 @@ import Sidebar from "~/components/Sidebar"
 import { useAuthStore } from "~/store/auth"
 import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
-import { cls } from "~/utils/helpers"
-import styles from "./styles.module.scss"
 
 const MainLayout: React.FC<React.PropsWithChildren> = (props) => {
   const router = useRouter()
@@ -35,7 +33,7 @@ const MainLayout: React.FC<React.PropsWithChildren> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Sidebar />
-      <div className={cls([styles.layout, "_container"])}>
+      <div className="container pb-safe-area">
         <Header />
         {props.children}
       </div>

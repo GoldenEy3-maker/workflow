@@ -99,7 +99,7 @@ const SignUp: NextPageWithLayout = () => {
   return (
     <>
       <Logo isMinimized={true} />
-      <h1 className="page-title _centered">Регистрация</h1>
+      <h1 className="text-display-l font-medium">Регистрация</h1>
 
       <Form.Root
         // eslint-disable-next-line @typescript-eslint/no-misused-promises

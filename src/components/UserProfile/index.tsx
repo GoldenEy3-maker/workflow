@@ -1,11 +1,13 @@
 import Image from "next/image"
 import { cls } from "~/utils/helpers"
-import styles from "./styles.module.scss"
 
 type UserProfileProps = {
   image?: string
   name: string
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+} & React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>
 
 const UserProfile: React.FC<UserProfileProps> = ({
   image,
@@ -14,16 +16,20 @@ const UserProfile: React.FC<UserProfileProps> = ({
   ...props
 }) => {
   return (
-    <div className={cls([className, styles.userProfile])} {...props}>
-      <div className={styles.img}>
+    <div
+      className={cls([className, "flex items-center gap-4 overflow-hidden"])}
+      {...props}
+    >
+      <div className="relative h-[50px] w-[50px] flex-shrink-0 overflow-hidden rounded-full bg-placeholder">
         <Image
           src={image ?? "/images/avatar-placeholder.png"}
           alt="Фото профиля"
           fill
           sizes="100vw"
+          objectFit="cover"
         />
       </div>
-      <span>{name}</span>
+      <span className="truncate">{name}</span>
     </div>
   )
 }

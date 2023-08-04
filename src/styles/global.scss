@@ -1,25 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "./var.scss";
-@import "./default.scss";
-@import "./components/rippleEffect.scss";
 
-.wrapper {
-  display: flex;
+body[data-lock="true"] {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
 }
 
-._container {
-  width: 100%;
-  height: 100%;
-  max-width: var(--container-mw);
-  padding-inline: var(--container-pdi);
-  margin-inline: auto;
+// Customizing scroll
+::-webkit-scrollbar {
+  width: 0.625rem;
 }
 
-.page-title {
-  font-size: var(--display-s-fs);
-  font-weight: 500;
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary-lowest-hsl));
 }
 
-.rich-text {
-  color: hsl(var(--primary-hsl));
-  font-weight: 500;
+// Customizing select
+::-moz-selection {
+  color: hsl(var(--surface-hsl));
+  background: hsl(var(--primary-hsl));
+}
+
+::selection {
+  color: hsl(var(--surface-hsl));
+  background: hsl(var(--primary-hsl));
+}
+
+// Reset inputs
+input::-ms-clear,
+input::-ms-reveal {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
