@@ -42,9 +42,7 @@ const Sidebar: React.FC = () => {
                   title="Главная"
                   onPointerDown={rippleEffectEvent}
                 >
-                  <span>
-                    <MdOutlineHome />
-                  </span>
+                  <MdOutlineHome />
                   <span>Главная</span>
                 </Link>
               </div>
@@ -54,17 +52,13 @@ const Sidebar: React.FC = () => {
                   title="Заказы"
                   onPointerDown={rippleEffectEvent}
                 >
-                  <span>
-                    <MdOutlineWorkOutline />
-                  </span>
+                  <MdOutlineWorkOutline />
                   <span>Заказы</span>
                 </Link>
               </div>
               <div className={styles.navItem}>
                 <Link href="#" title="Резюме" onPointerDown={rippleEffectEvent}>
-                  <span>
-                    <MdListAlt />
-                  </span>
+                  <MdListAlt />
                   <span>Резюме</span>
                 </Link>
               </div>
@@ -74,9 +68,7 @@ const Sidebar: React.FC = () => {
                   title="Избранное"
                   onPointerDown={rippleEffectEvent}
                 >
-                  <span>
-                    <MdFavoriteBorder />
-                  </span>
+                  <MdFavoriteBorder />
                   <span>Избранное</span>
                 </Link>
               </div>
@@ -86,9 +78,7 @@ const Sidebar: React.FC = () => {
                   title="История"
                   onPointerDown={rippleEffectEvent}
                 >
-                  <span>
-                    <MdOutlineHistory />
-                  </span>
+                  <MdOutlineHistory />
                   <span>История</span>
                 </Link>
               </div>
@@ -98,9 +88,7 @@ const Sidebar: React.FC = () => {
                   title="Профиль"
                   onPointerDown={rippleEffectEvent}
                 >
-                  <span>
-                    <MdPersonOutline />
-                  </span>
+                  <MdPersonOutline />
                   <span>Профиль</span>
                 </Link>
               </div>

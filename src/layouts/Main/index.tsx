@@ -16,6 +16,7 @@ type MainLayoutProps = {
 const MainLayout: React.FC<React.PropsWithChildren<MainLayoutProps>> = (
   props
 ) => {
+  const authStore = useAuthStore()
   const router = useRouter()
 
   const currentUserQuery = api.user.getCurrent.useQuery(undefined, {
@@ -24,8 +25,9 @@ const MainLayout: React.FC<React.PropsWithChildren<MainLayoutProps>> = (
 
   useEffect(() => {
     if (!currentUserQuery.isLoading && currentUserQuery.error)
-      void router.push(PagePaths.SignIn)
-    else useAuthStore.setState({ user: currentUserQuery.data })
+      return void router.push(PagePaths.SignIn)
+
+    if (currentUserQuery.data) authStore.setUser(currentUserQuery.data)
   }, [
     currentUserQuery.data,
     currentUserQuery.error,

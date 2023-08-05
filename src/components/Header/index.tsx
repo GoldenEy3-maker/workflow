@@ -3,7 +3,7 @@ import { useAuthStore } from "~/store/auth"
 import styles from "./styles.module.scss"
 
 const Header: React.FC = () => {
-  const user = useAuthStore((state) => state.user)
+  const authStore = useAuthStore()
 
   const getGreetings = () => {
     const currentHour = new Date().getHours()
@@ -21,9 +21,10 @@ const Header: React.FC = () => {
 
   return (
     <header className={styles.header}>
-      {user ? (
+      {authStore.user ? (
         <h1 className="page-title">
-          {getGreetings()}, <span className="rich-text">{user.firstName}</span>!
+          {getGreetings()},{" "}
+          <span className="rich-text">{authStore.user.firstName}</span>!
         </h1>
       ) : (
         <Skeleton width="25em" height="3em" />

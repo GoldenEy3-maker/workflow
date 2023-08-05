@@ -91,3 +91,17 @@
     }
   }
 }
+
+.credentialsSkelet {
+  text-align: center;
+
+  span {
+    &:first-child {
+      width: 7rem;
+    }
+  }
+}
+
+.avatarSkelet {
+  text-align: center;
+}

@@ -28,13 +28,14 @@ type FormState = {
 }
 
 const SignIn: NextPageWithLayout = () => {
+  const authStore = useAuthStore()
   const router = useRouter()
 
   const signInMut = api.user.signIn.useMutation({
     async onSuccess(token) {
       toast.success("Авторизация прошла успешно!")
 
-      useAuthStore.setState({ token })
+      authStore.setToken(token)
 
       const bol = await router.push(PagePaths.Home)
       console.log("🚀 ~ file: index.tsx:39 ~ onSuccess ~ bol:", bol)
