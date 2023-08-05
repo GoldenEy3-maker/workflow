@@ -259,7 +259,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 CreateResume.getLayout = (page) => {
   return (
-    <MainLayout>
+    <MainLayout title="Создание резюме">
       <ProfileLayout>{page}</ProfileLayout>
     </MainLayout>
   )

@@ -307,7 +307,7 @@ const SignUp: NextPageWithLayout = () => {
 }
 
 SignUp.getLayout = (page) => {
-  return <AuthLayout>{page}</AuthLayout>
+  return <AuthLayout title="Регистрация">{page}</AuthLayout>
 }
 
 export default SignUp

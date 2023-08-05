@@ -54,7 +54,7 @@ const Profile: NextPageWithLayout = () => {
 
 Profile.getLayout = (page) => {
   return (
-    <MainLayout>
+    <MainLayout title="Профиль">
       <ProfileLayout>{page}</ProfileLayout>
     </MainLayout>
   )

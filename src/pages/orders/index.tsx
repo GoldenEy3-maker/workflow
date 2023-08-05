@@ -21,7 +21,7 @@ const Orders: NextPageWithLayout = () => {
 }
 
 Orders.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>
+  return <MainLayout title="Заказы">{page}</MainLayout>
 }
 
 export default Orders

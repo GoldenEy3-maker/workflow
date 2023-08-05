@@ -88,7 +88,7 @@ const ActivateUser: NextPageWithLayout = () => {
 }
 
 ActivateUser.getLayout = (page) => {
-  return <AuthLayout>{page}</AuthLayout>
+  return <AuthLayout title="Активация аккаунта">{page}</AuthLayout>
 }
 
 export default ActivateUser

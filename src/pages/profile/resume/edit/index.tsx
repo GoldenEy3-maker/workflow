@@ -246,7 +246,6 @@ const EditResume: NextPageWithLayout = () => {
                   }}
                   render={({ field }) => (
                     <SlateEditor
-                      key={crypto.randomUUID()}
                       label="Расскажите о себе"
                       validError={hookForm.formState.errors.bio?.message}
                       onChange={field.onChange}
@@ -312,7 +311,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 EditResume.getLayout = (page) => {
   return (
-    <MainLayout>
+    <MainLayout title="Редактирование резюме">
       <ProfileLayout>{page}</ProfileLayout>
     </MainLayout>
   )

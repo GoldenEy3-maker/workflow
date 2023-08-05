@@ -133,7 +133,7 @@ const SignIn: NextPageWithLayout = () => {
 }
 
 SignIn.getLayout = (page) => {
-  return <AuthLayout>{page}</AuthLayout>
+  return <AuthLayout title="Авторизация">{page}</AuthLayout>
 }
 
 export default SignIn

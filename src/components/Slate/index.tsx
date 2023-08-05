@@ -105,8 +105,9 @@ type SlateEditorProps = {
 }
 
 const SlateEditor: React.FC<SlateEditorProps> = (props) => {
-  const [editor] = useState(() =>
-    slateEditorService.withInlines(withReact(createEditor()))
+  const editor = useMemo(
+    () => slateEditorService.withInlines(withReact(createEditor())),
+    []
   )
 
   const initialValue = useMemo<Descendant[]>(() => {
@@ -146,6 +147,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
       })}
     >
       <Slate
+        key={crypto.randomUUID()}
         editor={editor}
         onChange={(value) => {
           if (!props.onChange) return

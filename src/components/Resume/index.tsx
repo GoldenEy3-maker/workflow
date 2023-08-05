@@ -61,7 +61,6 @@ const Resume: React.FC<ResumeProps> = (props) => {
                 ) : null}
               </header>
               <SlateEditor
-                key={crypto.randomUUID()}
                 initialValue={props.data.details}
                 reduced={props.reduced}
                 readonly

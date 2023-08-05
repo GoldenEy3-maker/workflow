@@ -1,30 +1,30 @@
 import Image from "next/image"
+import Link from "next/link"
+import { PagePaths } from "~/utils/enums"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
 type UserProfileProps = {
   image?: string
   name: string
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-
-const UserProfile: React.FC<UserProfileProps> = ({
-  image,
-  name,
-  className,
-  ...props
-}) => {
+  className?: string
+}
+const UserProfile: React.FC<UserProfileProps> = (props) => {
   return (
-    <div className={cls([className, styles.userProfile])} {...props}>
+    <Link
+      href={PagePaths.Profile}
+      className={cls([props.className, styles.userProfile])}
+    >
       <div className={styles.img}>
         <Image
-          src={image ?? "/images/avatar-placeholder.png"}
+          src={props.image ?? "/images/avatar-placeholder.png"}
           alt="Фото профиля"
           fill
           sizes="100vw"
         />
       </div>
-      <span>{name}</span>
-    </div>
+      <span>{props.name}</span>
+    </Link>
   )
 }
 export default UserProfile
