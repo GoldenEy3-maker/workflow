@@ -44,6 +44,8 @@ model User {
   updatedAt       DateTime         @updatedAt
   resume          Resume?
   favoriteResumes FavoriteResume[]
+  favoriteOrders  FavoriteOrder[]
+  postedOrders    Order[]
 }
 
 model FavoriteResume {
@@ -62,7 +64,7 @@ model Resume {
   level        Level            @relation(fields: [levelId], references: [id])
   levelId      String
   details      String
-  resumeSkills ResumeSkill[]
+  skills       ResumeSkill[]
   author       User             @relation(fields: [authorId], references: [id])
   authorId     String           @unique
   createdAt    DateTime         @default(now())
@@ -79,9 +81,10 @@ model ResumeSkill {
 }
 
 model Skill {
-  id         String        @id @default(uuid())
-  value      String
-  attackedBy ResumeSkill[]
+  id               String        @id @default(uuid())
+  value            String
+  attachedByResume ResumeSkill[]
+  attachedByOrder  OrderSkill[]
 }
 
 model Level {
@@ -94,6 +97,44 @@ model Speciality {
   id         String   @id @default(uuid())
   value      String
   attackedBy Resume[]
+}
+
+model Order {
+  id          String          @id @default(uuid())
+  title       String
+  description String
+  price       Int?
+  secure      Boolean
+  author      User            @relation(fields: [authorId], references: [id])
+  authorId    String
+  status      OrderStatus     @default(POSTED)
+  skills      OrderSkill[]
+  favoritedBy FavoriteOrder[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model FavoriteOrder {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model OrderSkill {
+  id      String @id @default(uuid())
+  skill   Skill  @relation(fields: [skillId], references: [id])
+  skillId String
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+}
+
+enum OrderStatus {
+  COMPLETED
+  POSTED
+  ARCHIVED
 }
 
 enum Role {

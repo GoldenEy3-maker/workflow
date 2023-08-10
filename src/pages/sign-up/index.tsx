@@ -18,6 +18,7 @@ import Input from "~/components/Input"
 import Logo from "~/components/Logo"
 import * as Tabs from "~/components/Tabs"
 import AuthLayout from "~/layouts/Auth"
+import dateService from "~/services/date.service"
 import validationService from "~/services/validation.service"
 import { api } from "~/utils/api"
 import { InputMaskPatterns, PagePaths, QueryKeys } from "~/utils/enums"
@@ -106,7 +107,10 @@ const SignUp: NextPageWithLayout = () => {
         onSubmit={hookForm.handleSubmit((data) => {
           toast.dismiss()
 
-          signUpMut.mutate(data)
+          signUpMut.mutate({
+            ...data,
+            birthDate: dateService.normalizeRuLocale(data.birthDate),
+          })
         })}
         noValidate
       >
@@ -184,26 +188,25 @@ const SignUp: NextPageWithLayout = () => {
                 if (!validationService.validateDatePattern(value))
                   return "Невалидная дата!"
 
-                const years = dayjs(new Date()).diff(value, "y")
+                const years = dayjs(new Date()).diff(
+                  dateService.normalizeRuLocale(value),
+                  "y"
+                )
 
                 if (years < 16)
                   return "К сожалению мы не можем предоставить вам аккаунт в силу вашего возраста!"
               },
             }}
             render={({ field }) => (
-              <InputMask
-                mask={InputMaskPatterns.Date}
-                maskPlaceholder="ГГГГ-ММ-ДД"
+              <Input
+                label="Дата рождения"
+                type="date"
+                masked
+                leadingIcon={<MdOutlineCalendarMonth fontSize="1.5em" />}
+                validError={hookForm.formState.errors.birthDate?.message}
                 disabled={signUpMut.isLoading}
                 {...field}
-              >
-                <Input
-                  label="Дата рождения"
-                  type="text"
-                  leadingIcon={<MdOutlineCalendarMonth fontSize="1.5em" />}
-                  validError={hookForm.formState.errors.birthDate?.message}
-                />
-              </InputMask>
+              />
             )}
           />
 

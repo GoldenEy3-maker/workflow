@@ -15,14 +15,14 @@ type FilterProps = {
   }[]
 }
 
-export const Filter: React.FC<FilterProps> = ({ filters }) => {
+export const Filter: React.FC<FilterProps> = (props) => {
   return (
     <Filters.Root>
       <Filters.Trigger title="Фильтры">
         <MdOutlineFilterAlt fontSize="1.5em" />
       </Filters.Trigger>
       <Filters.Content>
-        {filters.map((group, index) => (
+        {props.filters.map((group, index) => (
           <Filters.Group legend={group.legend} key={index}>
             {group.checkboxes.map((checkbox, index) => (
               <Filters.Checkbox {...checkbox} key={index} />

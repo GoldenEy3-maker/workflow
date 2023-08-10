@@ -34,6 +34,8 @@ type OrdersStore = {
   filters: FilterValuesState
   sortValue: SortValues
   changeFilterHandler: ChangeEventHandler<HTMLInputElement>
+  changeSearchValue: (value: string) => void
+  changeSortValue: (value: SortValues) => void
 }
 
 export const useOrdersStore = create<OrdersStore>((set) => ({
@@ -61,16 +63,20 @@ export const useOrdersStore = create<OrdersStore>((set) => ({
     },
   },
   sortValue: "Дата",
+  changeSearchValue(value) {
+    set({ searchValue: value })
+  },
+  changeSortValue(value) {
+    set({ sortValue: value })
+  },
   changeFilterHandler: (event) => {
-    set((state) => {
-      const id = event.target.id as FilterValues
+    const id = event.target.id as FilterValues
 
-      return {
-        filters: {
-          ...state.filters,
-          [id]: changeFilterStateHandler(state.filters[id]),
-        },
-      }
-    })
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        [id]: changeFilterStateHandler(state.filters[id]),
+      },
+    }))
   },
 }))

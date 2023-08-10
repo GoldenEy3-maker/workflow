@@ -15,14 +15,13 @@ type ResumeProps = {
         include: {
           speciality: true
           level: true
-          resumeSkills: { include: { skill: true } }
+          skills: { include: { skill: true } }
         }
       }>
     | undefined
     | null
   loading?: boolean
   error?: string | undefined
-  expanded?: boolean
   reduced?: boolean
   backgrounded?: boolean
   headerActions?: React.ReactNode[]
@@ -67,8 +66,8 @@ const Resume: React.FC<ResumeProps> = (props) => {
               />
               <hr className={styles.divider} />
               <ul className={styles.tags}>
-                {props.data.resumeSkills.map((resumeSkill) => (
-                  <li key={resumeSkill.skill.id}>{resumeSkill.skill.value}</li>
+                {props.data.skills.map(({ skill }) => (
+                  <li key={skill.id}>{skill.value}</li>
                 ))}
               </ul>
               <footer className={styles.footer}>

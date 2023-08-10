@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { Role } from "@prisma/client"
-import { CompleteResume, RelatedResumeModel, CompleteFavoriteResume, RelatedFavoriteResumeModel } from "./index"
+import { CompleteResume, RelatedResumeModel, CompleteFavoriteResume, RelatedFavoriteResumeModel, CompleteFavoriteOrder, RelatedFavoriteOrderModel, CompleteOrder, RelatedOrderModel } from "./index"
 
 export const UserModel = z.object({
   id: z.string(),
@@ -21,6 +21,8 @@ export const UserModel = z.object({
 export interface CompleteUser extends z.infer<typeof UserModel> {
   resume?: CompleteResume | null
   favoriteResumes: CompleteFavoriteResume[]
+  favoriteOrders: CompleteFavoriteOrder[]
+  postedOrders: CompleteOrder[]
 }
 
 /**
@@ -31,4 +33,6 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserModel.extend({
   resume: RelatedResumeModel.nullish(),
   favoriteResumes: RelatedFavoriteResumeModel.array(),
+  favoriteOrders: RelatedFavoriteOrderModel.array(),
+  postedOrders: RelatedOrderModel.array(),
 }))

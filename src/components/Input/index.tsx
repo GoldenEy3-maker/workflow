@@ -7,8 +7,12 @@ import {
   useState,
 } from "react"
 import { MdClose, MdKeyboardArrowDown } from "react-icons/md"
+import ReactInputMask from "react-input-mask"
+import ReactTextMask from "react-text-mask"
+import { createNumberMask } from "text-mask-addons"
 import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
+import { InputMaskPatterns } from "~/utils/enums"
 import { cls } from "~/utils/helpers"
 import Button from "../Button"
 import styles from "./styles.module.scss"
@@ -21,8 +25,10 @@ export type InputProps = {
   options?: string[]
   optionHandler?: (value: string) => void
   optionsReset?: () => void
+  type?: React.InputHTMLAttributes<HTMLInputElement>["type"] | "currency"
+  masked?: boolean
 } & React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">,
   HTMLInputElement
 >
 
@@ -35,6 +41,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       trailingIcon,
       validError,
       options,
+      masked,
       optionHandler,
       optionsReset,
       onFocus,
@@ -135,13 +142,53 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={styles.leading}>{leadingIcon}</div>
           ) : null}
           {label ? <label htmlFor={props.id}>{label}</label> : null}
-          <input
-            onFocus={inputFocusHandler}
-            onBlur={inputBlurHandler}
-            onChange={inputChangeHandler}
-            ref={inputRef}
-            {...props}
-          />
+          {(() => {
+            if (masked && props.type === "currency")
+              return (
+                <ReactTextMask
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  mask={createNumberMask({
+                    prefix: "",
+                    suffix: " ₽",
+                    thousandsSeparatorSymbol: " ",
+                    integerLimit: 6,
+                  })}
+                  onFocus={inputFocusHandler}
+                  onBlur={inputBlurHandler}
+                  onChange={inputChangeHandler}
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  ref={inputRef}
+                  {...props}
+                />
+              )
+
+            if (masked && props.type === "date")
+              return (
+                <ReactInputMask
+                  mask={InputMaskPatterns.Date}
+                  maskPlaceholder="ДД.ММ.ГГГГ"
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  ref={inputRef}
+                  onFocus={inputFocusHandler}
+                  onBlur={inputBlurHandler}
+                  onChange={inputChangeHandler}
+                  {...props}
+                  type="text"
+                />
+              )
+
+            return (
+              <input
+                onFocus={inputFocusHandler}
+                onBlur={inputBlurHandler}
+                onChange={inputChangeHandler}
+                ref={inputRef}
+                {...props}
+              />
+            )
+          })()}
           {filteredOptions && !trailingIcon ? (
             <div
               className={cls([styles.trailing], {

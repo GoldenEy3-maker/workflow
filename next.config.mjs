@@ -2,7 +2,7 @@ await import("./src/env.mjs")
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
     domains: ["ofehkuhumrsbyulhfeme.supabase.co"],
   },

@@ -1,4 +1,8 @@
 export default new (class DateService {
+  normalizeRuLocale(value: string) {
+    return value.split(".").reverse().join(".")
+  }
+
   getMonths() {
     return Array.from(
       { length: 12 },

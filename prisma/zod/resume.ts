@@ -14,7 +14,7 @@ export const ResumeModel = z.object({
 export interface CompleteResume extends z.infer<typeof ResumeModel> {
   speciality: CompleteSpeciality
   level: CompleteLevel
-  resumeSkills: CompleteResumeSkill[]
+  skills: CompleteResumeSkill[]
   author: CompleteUser
   favoritedBy: CompleteFavoriteResume[]
 }
@@ -27,7 +27,7 @@ export interface CompleteResume extends z.infer<typeof ResumeModel> {
 export const RelatedResumeModel: z.ZodSchema<CompleteResume> = z.lazy(() => ResumeModel.extend({
   speciality: RelatedSpecialityModel,
   level: RelatedLevelModel,
-  resumeSkills: RelatedResumeSkillModel.array(),
+  skills: RelatedResumeSkillModel.array(),
   author: RelatedUserModel,
   favoritedBy: RelatedFavoriteResumeModel.array(),
 }))

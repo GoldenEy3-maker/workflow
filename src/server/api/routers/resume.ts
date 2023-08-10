@@ -19,7 +19,7 @@ export const resumeRouter = createTRPCRouter({
           specialityId: opts.input.speciality.id,
           levelId: opts.input.level.id,
           details: opts.input.bio,
-          resumeSkills: {
+          skills: {
             createMany: {
               data: opts.input.skills.map((skill) => ({
                 skillId: skill.id,
@@ -40,7 +40,7 @@ export const resumeRouter = createTRPCRouter({
         },
         include: {
           level: true,
-          resumeSkills: {
+          skills: {
             include: {
               skill: true,
             },

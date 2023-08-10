@@ -103,7 +103,7 @@ const EditResume: NextPageWithLayout = () => {
       hookForm.setValue("level", getResumeQuery.data.level.value)
       hookForm.setValue(
         "skills",
-        getResumeQuery.data.resumeSkills.map((item) => item.skill.value)
+        getResumeQuery.data.skills.map((item) => item.skill.value)
       )
       hookForm.setValue("bio", getResumeQuery.data.details)
     }

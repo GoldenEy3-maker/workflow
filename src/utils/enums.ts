@@ -8,13 +8,15 @@ export const PagePaths = {
   CreateResume: "/profile/resume/create",
   EditResume: "/profile/resume/edit",
   Orders: "/orders",
+  OrderCreate: "/profile/order/create",
   Favorite: "/favorites",
   ActivateUser: "/activate",
 } as const
 
 export const InputMaskPatterns = {
   Tel: "+7 (999) 999-99-99",
-  Date: "9999-99-99",
+  Date: "99.99.9999",
+  Price: "99 999 ₽",
 } as const
 
 export const QueryKeys = {

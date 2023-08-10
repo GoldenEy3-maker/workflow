@@ -30,7 +30,7 @@ export const Root: React.FC<
     if (onBlur) onBlur(event)
   }
 
-  useClickOutside(rootRef, closeHandler)
+  useClickOutside(rootRef, closeHandler, contextState.isOpen === true)
 
   return (
     <FilterContext.Provider value={[contextState, setContextState]}>

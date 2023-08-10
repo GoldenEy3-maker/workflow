@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteResumeSkill, RelatedResumeSkillModel } from "./index"
+import { CompleteResumeSkill, RelatedResumeSkillModel, CompleteOrderSkill, RelatedOrderSkillModel } from "./index"
 
 export const SkillModel = z.object({
   id: z.string(),
@@ -7,7 +7,8 @@ export const SkillModel = z.object({
 })
 
 export interface CompleteSkill extends z.infer<typeof SkillModel> {
-  attackedBy: CompleteResumeSkill[]
+  attachedByResume: CompleteResumeSkill[]
+  attachedByOrder: CompleteOrderSkill[]
 }
 
 /**
@@ -16,5 +17,6 @@ export interface CompleteSkill extends z.infer<typeof SkillModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedSkillModel: z.ZodSchema<CompleteSkill> = z.lazy(() => SkillModel.extend({
-  attackedBy: RelatedResumeSkillModel.array(),
+  attachedByResume: RelatedResumeSkillModel.array(),
+  attachedByOrder: RelatedOrderSkillModel.array(),
 }))

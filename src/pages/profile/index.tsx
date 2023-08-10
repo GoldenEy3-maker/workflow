@@ -1,7 +1,9 @@
-import { MdDeleteOutline } from "react-icons/md"
+import { MdAdd, MdDeleteOutline } from "react-icons/md"
 import Stats from "~/components/#pages/profile/Stats"
 import Button from "~/components/Button"
 import Link from "~/components/Link"
+import ListContainer from "~/components/ListContainer"
+import Order from "~/components/Order"
 import Resume from "~/components/Resume"
 import * as Section from "~/components/Section"
 import { useModal } from "~/hooks/modal.hook"
@@ -32,7 +34,7 @@ const Profile: NextPageWithLayout = () => {
       {(() => {
         if (!authStore.user) return <Resume data={undefined} loading />
 
-        if (authStore.user?.role === "PERFORMER")
+        if (authStore.user.role === "PERFORMER")
           return (
             <Resume
               data={getResumeQuery.data}
@@ -60,13 +62,39 @@ const Profile: NextPageWithLayout = () => {
             />
           )
 
-        if (authStore.user?.role === "EMPLOYER")
+        if (authStore.user.role === "EMPLOYER")
           return (
             <Section.Root>
               <Section.Header>
                 <Section.Title>Ваши заказы</Section.Title>
+                {/* <Button variant="filled" title="Добавить">
+                  <MdAdd />
+                  Добавить
+                </Button> */}
               </Section.Header>
-              <Section.Content>Loading</Section.Content>
+              <Section.Content>
+                <Order
+                  data={undefined}
+                  loading={false}
+                  backgrounded
+                  empty={
+                    <>
+                      <p>У вас пока что нет заказов.</p>
+                      <p>Скорее создайте его!</p>
+                      <Link
+                        href={PagePaths.OrderCreate}
+                        style={{ marginTop: "1rem" }}
+                        variant="filled"
+                        title="Создать заказ"
+                      >
+                        <MdAdd />
+                        Создать заказ
+                      </Link>
+                    </>
+                  }
+                />
+                {/* <ListContainer data={[]} render={() => []} loading={false} /> */}
+              </Section.Content>
             </Section.Root>
           )
       })()}
