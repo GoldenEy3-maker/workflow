@@ -1,6 +1,7 @@
 import { type inferRouterOutputs } from "@trpc/server"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { levelRouter } from "./routers/level"
+import { orderRouter } from "./routers/order"
 import { resumeRouter } from "./routers/resume"
 import { skillRouter } from "./routers/skills"
 import { specialityRouter } from "./routers/speciality"
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   level: levelRouter,
   skill: skillRouter,
   resume: resumeRouter,
+  order: orderRouter,
 })
 
 export type AppRouter = typeof appRouter

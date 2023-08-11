@@ -1,6 +1,11 @@
-import { type GetStaticProps } from "next"
+import {
+  GetStaticPropsResult,
+  type GetStaticPaths,
+  type GetStaticProps,
+} from "next"
 import { useRouter } from "next/router"
 import { SkillModel } from "prisma/zod"
+import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { IoPricetagOutline } from "react-icons/io5"
@@ -40,7 +45,8 @@ type FormState = {
 } & {
   [Key in FormOptionKeys]: string[]
 }
-const OrderCreate: NextPageWithLayout = () => {
+
+const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
   const router = useRouter()
 
   const getSkillsQuery = api.skill.getAll.useQuery(undefined, {
@@ -48,25 +54,56 @@ const OrderCreate: NextPageWithLayout = () => {
     refetchOnWindowFocus: false,
   })
 
-  const createOrderMut = api.order.create.useMutation({
+  const getOrderQuery = api.order.getById.useQuery(
+    { id: props.id },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const updateOrderMut = api.order.update.useMutation({
     onSuccess() {
-      toast.success("Заказ успешно создан!")
+      toast.success("Заказ успешно обновлен!")
       void router.push(PagePaths.Profile)
     },
     onError(error) {
-      console.log("🚀 ~ file: index.tsx:48 ~ onError ~ error:", error)
+      console.log("🚀 ~ file: [id].tsx:56 ~ onError ~ error:", error)
       toast.error(error.message)
     },
   })
 
   const hookForm = useForm<FormState>({
     defaultValues: {
-      description: "",
-      title: "",
-      skills: [],
-      price: "",
+      description: getOrderQuery.data?.description ?? "",
+      title: getOrderQuery.data?.title ?? "",
+      skills: getOrderQuery.data?.skills.map((s) => s.skill.value) ?? [],
+      price: getOrderQuery.data?.price?.toString() ?? "",
     },
   })
+
+  useEffect(() => {
+    if (!router.query.id) return void router.push(PagePaths.Profile)
+
+    if (getOrderQuery.isLoading) return
+    if (getOrderQuery.error) {
+      toast.error(getOrderQuery.error.message)
+      console.log(getOrderQuery.error)
+      void router.push(PagePaths.Profile)
+      return
+    }
+    if (!getOrderQuery.data) {
+      toast.error("Что-то пошло не так... Попробуй позже")
+      void router.push(PagePaths.Profile)
+      return
+    }
+  }, [
+    router,
+    getOrderQuery.data,
+    getOrderQuery.isLoading,
+    getOrderQuery.error,
+    hookForm,
+  ])
 
   return (
     <Section.Root>
@@ -83,12 +120,18 @@ const OrderCreate: NextPageWithLayout = () => {
                 .includes(skill.value.toLowerCase())
             )
 
-            if (!skills) return
+            if (!skills) {
+              toast.error("Заполните все обязательные поля!")
+            }
 
-            console.log(parseInt(data.price))
+            if (!router.query.id || Array.isArray(router.query.id)) {
+              toast.error("Невалидный параметр - 'id'")
+              return void router.push(PagePaths.Profile)
+            }
 
-            createOrderMut.mutate({
+            updateOrderMut.mutate({
               ...data,
+              id: router.query.id,
               skills: z.array(SkillModel).parse(skills),
               price: parseInt(data.price.replace(" ", "")),
             })
@@ -109,7 +152,7 @@ const OrderCreate: NextPageWithLayout = () => {
                   <Input
                     label="Заголовок"
                     leadingIcon={<MdTitle />}
-                    disabled={createOrderMut.isLoading}
+                    disabled={updateOrderMut.isLoading}
                     validError={hookForm.formState.errors.title?.message}
                     {...field}
                   />
@@ -123,7 +166,7 @@ const OrderCreate: NextPageWithLayout = () => {
                     label="Цена"
                     type="currency"
                     masked
-                    disabled={createOrderMut.isLoading}
+                    disabled={updateOrderMut.isLoading}
                     leadingIcon={<IoPricetagOutline />}
                     {...field}
                   />
@@ -184,7 +227,7 @@ const OrderCreate: NextPageWithLayout = () => {
               type="submit"
               variant="filled"
               title="Создать"
-              disabled={createOrderMut.isLoading}
+              disabled={updateOrderMut.isLoading}
             >
               Создать
             </Button>
@@ -195,22 +238,34 @@ const OrderCreate: NextPageWithLayout = () => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const ssg = createSSG()
 
   await ssg.skill.getAll.prefetch()
 
+  const id = ctx.params?.id
+
+  if (id && !Array.isArray(id)) await ssg.order.getById.prefetch({ id })
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
+      id,
     },
   }
 }
 
-OrderCreate.getLayout = (page) => (
-  <MainLayout title="Создание заказа">
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  }
+}
+
+EditOrder.getLayout = (page) => (
+  <MainLayout title="Редактирование заказа">
     <ProfileLayout>{page}</ProfileLayout>
   </MainLayout>
 )
 
-export default OrderCreate
+export default EditOrder

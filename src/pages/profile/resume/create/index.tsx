@@ -212,7 +212,7 @@ const CreateResume: NextPageWithLayout = () => {
               rules={{
                 validate(value) {
                   if (value.length < 3)
-                    return "Необходимо указать минимум 3 навыка!"
+                    return "Необходимо указать не менее 3 навыков!"
                 },
               }}
               render={({ field }) => (

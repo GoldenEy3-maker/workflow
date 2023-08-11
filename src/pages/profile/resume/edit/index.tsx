@@ -48,15 +48,6 @@ const EditResume: NextPageWithLayout = () => {
 
   const getResumeQuery = api.resume.getByUserId.useQuery()
 
-  const hookForm = useForm<FormState>({
-    defaultValues: {
-      speciality: "",
-      level: "",
-      bio: "",
-      skills: [],
-    },
-  })
-
   const specialityQuery = api.speciality.getAll.useQuery(undefined, {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -83,6 +74,15 @@ const EditResume: NextPageWithLayout = () => {
     },
   })
 
+  const hookForm = useForm<FormState>({
+    defaultValues: {
+      speciality: getResumeQuery.data?.speciality.value ?? "",
+      level: getResumeQuery.data?.level.value ?? "",
+      bio: getResumeQuery.data?.details ?? "",
+      skills: getResumeQuery.data?.skills.map((s) => s.skill.value) ?? [],
+    },
+  })
+
   useEffect(() => {
     if (getResumeQuery.isLoading) return
 
@@ -98,14 +98,6 @@ const EditResume: NextPageWithLayout = () => {
     if (!getResumeQuery.data) {
       toast.error("Для начала создайте свое резюме!")
       return void router.push(PagePaths.Profile)
-    } else {
-      hookForm.setValue("speciality", getResumeQuery.data.speciality.value)
-      hookForm.setValue("level", getResumeQuery.data.level.value)
-      hookForm.setValue(
-        "skills",
-        getResumeQuery.data.skills.map((item) => item.skill.value)
-      )
-      hookForm.setValue("bio", getResumeQuery.data.details)
     }
   }, [
     getResumeQuery.data,
@@ -250,7 +242,7 @@ const EditResume: NextPageWithLayout = () => {
                       validError={hookForm.formState.errors.bio?.message}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      initialValue={field.value}
+                      value={field.value}
                       name={field.name}
                     />
                   )}

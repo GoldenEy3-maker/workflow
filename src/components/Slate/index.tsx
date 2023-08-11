@@ -95,9 +95,8 @@ const Leaf = (props: RenderLeafProps) => {
 type SlateEditorProps = {
   label?: string
   onChange?: (value: string) => void
-  initialValue?: string | Descendant[]
   validError?: string
-  value?: string
+  value?: string | Descendant[]
   name?: string
   onBlur?: React.FocusEventHandler
   readonly?: boolean
@@ -111,13 +110,13 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
   )
 
   const initialValue = useMemo<Descendant[]>(() => {
-    if (props.initialValue)
-      return typeof props.initialValue === "string"
-        ? (JSON.parse(props.initialValue) as Descendant[])
-        : props.initialValue
+    if (props.value)
+      return typeof props.value === "string"
+        ? (JSON.parse(props.value) as Descendant[])
+        : props.value
 
     return [{ type: "paragraph", children: [{ text: "" }] }]
-  }, [props.initialValue])
+  }, [props.value])
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
@@ -306,7 +305,6 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
         <div className={styles.wrapper}>
           <p className={styles.label}>{props.label}</p>
           <Editable
-            value={props.value}
             name={props.name}
             renderElement={renderElement}
             renderLeaf={renderLeaf}

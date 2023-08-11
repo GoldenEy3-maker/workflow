@@ -9,6 +9,7 @@ export const PagePaths = {
   EditResume: "/profile/resume/edit",
   Orders: "/orders",
   OrderCreate: "/profile/order/create",
+  OrderEdit: "/profile/order/edit",
   Favorite: "/favorites",
   ActivateUser: "/activate",
 } as const

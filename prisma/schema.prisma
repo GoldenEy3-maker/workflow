@@ -127,7 +127,7 @@ model OrderSkill {
   id      String @id @default(uuid())
   skill   Skill  @relation(fields: [skillId], references: [id])
   skillId String
-  order   Order  @relation(fields: [orderId], references: [id])
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId String
 }
 

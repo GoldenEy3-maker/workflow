@@ -1,19 +1,19 @@
 import { Order } from "@prisma/client"
 import dayjs from "dayjs"
-import { MdOutlineFavorite } from "react-icons/md"
+import { BsShieldCheck, BsShieldExclamation } from "react-icons/bs"
 import { cls } from "~/utils/helpers"
-import Button from "../Button"
 import LoadingSkeletItemList from "../Loading/ItemList"
 import SlateEditor from "../Slate"
 import styles from "./styles.module.scss"
 
 type OrderProps = {
   data: Order | undefined | null
-  loading: boolean
+  loading?: boolean
   error?: string
   reduced?: boolean
   backgrounded?: boolean
   empty?: string | React.ReactNode
+  footerActions?: React.ReactNode[]
 }
 
 const Order: React.FC<OrderProps> = (props) => {
@@ -61,37 +61,23 @@ const Order: React.FC<OrderProps> = (props) => {
                       [styles._warning ?? ""]: !props.data?.secure,
                     })}
                   >
-                    {props.data?.secure ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1.5em"
-                        viewBox="0 -960 960 960"
-                        width="1.5em"
-                      >
-                        <path d="m438-338 226-226-57-57-169 169-84-84-57 57 141 141Zm42 258q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z" />
-                      </svg>
+                    {props.data.secure ? (
+                      <BsShieldCheck fontSize="1.5rem" />
                     ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1.5em"
-                        viewBox="0 -960 960 960"
-                        width="1.5em"
-                      >
-                        <path d="M480-320q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320Zm-40-160h80v-200h-80v200Zm40 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z" />
-                      </svg>
+                      <BsShieldExclamation fontSize="1.5rem" />
                     )}
                   </span>
                 </div>
               </header>
               <SlateEditor
-                initialValue={props.data?.description}
+                value={props.data?.description}
                 readonly
                 reduced={props.reduced}
               />
               <footer className={styles.footer}>
                 <div className={styles.info}>
                   <div className={styles.infoItem}>
-                    {dayjs(props.data?.createdAt).fromNow()}
+                    {dayjs(props.data?.updatedAt).fromNow()}
                   </div>
                   <div className={styles.infoItem}>
                     <svg
@@ -119,12 +105,9 @@ const Order: React.FC<OrderProps> = (props) => {
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <Button type="button" isIcon title="В избранное">
-                    <MdOutlineFavorite fontSize="1.5rem" />
-                  </Button>
-                  <Button type="button" variant="elevated" title="Откликнуться">
-                    Откликнуться
-                  </Button>
+                  {props.footerActions &&
+                    props.footerActions.length > 0 &&
+                    props.footerActions.map((action) => action)}
                 </div>
               </footer>
             </>

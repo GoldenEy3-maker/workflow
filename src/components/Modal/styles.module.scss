@@ -24,7 +24,7 @@
     visibility: visible;
 
     .wrapper {
-      transform: translateY(0) scale(1);
+      transform: scale(1);
     }
   }
 }
@@ -39,7 +39,7 @@
 
   overflow: hidden;
 
-  transform: translateY(30px) scale(0.98);
+  transform: scale(0.9);
 
   transition: 150ms ease;
 }

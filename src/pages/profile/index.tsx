@@ -1,4 +1,4 @@
-import { MdAdd, MdDeleteOutline } from "react-icons/md"
+import { MdAdd, MdDeleteOutline, MdOutlineArchive } from "react-icons/md"
 import Stats from "~/components/#pages/profile/Stats"
 import Button from "~/components/Button"
 import Link from "~/components/Link"
@@ -9,7 +9,9 @@ import * as Section from "~/components/Section"
 import { useModal } from "~/hooks/modal.hook"
 import MainLayout from "~/layouts/Main"
 import ProfileLayout from "~/layouts/Profile"
+import ArchiveOrderModal from "~/modals/ArchiveOrder"
 import DeleteResumeModal from "~/modals/DeleteResume"
+import { useArchiveOrderModalStore } from "~/store/#modals/archiveOrder"
 import { useDeleteResumeModalStore } from "~/store/#modals/deleteResume"
 import { useAuthStore } from "~/store/auth"
 import { api } from "~/utils/api"
@@ -20,15 +22,23 @@ const Profile: NextPageWithLayout = () => {
   const authStore = useAuthStore()
   const [openModal] = useModal()
   const deleteResumeModalStore = useDeleteResumeModalStore()
+  const deleteOrderModalStore = useArchiveOrderModalStore()
 
   const getResumeQuery = api.resume.getByUserId.useQuery(undefined, {
     enabled: authStore.user?.role === "PERFORMER",
+  })
+
+  const getOrdersQuery = api.order.getByUserId.useQuery(undefined, {
+    enabled: authStore.user?.role === "EMPLOYER",
   })
 
   return (
     <>
       <DeleteResumeModal
         successCallback={() => void getResumeQuery.refetch()}
+      />
+      <ArchiveOrderModal
+        successCallback={() => void getOrdersQuery.refetch()}
       />
       <Stats />
       {(() => {
@@ -67,33 +77,75 @@ const Profile: NextPageWithLayout = () => {
             <Section.Root>
               <Section.Header>
                 <Section.Title>Ваши заказы</Section.Title>
-                {/* <Button variant="filled" title="Добавить">
-                  <MdAdd />
-                  Добавить
-                </Button> */}
+                {getOrdersQuery.data &&
+                getOrdersQuery.data.length > 0 &&
+                !getOrdersQuery.isLoading &&
+                !getOrdersQuery.error ? (
+                  <Link
+                    href={PagePaths.OrderCreate}
+                    variant="elevated"
+                    title="Добавить"
+                  >
+                    <MdAdd />
+                    Добавить
+                  </Link>
+                ) : null}
               </Section.Header>
               <Section.Content>
-                <Order
-                  data={undefined}
-                  loading={false}
-                  backgrounded
+                <ListContainer
+                  data={getOrdersQuery.data}
+                  render={(data) => (
+                    <Order
+                      key={data.id}
+                      data={data}
+                      backgrounded
+                      reduced
+                      footerActions={[
+                        <Button
+                          key={crypto.randomUUID()}
+                          clrType="danger"
+                          isIcon
+                          onClick={() =>
+                            openModal(() => deleteOrderModalStore.open(data.id))
+                          }
+                          title="Архивировать заказ"
+                        >
+                          <MdOutlineArchive fontSize="1.5em" />
+                        </Button>,
+                        <Link
+                          key={crypto.randomUUID()}
+                          href={PagePaths.OrderEdit + "/" + data.id}
+                          variant="filled"
+                          title="Изменить"
+                        >
+                          Изменить
+                        </Link>,
+                      ]}
+                    />
+                  )}
+                  loading={getOrdersQuery.isLoading}
                   empty={
-                    <>
-                      <p>У вас пока что нет заказов.</p>
-                      <p>Скорее создайте его!</p>
-                      <Link
-                        href={PagePaths.OrderCreate}
-                        style={{ marginTop: "1rem" }}
-                        variant="filled"
-                        title="Создать заказ"
-                      >
-                        <MdAdd />
-                        Создать заказ
-                      </Link>
-                    </>
+                    <Order
+                      data={undefined}
+                      backgrounded
+                      empty={
+                        <>
+                          <p>У вас пока что нет заказов.</p>
+                          <p>Скорее создайте его!</p>
+                          <Link
+                            href={PagePaths.OrderCreate}
+                            style={{ marginTop: "1rem" }}
+                            variant="filled"
+                            title="Создать заказ"
+                          >
+                            <MdAdd />
+                            Создать заказ
+                          </Link>
+                        </>
+                      }
+                    />
                   }
                 />
-                {/* <ListContainer data={[]} render={() => []} loading={false} /> */}
               </Section.Content>
             </Section.Root>
           )

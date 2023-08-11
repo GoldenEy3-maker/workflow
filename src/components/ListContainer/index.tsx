@@ -1,18 +1,23 @@
-import { type Order, type Resume } from "@prisma/client"
+import { type Order as OrderPrisma, type Resume } from "@prisma/client"
+import Order from "../Order"
+import styles from "./styles.module.scss"
 
-type ListContainerProps = {
-  data: Resume[] | Order[] | undefined | null
+type ListContainerProps<T extends Resume | OrderPrisma> = {
+  data: T[] | undefined | null
   loading: boolean
   error?: string | React.ReactNode
-  render: (item: Resume | Order) => React.ReactNode
+  render: (item: T) => React.ReactNode
   empty?: string | React.ReactNode
 }
 
-const ListContainer: React.FC<ListContainerProps> = (props) => {
+const ListContainer = <T extends Resume | OrderPrisma>(
+  props: ListContainerProps<T>
+) => {
   return (
-    <div>
+    <div className={styles.container}>
       {(() => {
-        if (props.loading) return <p>Loading...</p>
+        if (props.loading)
+          return <Order data={undefined} loading backgrounded />
 
         if (props.error) return <p>Error</p>
 
