@@ -6,13 +6,7 @@ import styles from "./styles.module.scss"
 
 export type LinkProps = {
   variant?: "elevated" | "filled"
-} & Omit<
-  React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
-  >,
-  "href"
-> &
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
   Omit<NextLinkProps, "as" | "passHref" | "children">
 
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(
@@ -26,7 +20,7 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(
       className,
       children,
       onPointerDown,
-      variant, 
+      variant,
       ...props
     },
     ref

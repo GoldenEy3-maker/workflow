@@ -1,5 +1,5 @@
 import { type Order as OrderPrisma, type Resume } from "@prisma/client"
-import Order from "../Order"
+import LoadingSkeletItemList from "../Loading/ItemList"
 import styles from "./styles.module.scss"
 
 type ListContainerProps<T extends Resume | OrderPrisma> = {
@@ -16,8 +16,7 @@ const ListContainer = <T extends Resume | OrderPrisma>(
   return (
     <div className={styles.container}>
       {(() => {
-        if (props.loading)
-          return <Order data={undefined} loading backgrounded />
+        if (props.loading) return <LoadingSkeletItemList backgrounded />
 
         if (props.error) return <p>Error</p>
 

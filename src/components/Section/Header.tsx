@@ -3,7 +3,7 @@ import styles from "./styles.module.scss"
 
 type HeaderProps = {
   centered?: boolean
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+} & React.HTMLAttributes<HTMLElement>
 
 export const Header: React.FC<HeaderProps> = ({
   className,

@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type ActionsProps = {
   flexEnd?: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Actions: React.FC<ActionsProps> = ({
   className,

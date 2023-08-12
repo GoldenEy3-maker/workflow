@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type GroupProps = {
   legend?: string
-} & React.DetailedHTMLProps<
-  React.FieldsetHTMLAttributes<HTMLFieldSetElement>,
-  HTMLFieldSetElement
->
+} & React.FieldsetHTMLAttributes<HTMLFieldSetElement>
 
 export const Group: React.FC<GroupProps> = ({
   legend,

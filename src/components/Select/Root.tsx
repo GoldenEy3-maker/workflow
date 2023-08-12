@@ -9,10 +9,7 @@ import styles from "./styles.module.scss"
 
 type RootProps = {
   label?: string
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Root: React.FC<RootProps> = ({
   label,

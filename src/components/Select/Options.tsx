@@ -6,10 +6,7 @@ import styles from "./styles.module.scss"
 type OptionsProps = {
   values: string[]
   handler: (value: string) => void
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Options: React.FC<OptionsProps> = ({
   values,

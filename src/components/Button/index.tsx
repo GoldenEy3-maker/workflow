@@ -9,10 +9,7 @@ export type ButtonProps = {
   clrType?: "danger" | "success" | "warning"
   isIcon?: boolean
   isLoading?: boolean
-} & React.DetailedHTMLProps<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  HTMLButtonElement
->
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (

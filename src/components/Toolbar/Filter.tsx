@@ -1,16 +1,16 @@
-import type { ChangeEventHandler } from "react"
 import { MdOutlineFilterAlt } from "react-icons/md"
 import * as Filters from "~/components/Filters"
+import { type FilterHandler, type FilterValue } from "../Filters/Checkbox"
 
 type FilterProps = {
   filters: {
     legend: string
     checkboxes: {
       label: string
-      value: "on" | "off" | undefined
+      value: FilterValue
       id: string
       checked: boolean
-      onChange: ChangeEventHandler<HTMLInputElement>
+      handler: FilterHandler
     }[]
   }[]
 }

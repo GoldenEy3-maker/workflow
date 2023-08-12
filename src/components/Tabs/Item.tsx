@@ -6,10 +6,7 @@ import styles from "./styles.module.scss"
 
 type ItemProps = {
   label: string
-} & Omit<
-  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
-  "type"
->
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
 
 export const Item = forwardRef<HTMLInputElement, ItemProps>(
   ({ className, label, ...props }, ref) => {
@@ -23,7 +20,7 @@ export const Item = forwardRef<HTMLInputElement, ItemProps>(
       if (props.checked && itemRef.current) {
         setContext({
           activeWidth: itemRef.current.offsetWidth,
-          activeOffset: itemRef.current.offsetLeft
+          activeOffset: itemRef.current.offsetLeft,
         })
       }
     }, [props.checked, setContext])
@@ -31,7 +28,7 @@ export const Item = forwardRef<HTMLInputElement, ItemProps>(
     return (
       <div
         className={cls([className, styles.item], {
-          [styles._active]: !!props.checked
+          [styles._active]: !!props.checked,
         })}
       >
         <label

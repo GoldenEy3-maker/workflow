@@ -25,9 +25,17 @@ export const orderRouter = createTRPCRouter({
 
       return orders
     }),
-
   getAll: publicProcedure.query(async (opts) => {
-    const orders = await opts.ctx.prisma.order.findMany()
+    const orders = await opts.ctx.prisma.order.findMany({
+      where: {
+        status: {
+          not: "ARCHIVED",
+        },
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    })
 
     return orders
   }),

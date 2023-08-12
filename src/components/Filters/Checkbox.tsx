@@ -4,37 +4,72 @@ import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
-export type CheckboxValue = "on" | "off" | undefined
+export type FilterValue = "on" | "off" | undefined
+
+export type FilterState = Record<
+  string,
+  { checked: boolean; value: FilterValue }
+>
+
+export type FilterHandler = (args: {
+  id: string
+  checked: boolean
+  value: FilterValue
+}) => void
 
 type CheckboxProps = {
   label: string
-  value: CheckboxValue
+  value: FilterValue
+  id: string
+  checked: boolean
+  handler: FilterHandler
 } & Omit<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >,
-  "type" | "value"
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "type" | "value" | "id" | "checked"
 >
 
 export const Checkbox: React.FC<CheckboxProps> = ({
   label,
   className,
   id,
-  value,
+  handler,
   ...props
 }) => {
   const rippleEffectEvent = useRippleEffect()
 
   const icon = useMemo(() => {
-    if (value === undefined || value === "off") return <MdOutlineRemove />
+    if (props.value === undefined || props.value === "off")
+      return <MdOutlineRemove />
 
     return <MdCheck />
-  }, [value])
+  }, [props.value])
+
+  const changeHandler: React.ChangeEventHandler<HTMLInputElement> = () => {
+    let checked = props.checked
+    let value = props.value
+
+    if (props.value === undefined || props.value === "on") checked = true
+
+    if (props.value === "off") checked = false
+
+    switch (props.value) {
+      case "off":
+        value = undefined
+        break
+      case "on":
+        value = "off"
+        break
+      default:
+        value = "on"
+        break
+    }
+
+    handler({ id, checked, value })
+  }
 
   return (
     <div className={cls([className, styles.checkbox])}>
-      <input type="checkbox" id={id} value={value} {...props} />
+      <input type="checkbox" id={id} onChange={changeHandler} {...props} />
       <label htmlFor={id} onPointerDown={rippleEffectEvent}>
         <p>{label}</p>
         <span>{icon}</span>

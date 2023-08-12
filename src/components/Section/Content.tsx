@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type ContentProps = {
   isCenter?: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Content: React.FC<ContentProps> = ({
   className,

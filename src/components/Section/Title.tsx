@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type TitleProps = {
   primary?: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLHeadingElement>,
-  HTMLHeadingElement
->
+} & React.HTMLAttributes<HTMLHeadingElement>
 
 export const Title: React.FC<TitleProps> = ({
   primary,

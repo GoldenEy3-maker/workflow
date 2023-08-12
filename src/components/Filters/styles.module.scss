@@ -12,23 +12,17 @@
   right: 0;
   z-index: 2;
 
-  display: flex;
-  flex-direction: column;
-  gap: var(--_gap);
-
   opacity: 0;
   visibility: hidden;
 
   width: max-content;
   min-width: 15em;
 
-  background-color: hsl(var(--surface-container-high-hsl));
-
-  border-radius: var(--medium-shape);
+  background-color: hsl(var(--surface-container-highest-hsl));
 
   overflow: hidden;
 
-  padding: 0.7em var(--_content-inline-pd);
+  border-radius: var(--medium-shape);
 
   transition: 200ms ease;
 
@@ -38,6 +32,15 @@
     opacity: 1;
     visibility: visible;
   }
+}
+
+.wrapper {
+  max-height: 50vh;
+  overflow: auto;
+  display: flex;
+  padding: 0.7em var(--_content-inline-pd);
+  flex-direction: column;
+  gap: var(--_gap);
 }
 
 .group {

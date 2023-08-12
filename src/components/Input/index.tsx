@@ -27,10 +27,7 @@ export type InputProps = {
   optionsReset?: () => void
   type?: React.InputHTMLAttributes<HTMLInputElement>["type"] | "currency"
   masked?: boolean
-} & React.DetailedHTMLProps<
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">,
-  HTMLInputElement
->
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (

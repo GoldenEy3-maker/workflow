@@ -5,9 +5,12 @@ import type { FilterContextState } from "./context"
 import { FilterContext } from "./context"
 import styles from "./styles.module.scss"
 
-export const Root: React.FC<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children, onBlur, ...props }) => {
+export const Root: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  children,
+  onBlur,
+  ...props
+}) => {
   const rootRef = useRef<HTMLDivElement>(null)
 
   const [contextState, setContextState] = useState<FilterContextState>({

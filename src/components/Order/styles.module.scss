@@ -8,6 +8,8 @@
   background-color: hsl(var(--surface-container-hsl));
   border-radius: var(--medium-shape);
 
+  overflow: hidden;
+
   &._backgrounded {
     background-color: hsl(var(--surface-container-high-hsl));
   }
@@ -23,16 +25,15 @@
 
 .title {
   flex: 1;
-
   font-size: var(--title-l-fs);
   font-weight: 500;
   color: hsl(var(--primary-hsl));
 
-  &:not(._extended &) {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 
+  a {
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         text-decoration: underline;

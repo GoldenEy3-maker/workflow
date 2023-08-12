@@ -10,13 +10,7 @@ type ImageUploaderProps = {
   onSubmit: () => void
   reset: () => void
   currentImage?: string
-} & Omit<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >,
-  "type" | "onSubmit"
->
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onSubmit">
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
   className,

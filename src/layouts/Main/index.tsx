@@ -19,9 +19,7 @@ const MainLayout: React.FC<React.PropsWithChildren<MainLayoutProps>> = (
   const authStore = useAuthStore()
   const router = useRouter()
 
-  const currentUserQuery = api.user.getCurrent.useQuery(undefined, {
-    retry: false,
-  })
+  const currentUserQuery = api.user.getCurrent.useQuery(undefined)
 
   useEffect(() => {
     if (!currentUserQuery.isLoading && currentUserQuery.error)

@@ -1,3 +1,17 @@
+.container {
+  display: grid;
+  gap: 1rem;
+
+  padding: 2rem;
+
+  background-color: hsl(var(--surface-container-hsl));
+  border-radius: var(--medium-shape);
+
+  &._backgrounded {
+    background-color: hsl(var(--surface-container-high-hsl));
+  }
+}
+
 .tagsContainer {
   display: flex;
   align-items: center;

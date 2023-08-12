@@ -1,6 +1,8 @@
 import { Order } from "@prisma/client"
 import dayjs from "dayjs"
+import Link from "next/link"
 import { BsShieldCheck, BsShieldExclamation } from "react-icons/bs"
+import { PagePaths } from "~/utils/enums"
 import { cls } from "~/utils/helpers"
 import LoadingSkeletItemList from "../Loading/ItemList"
 import SlateEditor from "../Slate"
@@ -34,6 +36,9 @@ const Order: React.FC<OrderProps> = (props) => {
     }).format(value)
   }
 
+  if (props.loading)
+    return <LoadingSkeletItemList backgrounded={props.backgrounded} />
+
   return (
     <article
       className={cls([styles.order], {
@@ -41,15 +46,17 @@ const Order: React.FC<OrderProps> = (props) => {
       })}
     >
       {(() => {
-        if (props.loading) return <LoadingSkeletItemList />
-
         if (props.error) return <p>Error</p>
 
         if (props.data)
           return (
             <>
               <header className={styles.header}>
-                <h3 className={styles.title}>{props.data?.title}</h3>
+                <div className={styles.title}>
+                  <Link href={PagePaths.Orders + "/" + props.data.id}>
+                    {props.data?.title}
+                  </Link>
+                </div>
                 <div className={styles.extraInfo}>
                   <p className={styles.price}>
                     {props.data?.price

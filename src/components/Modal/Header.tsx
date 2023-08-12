@@ -1,12 +1,7 @@
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
-type HeaderProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLElement>,
-  HTMLElement
->
-
-export const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   className,
   children,
   ...props

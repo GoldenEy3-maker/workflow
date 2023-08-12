@@ -2,9 +2,11 @@ import { cls } from "~/utils/helpers"
 import { useTabsContext } from "./context"
 import styles from "./styles.module.scss"
 
-export const List: React.FC<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children, ...props }) => {
+export const List: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  children,
+  ...props
+}) => {
   const [context] = useTabsContext()
 
   return (

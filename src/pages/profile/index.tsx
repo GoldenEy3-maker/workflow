@@ -1,8 +1,14 @@
-import { MdAdd, MdDeleteOutline, MdOutlineArchive } from "react-icons/md"
+import {
+  MdAdd,
+  MdDeleteOutline,
+  MdOutlineArchive,
+  MdOutlineEdit,
+} from "react-icons/md"
 import Stats from "~/components/#pages/profile/Stats"
 import Button from "~/components/Button"
 import Link from "~/components/Link"
 import ListContainer from "~/components/ListContainer"
+import LoadingSkeletItemList from "~/components/Loading/ItemList"
 import Order from "~/components/Order"
 import Resume from "~/components/Resume"
 import * as Section from "~/components/Section"
@@ -42,7 +48,7 @@ const Profile: NextPageWithLayout = () => {
       />
       <Stats />
       {(() => {
-        if (!authStore.user) return <Resume data={undefined} loading />
+        if (!authStore.user) return <LoadingSkeletItemList />
 
         if (authStore.user.role === "PERFORMER")
           return (
@@ -86,7 +92,7 @@ const Profile: NextPageWithLayout = () => {
                     variant="elevated"
                     title="Добавить"
                   >
-                    <MdAdd />
+                    <MdAdd fontSize="1.3rem" />
                     Добавить
                   </Link>
                 ) : null}
@@ -118,6 +124,7 @@ const Profile: NextPageWithLayout = () => {
                           variant="filled"
                           title="Изменить"
                         >
+                          <MdOutlineEdit fontSize="1.3rem" />
                           Изменить
                         </Link>,
                       ]}

@@ -30,15 +30,16 @@ type ResumeProps = {
 }
 
 const Resume: React.FC<ResumeProps> = (props) => {
+  if (props.loading)
+    return <LoadingSkeletItemList backgrounded={props.backgrounded} />
+
   return (
-    <div
+    <article
       className={cls([styles.resume], {
         [styles._backgrounded ?? ""]: !!props.backgrounded,
       })}
     >
       {(() => {
-        if (props.loading) return <LoadingSkeletItemList />
-
         // TODO: Handler error state
         if (props.error) return <p>Error</p>
 
@@ -106,7 +107,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
           </div>
         )
       })()}
-    </div>
+    </article>
   )
 }
 

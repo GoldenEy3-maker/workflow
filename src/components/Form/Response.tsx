@@ -6,10 +6,7 @@ export type ResponseMessageType = "danger" | "warning" | "success" | undefined
 type ResponseProps = {
   state: boolean
   type: ResponseMessageType
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Response: React.FC<ResponseProps> = ({
   className,

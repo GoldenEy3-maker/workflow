@@ -1,9 +1,11 @@
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
-export const Wrapper: React.FC<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children, ...props }) => {
+export const Wrapper: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  children,
+  ...props
+}) => {
   return (
     <div
       data-modal-prevent

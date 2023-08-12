@@ -4,10 +4,7 @@ import styles from "./styles.module.scss"
 
 type RootProps = {
   closeHandler?: () => void
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 export const Root = forwardRef<HTMLDivElement, RootProps>(
   ({ closeHandler, className, children, ...props }, ref) => {

@@ -3,10 +3,7 @@ import styles from "./logo.module.scss"
 
 type LogoProps = {
   isMinimized?: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & React.HTMLAttributes<HTMLDivElement>
 
 const Logo: React.FC<LogoProps> = ({ className, isMinimized, ...props }) => {
   return (

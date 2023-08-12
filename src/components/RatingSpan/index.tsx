@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type RatingSpanProps = {
   value: number
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
->
+} & React.HTMLAttributes<HTMLSpanElement>
 
 const RatingSpan: React.FC<RatingSpanProps> = ({
   value,

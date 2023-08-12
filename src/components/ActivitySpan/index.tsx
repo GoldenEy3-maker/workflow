@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type ActivitySpanProps = {
   value: number
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
->
+} & React.HTMLAttributes<HTMLSpanElement>
 
 const ActivitySpan: React.FC<ActivitySpanProps> = (props) => {
   return (

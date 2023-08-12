@@ -1,8 +1,4 @@
-import {
-  GetStaticPropsResult,
-  type GetStaticPaths,
-  type GetStaticProps,
-} from "next"
+import { type GetStaticPaths, type GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import { SkillModel } from "prisma/zod"
 import { useEffect } from "react"
@@ -108,7 +104,7 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
   return (
     <Section.Root>
       <Section.Header>
-        <Section.Title>Создание заказа</Section.Title>
+        <Section.Title>Редактирование заказа</Section.Title>
       </Section.Header>
       <Section.Content className={styles.content}>
         <Form.Root
@@ -226,10 +222,10 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
             <Button
               type="submit"
               variant="filled"
-              title="Создать"
+              title="Сохранить"
               disabled={updateOrderMut.isLoading}
             >
-              Создать
+              Сохранить
             </Button>
           </Form.Actions>
         </Form.Root>

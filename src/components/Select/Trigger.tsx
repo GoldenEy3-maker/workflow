@@ -6,13 +6,7 @@ import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
 export const Trigger: React.FC<
-  Omit<
-    React.DetailedHTMLProps<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      HTMLInputElement
-    >,
-    "type"
-  >
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
 > = ({ value, className, ...props }) => {
   const triggerRef = useRef<HTMLButtonElement>(null)
 

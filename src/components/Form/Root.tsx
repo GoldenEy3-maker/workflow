@@ -3,10 +3,7 @@ import styles from "./styles.module.scss"
 
 type RootProps = {
   withGroups?: boolean
-} & React.DetailedHTMLProps<
-  React.FormHTMLAttributes<HTMLFormElement>,
-  HTMLFormElement
->
+} & React.FormHTMLAttributes<HTMLFormElement>
 
 export const Root: React.FC<RootProps> = ({
   children,

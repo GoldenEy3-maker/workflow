@@ -2,9 +2,11 @@ import { cls } from "~/utils/helpers"
 import { useFilterContext } from "./context"
 import styles from "./styles.module.scss"
 
-export const Content: React.FC<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children, ...props }) => {
+export const Content: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  children,
+  ...props
+}) => {
   const [contextState] = useFilterContext()
 
   return (
@@ -13,7 +15,7 @@ export const Content: React.FC<
       {...props}
       aria-hidden={!contextState.isOpen}
     >
-      {children}
+      <div className={styles.wrapper}>{children}</div>
     </div>
   )
 }

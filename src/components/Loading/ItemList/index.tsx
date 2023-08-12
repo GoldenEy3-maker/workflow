@@ -1,9 +1,18 @@
 import Skeleton from "react-loading-skeleton"
+import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
 
-const LoadingSkeletItemList: React.FC = () => {
+type LoadingSkeletItemListProps = {
+  backgrounded?: boolean
+}
+
+const LoadingSkeletItemList: React.FC<LoadingSkeletItemListProps> = (props) => {
   return (
-    <>
+    <div
+      className={cls([styles.container], {
+        [styles._backgrounded ?? ""]: !!props.backgrounded,
+      })}
+    >
       <Skeleton width="20em" />
       <Skeleton count={3} />
       <Skeleton
@@ -11,7 +20,7 @@ const LoadingSkeletItemList: React.FC = () => {
         width="10em"
         containerClassName={styles.tagsContainer}
       />
-    </>
+    </div>
   )
 }
 

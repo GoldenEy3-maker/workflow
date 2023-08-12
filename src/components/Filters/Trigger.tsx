@@ -2,13 +2,7 @@ import Button from "../Button"
 import { useFilterContext } from "./context"
 
 export const Trigger: React.FC<
-  Omit<
-    React.DetailedHTMLProps<
-      React.ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >,
-    "ref" | "type"
-  >
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">
 > = ({ className, children, ...props }) => {
   const [, setContextState] = useFilterContext()
 
