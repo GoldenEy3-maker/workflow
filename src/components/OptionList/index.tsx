@@ -10,6 +10,7 @@ type OptionListProps = {
   onChange: (value: string[]) => void
   reset: () => void
   validError?: string
+  disabled?: boolean
 }
 
 const OptionList: React.FC<OptionListProps> = (props) => {
@@ -19,7 +20,12 @@ const OptionList: React.FC<OptionListProps> = (props) => {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <p className={styles.label}>{props.label}</p>
-        <Button onClick={props.reset} clrType="danger" type="button">
+        <Button
+          onClick={props.reset}
+          clrType="danger"
+          disabled={props.disabled}
+          type="button"
+        >
           Очистить
         </Button>
       </header>
@@ -34,6 +40,7 @@ const OptionList: React.FC<OptionListProps> = (props) => {
               <input
                 type="checkbox"
                 checked={props.value.includes(opt)}
+                disabled={props.disabled}
                 onChange={() => {
                   if (props.value.includes(opt)) {
                     props.onChange(props.value.filter((item) => item !== opt))

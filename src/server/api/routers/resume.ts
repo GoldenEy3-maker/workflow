@@ -18,7 +18,7 @@ export const resumeRouter = createTRPCRouter({
           authorId: opts.ctx.user.id,
           specialityId: opts.input.speciality.id,
           levelId: opts.input.level.id,
-          details: opts.input.bio,
+          bio: opts.input.bio,
           skills: {
             createMany: {
               data: opts.input.skills.map((skill) => ({
@@ -77,7 +77,7 @@ export const resumeRouter = createTRPCRouter({
         data: {
           specialityId: opts.input.speciality.id,
           levelId: opts.input.level.id,
-          details: opts.input.bio,
+          bio: opts.input.bio,
         },
       })
 

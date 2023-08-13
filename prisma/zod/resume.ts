@@ -5,7 +5,7 @@ export const ResumeModel = z.object({
   id: z.string(),
   specialityId: z.string(),
   levelId: z.string(),
-  details: z.string(),
+  bio: z.string(),
   authorId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),

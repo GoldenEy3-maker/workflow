@@ -101,6 +101,7 @@ type SlateEditorProps = {
   onBlur?: React.FocusEventHandler
   readonly?: boolean
   reduced?: boolean
+  disabled?: boolean
 }
 
 const SlateEditor: React.FC<SlateEditorProps> = (props) => {
@@ -165,6 +166,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() => slateEditorService.toggleMark(editor, "bold")}
               >
@@ -175,6 +177,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() => slateEditorService.toggleMark(editor, "italic")}
               >
@@ -185,6 +188,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.toggleMark(editor, "underline")
@@ -197,6 +201,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.changeAlign(editor, AlignValues.Left)
@@ -209,6 +214,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.changeAlign(editor, AlignValues.Right)
@@ -221,6 +227,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.changeAlign(editor, AlignValues.Center)
@@ -233,6 +240,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.changeAlign(editor, AlignValues.Justify)
@@ -245,6 +253,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   // TODO: fix bug with untoggling list as fist element in editable area
@@ -261,6 +270,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() =>
                   slateEditorService.toggleBlock(
@@ -276,6 +286,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() => {
                   const url = window.prompt("Paste URL here:")
@@ -292,6 +303,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
               <Button
                 type="button"
                 isIcon
+                disabled={props.disabled || props.readonly}
                 clrType={!!props.validError ? "danger" : undefined}
                 onClick={() => {
                   slateEditorService.unwrapLink(editor)
@@ -310,7 +322,7 @@ const SlateEditor: React.FC<SlateEditorProps> = (props) => {
             renderLeaf={renderLeaf}
             className={styles.editable}
             onBlur={props.onBlur}
-            readOnly={props.readonly}
+            readOnly={props.readonly || props.disabled}
             onKeyDown={(event) => {
               if (!event.ctrlKey) return
 

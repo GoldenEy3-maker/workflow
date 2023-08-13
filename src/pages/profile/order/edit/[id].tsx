@@ -129,7 +129,9 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
               ...data,
               id: router.query.id,
               skills: z.array(SkillModel).parse(skills),
-              price: parseInt(data.price.replace(" ", "")),
+              price: data.price
+                ? parseInt(data.price.replace(" ", ""))
+                : undefined,
             })
           })}
         >
@@ -192,6 +194,7 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
                   name={field.name}
                   onBlur={field.onBlur}
                   onChange={field.onChange}
+                  disabled={updateOrderMut.isLoading}
                   value={field.value}
                   validError={hookForm.formState.errors.description?.message}
                 />
@@ -212,7 +215,11 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
                   options={getSkillsQuery.data?.map((skill) => skill.value)}
                   onChange={field.onChange}
                   value={field.value}
-                  reset={() => hookForm.resetField("skills")}
+                  disabled={updateOrderMut.isLoading}
+                  reset={() => {
+                    hookForm.clearErrors("skills")
+                    field.onChange([])
+                  }}
                   validError={hookForm.formState.errors.skills?.message}
                 />
               )}

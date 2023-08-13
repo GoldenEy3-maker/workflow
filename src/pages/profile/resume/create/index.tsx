@@ -140,6 +140,7 @@ const CreateResume: NextPageWithLayout = () => {
                       field.onChange(value)
                       hookForm.clearErrors("speciality")
                     }}
+                    disabled={createResumeMut.isLoading}
                     optionsReset={() => hookForm.resetField("speciality")}
                     validError={hookForm.formState.errors.speciality?.message}
                     {...field}
@@ -172,6 +173,7 @@ const CreateResume: NextPageWithLayout = () => {
                       field.onChange(value)
                       hookForm.clearErrors("level")
                     }}
+                    disabled={createResumeMut.isLoading}
                     optionsReset={() => hookForm.resetField("level")}
                     validError={hookForm.formState.errors.level?.message}
                     {...field}
@@ -203,6 +205,7 @@ const CreateResume: NextPageWithLayout = () => {
                   onBlur={field.onBlur}
                   value={field.value}
                   name={field.name}
+                  disabled={createResumeMut.isLoading}
                 />
               )}
             />
@@ -221,7 +224,11 @@ const CreateResume: NextPageWithLayout = () => {
                   label="Укажите свои навыки"
                   value={field.value}
                   onChange={field.onChange}
-                  reset={() => field.onChange([])}
+                  reset={() => {
+                    field.onChange([])
+                    hookForm.clearErrors("skills")
+                  }}
+                  disabled={createResumeMut.isLoading}
                   validError={hookForm.formState.errors.skills?.message}
                 />
               )}

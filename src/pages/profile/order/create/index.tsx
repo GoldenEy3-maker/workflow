@@ -90,7 +90,9 @@ const OrderCreate: NextPageWithLayout = () => {
             createOrderMut.mutate({
               ...data,
               skills: z.array(SkillModel).parse(skills),
-              price: parseInt(data.price.replace(" ", "")),
+              price: data.price
+                ? parseInt(data.price.replace(" ", ""))
+                : undefined,
             })
           })}
         >
@@ -154,6 +156,7 @@ const OrderCreate: NextPageWithLayout = () => {
                   onBlur={field.onBlur}
                   onChange={field.onChange}
                   value={field.value}
+                  disabled={createOrderMut.isLoading}
                   validError={hookForm.formState.errors.description?.message}
                 />
               )}
@@ -173,7 +176,11 @@ const OrderCreate: NextPageWithLayout = () => {
                   options={getSkillsQuery.data?.map((skill) => skill.value)}
                   onChange={field.onChange}
                   value={field.value}
-                  reset={() => hookForm.resetField("skills")}
+                  disabled={createOrderMut.isLoading}
+                  reset={() => {
+                    hookForm.clearErrors("skills")
+                    field.onChange([])
+                  }}
                   validError={hookForm.formState.errors.skills?.message}
                 />
               )}

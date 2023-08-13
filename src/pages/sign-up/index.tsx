@@ -17,9 +17,12 @@ import * as Form from "~/components/Form"
 import Input from "~/components/Input"
 import Logo from "~/components/Logo"
 import * as Tabs from "~/components/Tabs"
+import { useModal } from "~/hooks/modal.hook"
 import AuthLayout from "~/layouts/Auth"
+import ConfirmSignUpModal from "~/modals/ConfirmSignUp"
 import dateService from "~/services/date.service"
 import validationService from "~/services/validation.service"
+import { useConfirmSignUpModalStore } from "~/store/#modals/confirmSingUp"
 import { api } from "~/utils/api"
 import { InputMaskPatterns, PagePaths, QueryKeys } from "~/utils/enums"
 import { type NextPageWithLayout, type ValueOf } from "~/utils/types"
@@ -70,16 +73,17 @@ const useQueryToInitializeRole = (setter: UseFormSetValue<FormState>) => {
 }
 
 const SignUp: NextPageWithLayout = () => {
+  const [openModal] = useModal()
+  const confirmSignUpModalStore = useConfirmSignUpModalStore()
+
   const signUpMut = api.user.signUp.useMutation({
     onError(error) {
       toast.error(error.message)
     },
     onSuccess() {
-      toast.success(
-        "На указанную почту выслано приглашение для активации аккаунта!"
-      )
-
       hookForm.reset()
+
+      openModal(confirmSignUpModalStore.open)
     },
   })
 
@@ -99,6 +103,7 @@ const SignUp: NextPageWithLayout = () => {
 
   return (
     <>
+      <ConfirmSignUpModal />
       <Logo isMinimized={true} />
       <h1 className="page-title _centered">Регистрация</h1>
 

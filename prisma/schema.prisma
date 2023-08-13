@@ -63,7 +63,7 @@ model Resume {
   specialityId String
   level        Level            @relation(fields: [levelId], references: [id])
   levelId      String
-  details      String
+  bio          String
   skills       ResumeSkill[]
   author       User             @relation(fields: [authorId], references: [id])
   authorId     String           @unique

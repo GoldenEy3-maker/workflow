@@ -39,14 +39,14 @@
       font-size: var(--body-extra-fs);
       color: hsl(var(--on-surface-hsl));
 
-      transition: 200ms ease;
+      transition: background-color 200ms ease, color 200ms ease;
 
       svg {
         font-size: 1.75rem;
       }
 
-      &:focus {
-        outline: none;
+      &:focus-visible {
+        outline: 2px solid hsl(var(--primary-hsl));
         background-color: hsl(var(--primary-container-hsl));
         color: hsl(var(--primary-hsl));
       }

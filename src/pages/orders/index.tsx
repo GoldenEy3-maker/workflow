@@ -1,5 +1,6 @@
 import { type GetStaticProps } from "next"
 import { useState } from "react"
+import Button from "~/components/Button"
 import {
   type FilterHandler,
   type FilterState,
@@ -34,19 +35,13 @@ const Orders: NextPageWithLayout = () => {
 
   const [filters, setFilters] = useState<FilterState>(() => {
     let state = {
-      secure: {
-        checked: false,
-        value: undefined,
-      },
+      secure: undefined,
     }
 
     for (const skill of getSkillsQuery.data!) {
       state = {
         ...state,
-        [skill.id]: {
-          checked: false,
-          value: undefined,
-        },
+        [skill.id]: undefined,
       }
     }
 
@@ -56,7 +51,7 @@ const Orders: NextPageWithLayout = () => {
   const changeFilterHandler: FilterHandler = (args) => {
     setFilters((state) => ({
       ...state,
-      [args.id]: { checked: args.checked, value: args.value },
+      [args.id]: args.value,
     }))
   }
 
@@ -84,8 +79,8 @@ const Orders: NextPageWithLayout = () => {
                 checkboxes: getSkillsQuery.data!.map((s) => ({
                   label: s.value,
                   id: s.id,
+                  value: filters[s.id],
                   handler: changeFilterHandler,
-                  ...filters[s.id],
                 })),
               },
               {
@@ -94,8 +89,8 @@ const Orders: NextPageWithLayout = () => {
                   {
                     label: "Сертифицированные",
                     id: "secure",
+                    value: filters.secure,
                     handler: changeFilterHandler,
-                    ...filters.secure,
                   },
                 ],
               },
@@ -110,6 +105,14 @@ const Orders: NextPageWithLayout = () => {
             render={(data) => (
               <Order key={crypto.randomUUID()} data={data} backgrounded />
             )}
+            empty={
+              <Order
+                data={undefined}
+                loading={false}
+                backgrounded
+                empty={<p>Пока что заказов нет</p>}
+              />
+            }
           />
         </Section.Content>
       </Section.Root>

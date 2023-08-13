@@ -58,6 +58,10 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
   font-size: var(--title-l-fs);
   font-weight: 500;
 
@@ -66,9 +70,8 @@
 
 .content {
   margin-top: 1em;
-  // padding: 1rem 2rem;
 
-  // background-color: hsl(var(--surface-container-high-hsl));
+  font-size: var(--body-extra-fs);
 }
 
 .actions {

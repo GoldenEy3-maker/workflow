@@ -18,7 +18,7 @@
 
   background-color: hsl(var(--_bg-clr));
 
-  transition: 200ms ease;
+  transition: background-color 200ms ease, color 200ms ease;
 
   &.elevated {
     --_bg-clr: var(--primary-container-hsl);
@@ -30,14 +30,11 @@
     --_bg-clr: var(--primary-hsl);
   }
 
-  svg {
-    fill: hsl(var(--_clr));
-  }
-
-  &:focus {
+  &:focus-visible {
     --_bg-clr: var(--primary-container-hsl);
 
-    outline: none;
+    outline: 2px solid hsl(var(--primary-hsl));
+    outline-offset: 2px;
 
     &.elevated {
       --_bg-clr: var(--primary-container-high-hsl);

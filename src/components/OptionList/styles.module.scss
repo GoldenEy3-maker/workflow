@@ -39,12 +39,8 @@
   display: flex;
 
   label {
-    --_clr: var(--primary-hsl);
-    // --ripple-hsl: var(--surface-hsl);
-
     position: relative;
     overflow: hidden;
-
     display: flex;
     align-items: center;
     gap: 0.5em;
@@ -52,24 +48,11 @@
     padding: 0.5em 1.3em;
 
     background-color: hsl(var(--primary-container-hsl));
-    // border: 1px solid hsl(var(--outline-hsl));
     border-radius: 40px;
 
-    color: hsl(var(--_clr));
+    color: hsl(var(--primary-hsl));
 
-    transition: 200ms ease;
-
-    span {
-      svg {
-        fill: hsl(var(--_clr));
-      }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        background-color: hsl(var(--primary-container-highest-hsl));
-      }
-    }
+    transition: background-color 200ms ease;
   }
 
   input {
@@ -77,12 +60,26 @@
     height: 0;
     opacity: 0;
 
+    &:focus-visible + label {
+      background-color: hsl(var(--primary-container-high-hsl));
+      outline: 2px solid hsl(var(--primary-hsl));
+    }
+
     &:checked + label {
       background-color: hsl(var(--primary-container-highest-hsl));
     }
 
-    &:focus + label {
-      background-color: hsl(var(--primary-container-high-hsl));
+    &:disabled + label {
+      cursor: not-allowed;
+      color: hsl(274, 30%, 60%);
+    }
+
+    &:not(:disabled) + label {
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background-color: hsl(var(--primary-container-highest-hsl));
+        }
+      }
     }
   }
 }

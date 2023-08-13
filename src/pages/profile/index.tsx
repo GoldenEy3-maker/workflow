@@ -137,8 +137,7 @@ const Profile: NextPageWithLayout = () => {
                       backgrounded
                       empty={
                         <>
-                          <p>У вас пока что нет заказов.</p>
-                          <p>Скорее создайте его!</p>
+                          <p>У вас пока нет активных заказов</p>
                           <Link
                             href={PagePaths.OrderCreate}
                             style={{ marginTop: "1rem" }}

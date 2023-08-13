@@ -18,16 +18,10 @@
 
   border-radius: 40px;
 
-  transition: 200ms ease;
+  transition: color 200ms ease, background-color 200ms ease;
 
   &[type="submit"] {
     gap: 0;
-  }
-
-  svg {
-    fill: hsla(var(--_clr));
-
-    transition: 200ms ease;
   }
 
   &._icon {
@@ -136,23 +130,30 @@
     }
   }
 
-  &:focus {
+  &:focus-visible {
     --_bg-clr: var(--primary-container-high-hsl);
     --_clr: var(--primary-hsl);
 
-    outline: none;
+    outline: 2px solid hsl(var(--primary-hsl));
+    outline-offset: 2px;
 
     &._danger {
+      outline-color: hsl(var(--danger-hsl));
+
       --_clr: var(--danger-hsl);
       --_bg-clr: var(--danger-container-high-hsl);
     }
 
     &._success {
+      outline-color: hsl(var(--success-hsl));
+
       --_clr: var(--success-hsl);
       --_bg-clr: var(--success-container-high-hsl);
     }
 
     &._warning {
+      outline-color: hsl(var(--warning-hsl));
+
       --_clr: var(--warning-hsl);
       --_bg-clr: var(--warning-container-high-hsl);
     }

@@ -9,7 +9,6 @@ type FilterProps = {
       label: string
       value: FilterValue
       id: string
-      checked: boolean
       handler: FilterHandler
     }[]
   }[]

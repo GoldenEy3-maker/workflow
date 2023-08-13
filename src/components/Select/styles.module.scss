@@ -83,10 +83,10 @@
 
     padding: 0.5em 1em;
 
-    transition: 200ms ease;
+    transition: background-color 200ms ease;
 
-    &:focus {
-      outline: none;
+    &:focus-visible {
+      outline: 2px solid hsl(var(--primary-hsl));
 
       background-color: hsl(var(--primary-container-high-hsl));
     }

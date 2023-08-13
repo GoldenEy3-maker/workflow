@@ -61,7 +61,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
                 ) : null}
               </header>
               <SlateEditor
-                value={props.data.details}
+                value={props.data.bio}
                 reduced={props.reduced}
                 readonly
               />

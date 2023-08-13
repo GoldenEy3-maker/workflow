@@ -6,22 +6,14 @@ import styles from "./styles.module.scss"
 
 export type FilterValue = "on" | "off" | undefined
 
-export type FilterState = Record<
-  string,
-  { checked: boolean; value: FilterValue }
->
+export type FilterState = Record<string, FilterValue>
 
-export type FilterHandler = (args: {
-  id: string
-  checked: boolean
-  value: FilterValue
-}) => void
+export type FilterHandler = (args: { id: string; value: FilterValue }) => void
 
 type CheckboxProps = {
   label: string
   value: FilterValue
   id: string
-  checked: boolean
   handler: FilterHandler
 } & Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -45,12 +37,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   }, [props.value])
 
   const changeHandler: React.ChangeEventHandler<HTMLInputElement> = () => {
-    let checked = props.checked
     let value = props.value
-
-    if (props.value === undefined || props.value === "on") checked = true
-
-    if (props.value === "off") checked = false
 
     switch (props.value) {
       case "off":
@@ -64,12 +51,18 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         break
     }
 
-    handler({ id, checked, value })
+    handler({ id, value })
   }
 
   return (
     <div className={cls([className, styles.checkbox])}>
-      <input type="checkbox" id={id} onChange={changeHandler} {...props} />
+      <input
+        type="checkbox"
+        id={id}
+        onChange={changeHandler}
+        checked={props.value === "off" || props.value === "on"}
+        {...props}
+      />
       <label htmlFor={id} onPointerDown={rippleEffectEvent}>
         <p>{label}</p>
         <span>{icon}</span>

@@ -23,9 +23,9 @@
   --primary-hsl: var(--primary-base-hsl), 80%;
   --primary-low-hsl: var(--primary-base-hsl), 75%;
   --primary-lowest-hsl: var(--primary-base-hsl), 70%;
-  --primary-container-hsl: var(--primary-container-base-hsl), 18%;
-  --primary-container-high-hsl: var(--primary-container-base-hsl), 23%;
-  --primary-container-highest-hsl: var(--primary-container-base-hsl), 26%;
+  --primary-container-hsl: var(--primary-container-base-hsl), 20%;
+  --primary-container-high-hsl: var(--primary-container-base-hsl), 30%;
+  --primary-container-highest-hsl: var(--primary-container-base-hsl), 33%;
   --on-primary-hsl: var(--primary-base-hsl), 20%;
 
   --outline-hsl: var(--surface-base-hsl), 40%;
@@ -34,25 +34,25 @@
   --danger-hsl: var(--danger-base-hsl), 70%;
   --danger-low-hsl: var(--danger-base-hsl), 65%;
   --danger-lowest-hsl: var(--danger-base-hsl), 60%;
-  --danger-container-hsl: var(--danger-container-base-hsl), 18%;
-  --danger-container-high-hsl: var(--danger-container-base-hsl), 23%;
-  --danger-container-highest-hsl: var(--danger-container-base-hsl), 26%;
+  --danger-container-hsl: var(--danger-container-base-hsl), 20%;
+  --danger-container-high-hsl: var(--danger-container-base-hsl), 30%;
+  --danger-container-highest-hsl: var(--danger-container-base-hsl), 33%;
   --on-danger-hsl: var(--danger-base-hsl), 20%;
 
   --success-hsl: var(--success-base-hsl), 50%;
   --success-low-hsl: var(--success-base-hsl), 45%;
   --success-lowest-hsl: var(--success-base-hsl), 40%;
-  --success-container-hsl: var(--success-container-base-hsl), 18%;
-  --success-container-high-hsl: var(--success-container-base-hsl), 23%;
-  --success-container-highest-hsl: var(--success-container-base-hsl), 26%;
+  --success-container-hsl: var(--success-container-base-hsl), 20%;
+  --success-container-high-hsl: var(--success-container-base-hsl), 30%;
+  --success-container-highest-hsl: var(--success-container-base-hsl), 33%;
   --on-success-hsl: var(--success-base-hsl), 20%;
 
   --warning-hsl: var(--warning-base-hsl), 60%;
   --warning-low-hsl: var(--warning-base-hsl), 55%;
   --warning-lowest-hsl: var(--warning-base-hsl), 50%;
-  --warning-container-hsl: var(--warning-container-base-hsl), 18%;
-  --warning-container-high-hsl: var(--warning-container-base-hsl), 23%;
-  --warning-container-highest-hsl: var(--warning-container-base-hsl), 26%;
+  --warning-container-hsl: var(--warning-container-base-hsl), 20%;
+  --warning-container-high-hsl: var(--warning-container-base-hsl), 30%;
+  --warning-container-highest-hsl: var(--warning-container-base-hsl), 33%;
   --on-warning-hsl: var(--warning-base-hsl), 20%;
 
   --ripple-hsl: var(--primary-hsl);

@@ -84,7 +84,6 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      console.log(opts.input)
       const newOrder = await opts.ctx.prisma.order.create({
         data: {
           title: opts.input.title,

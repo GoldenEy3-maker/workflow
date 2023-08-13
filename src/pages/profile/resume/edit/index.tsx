@@ -76,10 +76,10 @@ const EditResume: NextPageWithLayout = () => {
 
   const hookForm = useForm<FormState>({
     defaultValues: {
-      speciality: getResumeQuery.data?.speciality.value ?? "",
-      level: getResumeQuery.data?.level.value ?? "",
-      bio: getResumeQuery.data?.details ?? "",
-      skills: getResumeQuery.data?.skills.map((s) => s.skill.value) ?? [],
+      speciality: "",
+      level: "",
+      bio: "",
+      skills: [],
     },
   })
 
@@ -98,6 +98,14 @@ const EditResume: NextPageWithLayout = () => {
     if (!getResumeQuery.data) {
       toast.error("Для начала создайте свое резюме!")
       return void router.push(PagePaths.Profile)
+    } else {
+      hookForm.setValue("speciality", getResumeQuery.data.speciality.value)
+      hookForm.setValue("level", getResumeQuery.data.level.value)
+      hookForm.setValue("bio", getResumeQuery.data.bio)
+      hookForm.setValue(
+        "skills",
+        getResumeQuery.data.skills.map((s) => s.skill.value)
+      )
     }
   }, [
     getResumeQuery.data,
@@ -177,6 +185,7 @@ const EditResume: NextPageWithLayout = () => {
                           field.onChange(value)
                           hookForm.clearErrors("speciality")
                         }}
+                        disabled={updateResumeMut.isLoading}
                         optionsReset={() => hookForm.resetField("speciality")}
                         validError={
                           hookForm.formState.errors.speciality?.message
@@ -211,6 +220,7 @@ const EditResume: NextPageWithLayout = () => {
                           field.onChange(value)
                           hookForm.clearErrors("level")
                         }}
+                        disabled={updateResumeMut.isLoading}
                         optionsReset={() => hookForm.resetField("level")}
                         validError={hookForm.formState.errors.level?.message}
                         {...field}
@@ -244,6 +254,7 @@ const EditResume: NextPageWithLayout = () => {
                       onBlur={field.onBlur}
                       value={field.value}
                       name={field.name}
+                      disabled={updateResumeMut.isLoading}
                     />
                   )}
                 />
@@ -262,7 +273,11 @@ const EditResume: NextPageWithLayout = () => {
                       label="Укажите свои навыки"
                       value={field.value}
                       onChange={field.onChange}
-                      reset={() => field.onChange([])}
+                      reset={() => {
+                        field.onChange([])
+                        hookForm.clearErrors("skills")
+                      }}
+                      disabled={updateResumeMut.isLoading}
                       validError={hookForm.formState.errors.skills?.message}
                     />
                   )}
