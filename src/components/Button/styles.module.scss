@@ -11,14 +11,18 @@
   align-items: center;
   gap: 0.5rem;
 
-  color: hsla(var(--_clr));
-  background-color: hsla(var(--_bg-clr));
+  color: hsl(var(--_clr));
+  background-color: hsl(var(--_bg-clr));
 
   padding: 0.7rem 1.5rem;
 
   border-radius: 40px;
 
   transition: color 200ms ease, background-color 200ms ease;
+
+  &._sm {
+    padding: 0.3rem 1rem;
+  }
 
   &[type="submit"] {
     gap: 0;

@@ -9,6 +9,7 @@ export type ButtonProps = {
   clrType?: "danger" | "success" | "warning"
   isIcon?: boolean
   isLoading?: boolean
+  size?: "sm" | "md" | "lg"
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -21,6 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       clrType,
       isIcon,
+      size,
       ...props
     },
     ref
@@ -38,6 +40,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           [styles._danger ?? ""]: clrType === "danger",
           [styles._success ?? ""]: clrType === "success",
           [styles._warning ?? ""]: clrType === "warning",
+          [styles._sm ?? ""]: size === "sm",
           [styles._icon ?? ""]: !!isIcon,
         })}
         onPointerDown={(event) => {

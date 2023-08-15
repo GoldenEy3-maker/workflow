@@ -1,6 +1,6 @@
+import { Fzf } from "fzf"
 import { type GetStaticProps } from "next"
-import { useState } from "react"
-import Button from "~/components/Button"
+import { useMemo, useState } from "react"
 import {
   type FilterHandler,
   type FilterState,
@@ -8,42 +8,52 @@ import {
 import ListContainer from "~/components/ListContainer"
 import Order from "~/components/Order"
 import * as Section from "~/components/Section"
+import { type SortTypeKeys } from "~/components/Sort/types"
 import * as Toolbar from "~/components/Toolbar"
 import MainLayout from "~/layouts/Main"
 import { createSSG } from "~/server/ssg"
+import slateEditorService from "~/services/slateEditor.service"
 import { api } from "~/utils/api"
 import { type NextPageWithLayout, type ValueOf } from "~/utils/types"
 import styles from "./styles.module.scss"
 
-export const SortValues = {
-  Date: "Дата",
-  Price: "Цена",
-  Popular: "Популярность",
+const SortValueKeys = {
+  Date: "date",
+  Price: "price",
+  Popular: "popular",
 } as const
 
-export type SortValues = ValueOf<typeof SortValues>
+type SortValueKeys = ValueOf<typeof SortValueKeys>
 
 const Orders: NextPageWithLayout = () => {
   const [searchValue, setSearchValue] = useState("")
-  const [sortValue, setSortValue] = useState<SortValues>("Дата")
+  const [sortValue, setSortValue] = useState<SortValueKeys>("date")
+  const [sortType, setSortType] = useState<SortTypeKeys>("desc")
 
-  const getOrderQuery = api.order.getAll.useQuery()
+  const getOrdersQuery = api.order.getAll.useQuery()
   const getSkillsQuery = api.skill.getAll.useQuery(undefined, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+
+  const fzf = useMemo(
+    () =>
+      getOrdersQuery.data &&
+      new Fzf(getOrdersQuery.data, {
+        selector: (item) =>
+          item.title + " " + slateEditorService.parseText(item.description),
+      }),
+    [getOrdersQuery.data]
+  )
 
   const [filters, setFilters] = useState<FilterState>(() => {
     let state = {
       secure: undefined,
     }
 
-    for (const skill of getSkillsQuery.data!) {
-      state = {
-        ...state,
-        [skill.id]: undefined,
-      }
-    }
+    getSkillsQuery.data?.forEach(
+      (skill) => (state = { ...state, [skill.id]: undefined })
+    )
 
     return state
   })
@@ -53,6 +63,17 @@ const Orders: NextPageWithLayout = () => {
       ...state,
       [args.id]: args.value,
     }))
+  }
+
+  const getSortOptionLabel = (key: SortValueKeys) => {
+    switch (key) {
+      case "date":
+        return "Дата"
+      case "popular":
+        return "Популярность"
+      case "price":
+        return "Цена"
+    }
   }
 
   return (
@@ -67,10 +88,18 @@ const Orders: NextPageWithLayout = () => {
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <Toolbar.Sort
-            label="Сортировать по:"
-            handler={(value) => setSortValue(value as SortValues)}
-            value={sortValue}
-            values={Object.values(SortValues)}
+            resetHandler={() => {
+              setSortValue("date")
+              setSortType("desc")
+            }}
+            sortType={sortType}
+            sortTypeHandler={(key) => setSortType(key)}
+            options={Object.values(SortValueKeys).map((key) => ({
+              id: key,
+              checked: sortValue === (key as SortValueKeys),
+              label: getSortOptionLabel(key as SortValueKeys),
+              onChange: () => setSortValue(key as SortValueKeys),
+            }))}
           />
           <Toolbar.Filter
             filters={[
@@ -99,11 +128,46 @@ const Orders: NextPageWithLayout = () => {
         </Toolbar.Root>
         <Section.Content>
           <ListContainer
-            data={getOrderQuery.data}
-            loading={getOrderQuery.isLoading}
-            error={getOrderQuery.error?.message}
+            data={fzf
+              ?.find(searchValue)
+              .map((res) => res.item)
+              .filter((data) => {
+                const skillsId = data.skills.map((s) => s.skillId)
+                let result = true
+
+                for (const [key, value] of Object.entries(filters)) {
+                  if (value === "on") result = skillsId.includes(key)
+                  if (value === "off") result = !skillsId.includes(key)
+
+                  if (key === "secure") {
+                    if (value === "on") result = data.secure
+                    if (value === "off") result = !data.secure
+                  }
+                }
+
+                return result
+              })
+              .sort((a, b) => {
+                if (sortValue === "price") {
+                  const aPrice = a.price ?? 0
+                  const bPrice = b.price ?? 0
+
+                  return sortType === "desc" ? bPrice - aPrice : aPrice - bPrice
+                }
+
+                return sortType === "desc"
+                  ? b.updatedAt.getTime() - a.updatedAt.getTime()
+                  : a.updatedAt.getTime() - b.updatedAt.getTime()
+              })}
+            loading={getOrdersQuery.isLoading}
+            error={getOrdersQuery.error?.message}
             render={(data) => (
-              <Order key={crypto.randomUUID()} data={data} backgrounded />
+              <Order
+                key={crypto.randomUUID()}
+                data={data}
+                backgrounded
+                reduced
+              />
             )}
             empty={
               <Order

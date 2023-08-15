@@ -46,10 +46,13 @@ a:hover {
 
 ::-webkit-scrollbar {
   width: 0.625rem;
+  background-color: hsl(var(--primary-container-hsl));
+  border-radius: var(--full-shape);
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary-lowest-hsl));
+  border-radius: var(--full-shape);
 }
 
 ::-moz-selection {

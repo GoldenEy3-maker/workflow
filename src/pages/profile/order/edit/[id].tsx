@@ -17,6 +17,7 @@ import { type CustomElement } from "~/components/Slate/types"
 import MainLayout from "~/layouts/Main"
 import ProfileLayout from "~/layouts/Profile"
 import { createSSG } from "~/server/ssg"
+import slateEditorService from "~/services/slateEditor.service"
 import validationService from "~/services/validation.service"
 import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
@@ -179,13 +180,8 @@ const EditOrder: NextPageWithLayout<{ id: string }> = (props) => {
                   if (value === "")
                     return "Опишите подробнее задачи вашего заказа!"
 
-                  const content = JSON.parse(value) as CustomElement[]
-
-                  const isEmpty = content.every((elem) =>
-                    validationService.validateEmptySlateEditor(elem.children)
-                  )
-
-                  if (isEmpty) return "Опишите подробнее задачи вашего заказа!"
+                  if (slateEditorService.parseText(value) === "")
+                    return "Опишите подробнее задачи вашего заказа!"
                 },
               }}
               render={({ field }) => (

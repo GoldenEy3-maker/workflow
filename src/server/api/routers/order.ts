@@ -32,6 +32,9 @@ export const orderRouter = createTRPCRouter({
           not: "ARCHIVED",
         },
       },
+      include: {
+        skills: true,
+      },
       orderBy: {
         updatedAt: "desc",
       },

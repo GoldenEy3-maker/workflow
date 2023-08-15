@@ -1,5 +1,5 @@
 import isUrl from "is-url"
-import { Editor, Element, Range, Transforms } from "slate"
+import { Editor, Element, Range, Transforms, type Descendant } from "slate"
 import {
   AlignValues,
   ElementTypes,
@@ -159,5 +159,25 @@ export default new (class SlateEditorService {
     }
 
     return editor
+  }
+
+  parseText(value: string) {
+    const obj = JSON.parse(value) as Descendant[]
+
+    const parse = (descendants: Descendant[]) => {
+      let result = ""
+
+      for (const elem of descendants) {
+        for (const [key, value] of Object.entries(elem)) {
+          if (key === "text") result += value as string
+          if (key === "children")
+            result += parse((elem as CustomElement).children)
+        }
+      }
+
+      return result
+    }
+
+    return parse(obj)
   }
 })()

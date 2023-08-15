@@ -1,0 +1,234 @@
+.root {
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  padding-inline: 1rem;
+  padding-bottom: 0.3rem;
+}
+
+.title {
+  color: hsl(var(--primary-hsl));
+  font-size: var(--body-extra-fs);
+  font-weight: 500;
+}
+
+.content {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 10;
+
+  width: max-content;
+
+  background-color: hsl(var(--surface-container-highest-hsl));
+  border-radius: var(--medium-shape);
+
+  padding-block: 1rem;
+
+  opacity: 0;
+  visibility: hidden;
+
+  translate: -50%;
+
+  transition: 200ms ease;
+
+  [aria-hidden="false"] & {
+    top: 120%;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.container {
+  display: grid;
+  gap: 0.3rem;
+
+  max-height: 200px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    background-color: hsl(var(--primary-container-high-hsl));
+  }
+
+  &Item {
+    display: flex;
+
+    input {
+      width: 0;
+      height: 0;
+      opacity: 0;
+
+      &:focus-visible + label {
+        outline: 2px solid hsl(var(--primary-hsl));
+        outline-offset: -3px;
+
+        background-color: hsl(var(--primary-container-high-hsl));
+      }
+
+      &:checked + label {
+        i {
+          &::before {
+            transform: translate(-50%, -50%) scale(1);
+          }
+        }
+      }
+    }
+
+    label {
+      position: relative;
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      width: 100%;
+
+      padding: 0.7rem 1rem;
+
+      transition: background-color 200ms ease;
+
+      i {
+        width: 1rem;
+        height: 1rem;
+
+        position: relative;
+
+        border: 2px solid hsl(var(--outline-hsl));
+        border-radius: var(--full-shape);
+
+        &::before {
+          content: "";
+
+          position: absolute;
+          top: 50%;
+          left: 50%;
+
+          width: 0.5rem;
+          height: 0.5rem;
+
+          border-radius: var(--full-shape);
+
+          background-color: hsl(var(--primary-hsl));
+
+          transform: translate(-50%, -50%) scale(0);
+
+          transition: 200ms ease;
+        }
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background-color: hsl(var(--primary-container-highest-hsl));
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  display: grid;
+  gap: 0.3rem;
+
+  padding-top: 0.3rem;
+
+  &::before {
+    content: "";
+
+    width: 90%;
+    height: 2px;
+
+    margin-inline: auto;
+
+    background-color: hsl(var(--outline-hsl));
+    border-radius: var(--full-shape);
+  }
+
+  &Item {
+    display: flex;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:focus-visible + label {
+        outline: 2px solid hsl(var(--primary-hsl));
+        outline-offset: -3px;
+
+        background-color: hsl(var(--primary-container-high-hsl));
+      }
+    }
+
+    label {
+      position: relative;
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      width: 100%;
+
+      padding: 0.7rem 1rem;
+
+      transition: color 200ms ease, background-color 200ms ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:first-child {
+        label {
+          --ripple-hsl: var(--success-hsl);
+        }
+
+        input:checked + label {
+          // background-color: hsl(var(--success-container-high-hsl));
+          color: hsl(var(--success-hsl));
+        }
+
+        input:focus-visible + label {
+          outline: 2px solid hsl(var(--success-hsl));
+          outline-offset: -3px;
+
+          background-color: hsl(var(--success-container-high-hsl));
+          color: hsl(var(--success-hsl));
+        }
+
+        label:hover {
+          background-color: hsl(var(--success-container-high-hsl));
+          color: hsl(var(--success-hsl));
+        }
+      }
+
+      &:last-child {
+        label {
+          --ripple-hsl: var(--danger-hsl);
+        }
+
+        input:checked + label {
+          // background-color: hsl(var(--danger-container-high-hsl));
+          color: hsl(var(--danger-hsl));
+        }
+
+        input:focus-visible + label {
+          outline: 2px solid hsl(var(--danger-hsl));
+          outline-offset: -3px;
+
+          background-color: hsl(var(--danger-container-high-hsl));
+          color: hsl(var(--danger-hsl));
+        }
+
+        label:hover {
+          background-color: hsl(var(--danger-container-high-hsl));
+          color: hsl(var(--danger-hsl));
+        }
+      }
+    }
+  }
+}

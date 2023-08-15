@@ -12,12 +12,11 @@ export const Content: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   const [contextState] = useFilterContext()
 
   useEffect(() => {
-    if (contentRef.current) {
+    if (contentRef.current)
       contentRef.current.style.setProperty(
         "--offset-top",
-        contentRef.current.getBoundingClientRect().top.toString() + "px"
+        `${contentRef.current.getBoundingClientRect().top}px`
       )
-    }
   }, [])
 
   return (

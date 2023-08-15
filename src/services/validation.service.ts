@@ -1,6 +1,3 @@
-import { type Descendant } from "slate"
-import { type CustomElement } from "~/components/Slate/types"
-
 export default new (class ValidationSevice {
   validateEmail(value: string) {
     return new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, "g").test(value)
@@ -38,15 +35,5 @@ export default new (class ValidationSevice {
       /(^[А-ЯЁа-яё]{2,16})\s([А-ЯЁа-яё]{2,16})?\s?([А-ЯЁа-яё]{2,16})/,
       "g"
     ).test(value)
-  }
-
-  validateEmptySlateEditor(descendants: Descendant[]): boolean {
-    return descendants.every((elem) => {
-      for (const [key, value] of Object.entries(elem)) {
-        if (key === "text") return (value as string).length === 0
-      }
-
-      return this.validateEmptySlateEditor((elem as CustomElement).children)
-    })
   }
 })()

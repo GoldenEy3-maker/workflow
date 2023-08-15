@@ -10,9 +10,8 @@ export const useClickOutside = (
       if (
         !ref.current?.contains(event.target as HTMLElement) &&
         (extraCondition ?? true)
-      ) {
+      )
         callback()
-      }
     },
     [ref, callback, extraCondition]
   )

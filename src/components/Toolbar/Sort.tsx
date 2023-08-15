@@ -1,20 +1,25 @@
-import * as Select from "~/components/Select"
-import { cls } from "~/utils/helpers"
+// import * as Select from "~/components/Select"
+import * as Sort from "~/components/Sort"
+import { type Option, type SortTypeKeys } from "~/components/Sort/types"
 import styles from "./styles.module.scss"
 
 type SortProps = {
-  className?: string
-  label?: string
-  value: string
-  values: string[]
-  handler: (value: string) => void
+  options: Option[]
+  resetHandler: () => void
+  sortType: SortTypeKeys
+  sortTypeHandler: (id: SortTypeKeys) => void
 }
 
-export const Sort: React.FC<SortProps> = ({ className, label, value, ...props }) => {
+export const Sorter: React.FC<SortProps> = (props) => {
   return (
-    <Select.Root className={cls([className, styles.sort])} label={label}>
-      <Select.Trigger value={value} />
-      <Select.Options {...props} />
-    </Select.Root>
+    <Sort.Root className={styles.sort}>
+      <Sort.Trigger>Сортировать</Sort.Trigger>
+      <Sort.Content
+        resetHandler={props.resetHandler}
+        options={props.options}
+        sortType={props.sortType}
+        sortTypeHandler={props.sortTypeHandler}
+      />
+    </Sort.Root>
   )
 }

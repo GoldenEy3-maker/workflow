@@ -28,8 +28,7 @@ export const Root: React.FC<RootProps> = ({
     setContextState((state) => ({ ...state, isOpen: false }))
 
   const closeOnBlurHandler: React.FocusEventHandler = (event) => {
-    if (!rootRef.current?.contains(event.relatedTarget as HTMLElement))
-      closeHandler()
+    if (!rootRef.current?.contains(event.relatedTarget)) closeHandler()
   }
 
   useClickOutside(rootRef, closeHandler, contextState.isOpen === true)
