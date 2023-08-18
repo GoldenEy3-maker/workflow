@@ -7,16 +7,15 @@ type TitleProps = {
 
 export const Title: React.FC<TitleProps> = ({
   primary,
-  className,
   children,
   ...props
 }) => {
   return (
     <h3
-      className={cls([className, styles.title], {
+      {...props}
+      className={cls([props.className, styles.title], {
         [styles._primary ?? ""]: !!primary,
       })}
-      {...props}
     >
       {children}
     </h3>

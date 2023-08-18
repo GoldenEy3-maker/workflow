@@ -1,13 +1,13 @@
-import { createContext, useContext, type RefObject } from "react"
+import { createContext, useContext } from "react"
 
-export type SelectContextState = {
+type SelectContext = {
   isOpen: boolean
-  triggerRef: RefObject<HTMLButtonElement>
+  triggerRef: React.RefObject<HTMLButtonElement>
+  close: () => void
+  toggle: () => void
 }
 
-type SelectContext = [SelectContextState, React.Dispatch<React.SetStateAction<SelectContextState>>]
-
-export const SelectContext = createContext<SelectContext | undefined>(undefined)
+export const SelectContext = createContext<SelectContext | null>(null)
 
 export const useSelectContext = () => {
   const context = useContext(SelectContext)

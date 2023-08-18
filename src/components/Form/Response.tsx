@@ -9,7 +9,6 @@ type ResponseProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export const Response: React.FC<ResponseProps> = ({
-  className,
   children,
   state,
   type,
@@ -17,13 +16,13 @@ export const Response: React.FC<ResponseProps> = ({
 }) => {
   return (
     <div
-      className={cls([className, styles.response], {
+      {...props}
+      className={cls([props.className, styles.response], {
         [styles._dangerMessage ?? ""]: type === "danger",
         [styles._successMessage ?? ""]: type === "success",
         [styles._warningMessage ?? ""]: type === "warning",
       })}
       aria-hidden={!state}
-      {...props}
     >
       <div className={styles.responseMessage}>{children}</div>
     </div>

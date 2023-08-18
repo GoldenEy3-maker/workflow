@@ -1,8 +1,5 @@
 import { useRef, useState } from "react"
-import {
-  SelectContext,
-  type SelectContextState,
-} from "~/components/Select/context"
+import { SelectContext } from "~/components/Select/context"
 import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
@@ -11,35 +8,28 @@ type RootProps = {
   label?: string
 } & React.HTMLAttributes<HTMLDivElement>
 
-export const Root: React.FC<RootProps> = ({
-  label,
-  className,
-  children,
-  ...props
-}) => {
+export const Root: React.FC<RootProps> = ({ label, children, ...props }) => {
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
-  const [contextState, setContextState] = useState<SelectContextState>({
-    isOpen: false,
-    triggerRef: { current: null },
-  })
+  const [isOpen, setIsOpen] = useState(false)
 
-  const closeHandler = () =>
-    setContextState((state) => ({ ...state, isOpen: false }))
+  const close = () => setIsOpen(false)
+  const toggle = () => setIsOpen((state) => !state)
 
   const closeOnBlurHandler: React.FocusEventHandler = (event) => {
-    if (!rootRef.current?.contains(event.relatedTarget)) closeHandler()
+    if (event.relatedTarget && !rootRef.current?.contains(event.relatedTarget))
+      close()
   }
 
-  useClickOutside(rootRef, closeHandler, contextState.isOpen === true)
+  useClickOutside(rootRef, close, isOpen === true)
 
   return (
-    <SelectContext.Provider value={[contextState, setContextState]}>
+    <SelectContext.Provider value={{ isOpen, close, toggle, triggerRef }}>
       <div
-        className={cls([className, styles.root], {
-          [styles._active ?? ""]: contextState.isOpen,
-        })}
         {...props}
+        className={cls([props.className, styles.root])}
+        aria-hidden={!isOpen}
       >
         {label ? <span className={styles.label}>{label}</span> : null}
         <div

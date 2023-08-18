@@ -3,13 +3,12 @@ import { TabsContextProvider } from "./context"
 import styles from "./styles.module.scss"
 
 export const Root: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
-  className,
   children,
   ...props
 }) => {
   return (
     <TabsContextProvider>
-      <div className={cls([className, styles.root])} {...props}>
+      <div {...props} className={cls([props.className, styles.root])}>
         {children}
       </div>
     </TabsContextProvider>

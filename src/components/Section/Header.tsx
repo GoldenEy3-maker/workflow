@@ -6,17 +6,16 @@ type HeaderProps = {
 } & React.HTMLAttributes<HTMLElement>
 
 export const Header: React.FC<HeaderProps> = ({
-  className,
   children,
   centered,
   ...props
 }) => {
   return (
     <header
-      className={cls([className, styles.header], {
+      {...props}
+      className={cls([props.className, styles.header], {
         [styles._center ?? ""]: !!centered,
       })}
-      {...props}
     >
       {children}
     </header>

@@ -2,9 +2,9 @@ import { Fzf } from "fzf"
 import { type GetStaticProps } from "next"
 import { useMemo, useState } from "react"
 import {
-  type FilterHandler,
-  type FilterState,
-} from "~/components/Filters/Checkbox"
+  type FiltersCheckboxHandler,
+  type FiltersState,
+} from "~/components/Filters/types"
 import ListContainer from "~/components/ListContainer"
 import Order from "~/components/Order"
 import * as Section from "~/components/Section"
@@ -46,7 +46,7 @@ const Orders: NextPageWithLayout = () => {
     [getOrdersQuery.data]
   )
 
-  const [filters, setFilters] = useState<FilterState>(() => {
+  const [filters, setFilters] = useState<FiltersState>(() => {
     let state = {
       secure: undefined,
     }
@@ -58,11 +58,23 @@ const Orders: NextPageWithLayout = () => {
     return state
   })
 
-  const changeFilterHandler: FilterHandler = (args) => {
+  const changeFilterHandler: FiltersCheckboxHandler = (args) => {
     setFilters((state) => ({
       ...state,
       [args.id]: args.value,
     }))
+  }
+
+  const resetFilters = () => {
+    setFilters((state) => {
+      let newState = state
+
+      for (const [key, value] of Object.entries(filters)) {
+        if (value !== undefined) newState = { ...newState, [key]: undefined }
+      }
+
+      return newState
+    })
   }
 
   const getSortOptionLabel = (key: SortValueKeys) => {
@@ -102,9 +114,10 @@ const Orders: NextPageWithLayout = () => {
             }))}
           />
           <Toolbar.Filter
-            filters={[
+            resetHandler={resetFilters}
+            options={[
               {
-                legend: "Навыки",
+                label: "Навыки",
                 checkboxes: getSkillsQuery.data!.map((s) => ({
                   label: s.value,
                   id: s.id,
@@ -113,7 +126,7 @@ const Orders: NextPageWithLayout = () => {
                 })),
               },
               {
-                legend: "Сертификат",
+                label: "Сертификат",
                 checkboxes: [
                   {
                     label: "Сертифицированные",

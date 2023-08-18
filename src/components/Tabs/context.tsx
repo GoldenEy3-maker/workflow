@@ -1,34 +1,35 @@
 import { createContext, useContext, useState } from "react"
 
-type TabsContextState = {
-  activeWidth: number
-  activeOffset: number
+type ActiveTab = {
+  width: number
+  offset: number
 }
 
-type TabsContext = [
-  TabsContextState,
-  React.Dispatch<React.SetStateAction<TabsContextState>>
-]
+type TabsContext = {
+  setActiveTab: React.Dispatch<React.SetStateAction<ActiveTab>>
+} & ActiveTab
 
-const TabsContext = createContext<TabsContext | undefined>(undefined)
+const TabsContext = createContext<TabsContext | null>(null)
 
 export const TabsContextProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const contextStore = useState<TabsContextState>({
-    activeOffset: 0,
-    activeWidth: 0,
+  const [activeTab, setActiveTab] = useState<ActiveTab>({
+    width: 0,
+    offset: 0,
   })
 
   return (
-    <TabsContext.Provider value={contextStore}>{children}</TabsContext.Provider>
+    <TabsContext.Provider value={{ ...activeTab, setActiveTab }}>
+      {children}
+    </TabsContext.Provider>
   )
 }
 
 export const useTabsContext = () => {
-  const context = useContext(TabsContext)
+  const ctx = useContext(TabsContext)
 
-  if (!context) throw new Error("TabsContextProvider is lost!")
+  if (!ctx) throw new Error("TabsContextProvider is lost!")
 
-  return context
+  return ctx
 }

@@ -18,6 +18,7 @@ import Button from "../Button"
 import styles from "./styles.module.scss"
 
 export type InputProps = {
+  size?: "sm" | "md" | "lg"
   label?: string
   leadingIcon?: React.ReactNode
   trailingIcon?: React.ReactNode
@@ -27,7 +28,7 @@ export type InputProps = {
   optionsReset?: () => void
   type?: React.InputHTMLAttributes<HTMLInputElement>["type"] | "currency"
   masked?: boolean
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size">
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -39,6 +40,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       validError,
       options,
       masked,
+      size,
       optionHandler,
       optionsReset,
       onFocus,
@@ -130,6 +132,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             options && !trailingIcon ? true : !!trailingIcon,
           [styles._disabled ?? ""]: !!props.disabled,
           [styles._notValid ?? ""]: !!validError,
+          [styles._sm ?? ""]: size === "sm",
         })}
         ref={rootRef}
         onBlur={closeOptionsOnRootBlur}

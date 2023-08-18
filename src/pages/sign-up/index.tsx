@@ -11,7 +11,6 @@ import {
   MdOutlineLock,
   MdPersonOutline,
 } from "react-icons/md"
-import InputMask from "react-input-mask"
 import Button from "~/components/Button"
 import * as Form from "~/components/Form"
 import Input from "~/components/Input"
@@ -24,7 +23,7 @@ import dateService from "~/services/date.service"
 import validationService from "~/services/validation.service"
 import { useConfirmSignUpModalStore } from "~/store/#modals/confirmSingUp"
 import { api } from "~/utils/api"
-import { InputMaskPatterns, PagePaths, QueryKeys } from "~/utils/enums"
+import { PagePaths, QueryKeys } from "~/utils/enums"
 import { type NextPageWithLayout, type ValueOf } from "~/utils/types"
 import styles from "./styles.module.scss"
 

@@ -6,17 +6,16 @@ type ContentProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export const Content: React.FC<ContentProps> = ({
-  className,
   children,
   isCenter,
   ...props
 }) => {
   return (
     <div
-      className={cls([className, styles.content], {
+      {...props}
+      className={cls([props.className, styles.content], {
         [styles._center ?? ""]: !!isCenter,
       })}
-      {...props}
     >
       {children}
     </div>

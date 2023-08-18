@@ -3,18 +3,13 @@ import { MdCheck, MdOutlineRemove } from "react-icons/md"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
 import { cls } from "~/utils/helpers"
 import styles from "./styles.module.scss"
-
-export type FilterValue = "on" | "off" | undefined
-
-export type FilterState = Record<string, FilterValue>
-
-export type FilterHandler = (args: { id: string; value: FilterValue }) => void
+import { type FiltersCheckboxHandler, type FiltersCheckboxValue } from "./types"
 
 type CheckboxProps = {
   label: string
-  value: FilterValue
+  value: FiltersCheckboxValue
   id: string
-  handler: FilterHandler
+  handler: FiltersCheckboxHandler
 } & Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type" | "value" | "id" | "checked"
@@ -23,7 +18,6 @@ type CheckboxProps = {
 export const Checkbox: React.FC<CheckboxProps> = ({
   label,
   className,
-  id,
   handler,
   ...props
 }) => {
@@ -51,21 +45,20 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         break
     }
 
-    handler({ id, value })
+    handler({ id: props.id, value })
   }
 
   return (
     <div className={cls([className, styles.checkbox])}>
       <input
         type="checkbox"
-        id={id}
         onChange={changeHandler}
         checked={props.value === "off" || props.value === "on"}
         {...props}
       />
-      <label htmlFor={id} onPointerDown={rippleEffectEvent}>
-        <p>{label}</p>
+      <label htmlFor={props.id} onPointerDown={rippleEffectEvent}>
         <span>{icon}</span>
+        <p>{label}</p>
       </label>
     </div>
   )

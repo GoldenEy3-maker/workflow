@@ -5,9 +5,9 @@ type LogoProps = {
   isMinimized?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const Logo: React.FC<LogoProps> = ({ className, isMinimized, ...props }) => {
+const Logo: React.FC<LogoProps> = ({ isMinimized, ...props }) => {
   return (
-    <div className={cls([className, styles.logo])} {...props}>
+    <div {...props} className={cls([props.className, styles.logo])}>
       <span>
         <svg
           width="3em"

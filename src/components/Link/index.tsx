@@ -11,18 +11,7 @@ export type LinkProps = {
 
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(
   (
-    {
-      href,
-      locale,
-      shallow,
-      scroll,
-      replace,
-      className,
-      children,
-      onPointerDown,
-      variant,
-      ...props
-    },
+    { href, locale, shallow, scroll, replace, children, variant, ...props },
     ref
   ) => {
     const rippleEffectEvent = useRippleEffect()
@@ -38,17 +27,17 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         legacyBehavior
       >
         <a
-          className={cls([className, styles.link], {
+          {...props}
+          className={cls([props.className, styles.link], {
             [styles.elevated ?? ""]: variant === "elevated",
             [styles.filled ?? ""]: variant === "filled",
           })}
           onPointerDown={(event) => {
             rippleEffectEvent(event)
 
-            if (onPointerDown) onPointerDown(event)
+            if (props.onPointerDown) props.onPointerDown(event)
           }}
           ref={ref}
-          {...props}
         >
           {children}
         </a>

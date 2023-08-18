@@ -13,7 +13,7 @@ type SortProps = {
 export const Sorter: React.FC<SortProps> = (props) => {
   return (
     <Sort.Root className={styles.sort}>
-      <Sort.Trigger>Сортировать</Sort.Trigger>
+      <Sort.Trigger title="Сортировать">Сортировать</Sort.Trigger>
       <Sort.Content
         resetHandler={props.resetHandler}
         options={props.options}

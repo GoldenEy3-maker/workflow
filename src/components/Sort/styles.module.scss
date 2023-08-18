@@ -2,6 +2,14 @@
   position: relative;
 }
 
+.triggerIcon {
+  transition: 200ms ease;
+
+  [aria-hidden="false"] & {
+    rotate: 180deg;
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -29,7 +37,7 @@
   background-color: hsl(var(--surface-container-highest-hsl));
   border-radius: var(--medium-shape);
 
-  padding-block: 1rem;
+  padding-block: 1rem 0.5rem;
 
   opacity: 0;
   visibility: hidden;
@@ -90,7 +98,7 @@
 
       width: 100%;
 
-      padding: 0.7rem 1rem;
+      padding: 0.5rem 1rem;
 
       transition: background-color 200ms ease;
 
@@ -176,7 +184,7 @@
 
       width: 100%;
 
-      padding: 0.7rem 1rem;
+      padding: 0.5rem 1rem;
 
       transition: color 200ms ease, background-color 200ms ease;
     }

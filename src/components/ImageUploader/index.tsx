@@ -22,7 +22,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 }) => {
   return (
     <div className={cls([className, styles.uploader])}>
-      <input type="file" {...props} />
+      <input {...props} type="file" />
       <label htmlFor={props.id}>
         <div className={styles.preview}>
           <Image

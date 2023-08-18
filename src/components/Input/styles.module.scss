@@ -9,6 +9,14 @@
   position: relative;
   width: 20em;
 
+  &._sm {
+    --_icon-size: 1rem;
+    --_padding-left: 0.5rem;
+    --_padding-right: 0.5rem;
+    --_padding-top: 1.3rem;
+    --_padding-bottom: 0.3rem;
+  }
+
   label {
     position: absolute;
     top: calc((var(--_padding-top) + var(--_padding-bottom)) / 2);
@@ -204,7 +212,7 @@
 .wrapper {
   position: relative;
 
-  background-color: hsl(var(--surface-container-hsl));
+  // background-color: hsl(var(--surface-container-hsl));
 
   border: 1px solid hsl(var(--outline-hsl));
   border-radius: var(--medium-shape);

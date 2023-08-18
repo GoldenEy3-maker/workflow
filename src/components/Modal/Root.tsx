@@ -7,19 +7,21 @@ type RootProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export const Root = forwardRef<HTMLDivElement, RootProps>(
-  ({ closeHandler, className, children, ...props }, ref) => {
+  ({ closeHandler, children, ...props }, ref) => {
     return (
       <div
-        className={cls([className, styles.root])}
+        {...props}
+        className={cls([props.className, styles.root])}
         ref={ref}
-        onPointerDown={(e) => {
+        onPointerDown={(event) => {
           if (
-            !(e.target as HTMLElement).closest("[data-modal-prevent]") &&
+            !(event.target as HTMLElement).closest("[data-modal-prevent]") &&
             closeHandler
           )
             closeHandler()
+
+          if (props.onPointerDown) props.onPointerDown(event)
         }}
-        {...props}
       >
         {children}
       </div>

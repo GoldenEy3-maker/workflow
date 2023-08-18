@@ -11,14 +11,13 @@ type OptionsProps = {
 export const Options: React.FC<OptionsProps> = ({
   values,
   handler,
-  className,
   ...props
 }) => {
   const rippleEffectEvent = useRippleEffect()
-  const [context, setContext] = useSelectContext()
+  const ctx = useSelectContext()
 
   return (
-    <div className={cls([className, styles.options])} {...props}>
+    <div {...props} className={cls([props.className, styles.options])}>
       {values.map((value, index) => (
         <button
           type="button"
@@ -26,10 +25,8 @@ export const Options: React.FC<OptionsProps> = ({
           onPointerDown={rippleEffectEvent}
           onClick={() => {
             handler(value)
-
-            setContext((state) => ({ ...state, isOpen: false }))
-
-            context.triggerRef.current?.focus()
+            ctx.close()
+            ctx.triggerRef.current?.focus()
           }}
         >
           {value}

@@ -10,20 +10,18 @@ type ItemProps = {
 
 export const Item = forwardRef<HTMLInputElement, ItemProps>(
   ({ className, label, ...props }, ref) => {
-    const itemRef = useRef<HTMLLabelElement>(null)
-
-    const [, setContext] = useTabsContext()
-
+    const ctx = useTabsContext()
     const rippleEffectEvent = useRippleEffect()
+    const itemRef = useRef<HTMLLabelElement>(null)
 
     useEffect(() => {
       if (props.checked && itemRef.current) {
-        setContext({
-          activeWidth: itemRef.current.offsetWidth,
-          activeOffset: itemRef.current.offsetLeft,
+        ctx.setActiveTab({
+          width: itemRef.current.offsetWidth,
+          offset: itemRef.current.offsetLeft,
         })
       }
-    }, [props.checked, setContext])
+    }, [props.checked])
 
     return (
       <div
@@ -38,7 +36,7 @@ export const Item = forwardRef<HTMLInputElement, ItemProps>(
         >
           {label}
         </label>
-        <input type="radio" ref={ref} {...props} />
+        <input {...props} type="radio" ref={ref} />
       </div>
     )
   }

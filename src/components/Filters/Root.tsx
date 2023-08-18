@@ -1,47 +1,41 @@
 import { useRef, useState } from "react"
 import { useClickOutside } from "~/hooks/clickOutside.hook"
 import { cls } from "~/utils/helpers"
-import type { FilterContextState } from "./context"
 import { FilterContext } from "./context"
 import styles from "./styles.module.scss"
 
 export const Root: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
-  className,
   children,
-  onBlur,
   ...props
 }) => {
   const rootRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const [contextState, setContextState] = useState<FilterContextState>({
-    isOpen: false,
-  })
-
-  const closeHandler = () =>
-    setContextState((state) => ({ ...state, isOpen: false }))
+  const close = () => setIsOpen(false)
+  const toggle = () => setIsOpen((state) => !state)
 
   const closeOnBlurHandler: React.FocusEventHandler<HTMLDivElement> = (
     event
   ) => {
     if (
-      event.relatedTarget !== null &&
-      rootRef.current?.contains(event.target as HTMLElement) &&
+      event.relatedTarget &&
       !rootRef.current?.contains(event.relatedTarget as HTMLElement)
     )
-      closeHandler()
+      close()
 
-    if (onBlur) onBlur(event)
+    if (props.onBlur) props.onBlur(event)
   }
 
-  useClickOutside(rootRef, closeHandler, contextState.isOpen === true)
+  useClickOutside(rootRef, close, isOpen)
 
   return (
-    <FilterContext.Provider value={[contextState, setContextState]}>
+    <FilterContext.Provider value={{ isOpen, toggle }}>
       <div
-        className={cls([className, styles.root])}
-        onBlur={closeOnBlurHandler}
         {...props}
+        className={cls([props.className, styles.root])}
+        onBlur={closeOnBlurHandler}
         ref={rootRef}
+        aria-hidden={!isOpen}
       >
         {children}
       </div>

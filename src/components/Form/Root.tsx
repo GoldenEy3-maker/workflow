@@ -7,16 +7,15 @@ type RootProps = {
 
 export const Root: React.FC<RootProps> = ({
   children,
-  className,
   withGroups,
   ...props
 }) => {
   return (
     <form
-      className={cls([className, styles.root], {
+      {...props}
+      className={cls([props.className, styles.root], {
         [styles.withGroups ?? ""]: !!withGroups,
       })}
-      {...props}
     >
       {children}
     </form>

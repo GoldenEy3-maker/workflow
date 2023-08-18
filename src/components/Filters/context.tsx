@@ -1,20 +1,16 @@
 import { createContext, useContext } from "react"
 
-export type FilterContextState = {
+export type FilterContext = {
   isOpen: boolean
+  toggle: () => void
 }
 
-type FilterContext = [
-  FilterContextState,
-  React.Dispatch<React.SetStateAction<FilterContextState>>
-]
-
-export const FilterContext = createContext<FilterContext | undefined>(undefined)
+export const FilterContext = createContext<FilterContext | null>(null)
 
 export const useFilterContext = () => {
-  const context = useContext(FilterContext)
+  const ctx = useContext(FilterContext)
 
-  if (!context) throw new Error("FilterContextProvider is lost!")
+  if (!ctx) throw new Error("FilterContextProvider is lost!")
 
-  return context
+  return ctx
 }

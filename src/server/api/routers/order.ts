@@ -20,7 +20,7 @@ export const orderRouter = createTRPCRouter({
                 not: "ARCHIVED",
               },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: { updatedAt: "desc" },
       })
 
       return orders

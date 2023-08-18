@@ -31,7 +31,7 @@
 
     transition: 200ms ease;
 
-    ._active & {
+    [aria-hidden="false"] & {
       rotate: 180deg;
     }
   }
@@ -98,7 +98,7 @@
     }
   }
 
-  ._active & {
+  [aria-hidden="false"] & {
     top: 120%;
     z-index: 15;
 

@@ -2,6 +2,35 @@
   position: relative;
 }
 
+.triggerIcon {
+  transition: 200ms ease;
+
+  [aria-hidden="false"] & {
+    rotate: 180deg;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  padding-inline: 1rem;
+  padding-bottom: 0.7rem;
+}
+
+.title {
+  font-size: var(--body-extra-fs);
+  font-weight: 500;
+  color: hsl(var(--primary-hsl));
+}
+
+.searchContainer {
+  padding-inline: 1rem;
+  padding-bottom: 0.5rem;
+}
+
 .content {
   --_gap: 1em;
   --_label-inline-pd: 0.7em;
@@ -16,17 +45,17 @@
   visibility: hidden;
 
   width: max-content;
-  min-width: 15em;
+  min-width: 20rem;
 
   background-color: hsl(var(--surface-container-highest-hsl));
 
-  overflow: hidden;
+  padding-block: 1rem;
 
   border-radius: var(--medium-shape);
 
   transition: 200ms ease;
 
-  &[aria-hidden="false"] {
+  [aria-hidden="false"] & {
     top: 120%;
 
     opacity: 1;
@@ -34,43 +63,100 @@
   }
 }
 
-.wrapper {
-  max-height: calc(100vh - var(--offset-top) - 3rem);
-  min-height: 300px;
+.container {
+  max-height: calc(100vh - var(--offset-top) - 11rem);
+  min-height: 100px;
   overflow: auto;
+
   display: flex;
-  padding: 0.7em var(--_content-inline-pd);
   flex-direction: column;
-  gap: var(--_gap);
+  gap: 0.3rem;
 }
 
 .group {
-  &:not(:last-child) {
-    &:after {
-      content: "";
+  &Trigger {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 10;
 
-      display: block;
-      width: calc(100% - var(--_content-inline-pd) * 2);
-      height: 1px;
+    overflow: hidden;
 
-      margin: var(--_gap) auto 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-      background-color: hsl(var(--outline-variant-hsl));
+    width: 100%;
+
+    background-color: hsl(var(--surface-container-highest-hsl));
+
+    padding: 0.5rem 1rem;
+
+    transition: background-color 200ms ease, color 200ms ease;
+
+    [aria-expanded="true"] & {
+      color: hsl(var(--primary-hsl));
+
+      &Icon {
+        rotate: -180deg;
+      }
+    }
+
+    &Icon {
+      transition: 200ms ease;
+    }
+
+    &:focus-visible {
+      outline: 2px solid hsl(var(--primary-hsl));
+      outline-offset: -3px;
+      background-color: hsl(var(--primary-container-high-hsl));
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: hsl(var(--primary-container-highest-hsl));
+      }
     }
   }
 
-  legend {
-    font-size: var(--body-m-fs);
-    color: hsl(var(--primary-hsl));
-    margin-bottom: 0.4em;
-
-    padding-inline: var(--_label-inline-pd);
-  }
-
   &Container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3em;
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+
+    padding-top: 0;
+
+    transition: 300ms ease;
+
+    [aria-expanded="true"] & {
+      grid-template-rows: 1fr;
+      padding-top: 0.5rem;
+      visibility: visible;
+    }
+
+    &Wrapper {
+      overflow: hidden;
+      position: relative;
+
+      display: grid;
+      gap: 0.3rem;
+
+      &:after {
+        content: "";
+
+        position: absolute;
+        top: 50%;
+        left: 1.65rem;
+
+        height: 100%;
+        width: 2px;
+
+        background-color: hsl(var(--outline-hsl));
+        border-radius: var(--full-shape);
+
+        translate: 0 -50%;
+      }
+    }
   }
 }
 
@@ -85,6 +171,7 @@
     &:focus-visible ~ label {
       background-color: hsl(var(--primary-container-high-hsl));
       outline: 2px solid hsl(var(--primary-hsl));
+      outline-offset: -3px;
     }
 
     &:checked ~ label {
@@ -101,19 +188,16 @@
   }
 
   label {
-    flex: 1;
-
     position: relative;
     overflow: hidden;
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
 
-    padding: 0.7em var(--_label-inline-pd);
+    width: 100%;
 
-    border-radius: var(--small-shape);
+    padding: 0.5em 1rem 0.5rem 3rem;
 
     transition: background-color 200ms ease;
 
@@ -144,7 +228,7 @@
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        background-color: hsl(var(--primary-container-highest-hsl)) !important;
+        background-color: hsl(var(--primary-container-highest-hsl));
       }
     }
   }

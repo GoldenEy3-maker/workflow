@@ -7,7 +7,7 @@ export const List: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
   ...props
 }) => {
-  const [context] = useTabsContext()
+  const ctx = useTabsContext()
 
   return (
     <div className={cls([className, styles.list])} {...props}>
@@ -16,8 +16,8 @@ export const List: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
         className={styles.line}
         style={
           {
-            "--offset": `${context.activeOffset}px`,
-            "--width": `${context.activeWidth}px`,
+            "--offset": `${ctx.offset}px`,
+            "--width": `${ctx.width}px`,
           } as React.CSSProperties
         }
       >
