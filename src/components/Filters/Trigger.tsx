@@ -3,9 +3,15 @@ import Button from "../Button"
 import { useFilterContext } from "./context"
 import styles from "./styles.module.scss"
 
-export const Trigger: React.FC<
-  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">
-> = ({ children, ...props }) => {
+type TriggerProps = {
+  activeCounter?: number
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">
+
+export const Trigger: React.FC<TriggerProps> = ({
+  children,
+  activeCounter,
+  ...props
+}) => {
   const ctx = useFilterContext()
 
   return (
@@ -18,9 +24,13 @@ export const Trigger: React.FC<
     >
       <MdOutlineFilterAlt fontSize="1.5em" />
       {children}
-      <span className={styles.triggerIcon}>
-        <MdKeyboardArrowDown fontSize="1.5rem" />
-      </span>
+      {activeCounter && activeCounter !== 0 ? (
+        <div className={styles.activeCounter}>{activeCounter}</div>
+      ) : (
+        <span className={styles.triggerIcon}>
+          <MdKeyboardArrowDown fontSize="1.5rem" />
+        </span>
+      )}
     </Button>
   )
 }

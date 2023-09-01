@@ -10,6 +10,21 @@
   }
 }
 
+.activeCounter {
+  width: 1.5rem;
+  height: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: hsl(var(--primary-hsl));
+  color: hsl(var(--on-primary-hsl));
+  border-radius: 50%;
+
+  font-size: var(--medium-shape);
+}
+
 .header {
   display: flex;
   align-items: center;

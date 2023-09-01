@@ -1,4 +1,5 @@
 import { Fzf } from "fzf"
+import { useMemo } from "react"
 import * as Filters from "~/components/Filters"
 import {
   type FiltersCheckboxHandler,
@@ -19,9 +20,23 @@ type FilterProps = {
 }
 
 export const Filter: React.FC<FilterProps> = (props) => {
+  const activeCounter = useMemo(() => {
+    let result = 0
+
+    for (const opt of props.options) {
+      for (const checkbox of opt.checkboxes) {
+        if (checkbox.value !== undefined) result += 1
+      }
+    }
+
+    return result
+  }, [props.options])
+
   return (
     <Filters.Root>
-      <Filters.Trigger title="Фильтровать">Фильтровать</Filters.Trigger>
+      <Filters.Trigger title="Фильтровать" activeCounter={activeCounter}>
+        Фильтровать
+      </Filters.Trigger>
       <Filters.Content resetHandler={props.resetHandler}>
         {(searchValue) => {
           return props.options.map((group, index) => {
