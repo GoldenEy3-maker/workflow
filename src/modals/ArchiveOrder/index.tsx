@@ -1,24 +1,27 @@
 import toast from "react-hot-toast"
 import Button from "~/components/Button"
 import * as Modal from "~/components/Modal"
-import { useModal } from "~/hooks/modal.hook"
-import { useArchiveOrderModalStore } from "~/store/#modals/archiveOrder"
+import { useModalStore } from "~/store/modal"
 import { api } from "~/utils/api"
+import { ModalName } from "~/utils/enums"
+
+export type ArchiveOrderModalOpts = {
+  id: string
+}
 
 type ArchiveOrderModalProps = {
   successCallback: () => void
 }
 
 const ArchiveOrderModal: React.FC<ArchiveOrderModalProps> = (props) => {
-  const [, closeModal] = useModal()
-  const archiveOrderModalStore = useArchiveOrderModalStore()
+  const modalStore = useModalStore()
 
-  const closeHandler = () => closeModal(() => archiveOrderModalStore.close())
+  const closeModal = () => modalStore.close(ModalName.ArchiveOrder)
 
   const archiveOrderMut = api.order.archive.useMutation({
     onSuccess() {
       toast.success("Заказ успешно архивирован!")
-      closeHandler()
+      closeModal()
 
       if (props.successCallback) props.successCallback()
     },
@@ -30,13 +33,13 @@ const ArchiveOrderModal: React.FC<ArchiveOrderModalProps> = (props) => {
 
   return (
     <Modal.Root
-      aria-hidden={!archiveOrderModalStore.isOpen}
-      closeHandler={closeHandler}
+      aria-hidden={!modalStore.activeModals.includes(ModalName.ArchiveOrder)}
+      closeHandler={closeModal}
     >
       <Modal.Wrapper>
         <Modal.Header>
           <Modal.Title>Архивирование заказа</Modal.Title>
-          <Modal.Close handler={closeHandler} />
+          <Modal.Close handler={closeModal} />
         </Modal.Header>
         <Modal.Content>
           Ваш заказ не удалится полностью . Он{" "}
@@ -50,7 +53,7 @@ const ArchiveOrderModal: React.FC<ArchiveOrderModalProps> = (props) => {
         <Modal.Actions>
           <Button
             variant="elevated"
-            onClick={closeHandler}
+            onClick={closeModal}
             disabled={archiveOrderMut.isLoading}
             title="Отменить"
           >
@@ -61,9 +64,13 @@ const ArchiveOrderModal: React.FC<ArchiveOrderModalProps> = (props) => {
             clrType="danger"
             isLoading={archiveOrderMut.isLoading}
             disabled={archiveOrderMut.isLoading}
-            onClick={() =>
-              archiveOrderMut.mutate({ id: archiveOrderModalStore.id })
-            }
+            onClick={() => {
+              if (modalStore.opts) {
+                archiveOrderMut.mutate({
+                  id: modalStore.opts[ModalName.ArchiveOrder]?.id,
+                })
+              }
+            }}
             title="Архивировать"
           >
             Архивировать
@@ -72,6 +79,16 @@ const ArchiveOrderModal: React.FC<ArchiveOrderModalProps> = (props) => {
       </Modal.Wrapper>
     </Modal.Root>
   )
+}
+
+export const useArchiveOrderModal = () => {
+  const modalStore = useModalStore()
+
+  return {
+    open: (opts: ArchiveOrderModalOpts) =>
+      modalStore.open(ModalName.ArchiveOrder, opts),
+    close: () => modalStore.close(ModalName.ArchiveOrder),
+  }
 }
 
 export default ArchiveOrderModal

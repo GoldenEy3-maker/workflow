@@ -11,10 +11,8 @@ import {
 import Skeleton from "react-loading-skeleton"
 import UserProfile from "~/components/UserProfile"
 import { env } from "~/env.mjs"
-import { useModal } from "~/hooks/modal.hook"
 import { useRippleEffect } from "~/hooks/rippleEffect.hook"
-import SignOutModal from "~/modals/SignOut"
-import { useSignOutModalStore } from "~/store/#modals/signOut"
+import SignOutModal, { useSignOutModal } from "~/modals/SignOut"
 import { useAuthStore } from "~/store/auth"
 import { PagePaths } from "~/utils/enums"
 import Button from "../Button"
@@ -23,10 +21,9 @@ import styles from "./styles.module.scss"
 
 const Sidebar: React.FC = () => {
   const authStore = useAuthStore()
-  const signOutModalStore = useSignOutModalStore()
+  const signOutModal = useSignOutModal()
 
   const rippleEffectEvent = useRippleEffect()
-  const [openModal] = useModal()
 
   return (
     <>
@@ -106,10 +103,7 @@ const Sidebar: React.FC = () => {
                   className={styles.userProfile}
                 />
               </div>
-              <Button
-                isIcon
-                onClick={() => openModal(() => signOutModalStore.open())}
-              >
+              <Button isIcon onClick={signOutModal.open}>
                 <MdOutlineLogout fontSize="1.5em" />
               </Button>
             </div>

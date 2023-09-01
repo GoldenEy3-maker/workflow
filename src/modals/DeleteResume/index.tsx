@@ -1,24 +1,23 @@
 import toast from "react-hot-toast"
 import Button from "~/components/Button"
 import * as Modal from "~/components/Modal"
-import { useModal } from "~/hooks/modal.hook"
-import { useDeleteResumeModalStore } from "~/store/#modals/deleteResume"
+import { useModalStore } from "~/store/modal"
 import { api } from "~/utils/api"
+import { ModalName } from "~/utils/enums"
 
 type DeleteResumeModalProps = {
   successCallback?: () => void
 }
 
 const DeleteResumeModal: React.FC<DeleteResumeModalProps> = (props) => {
-  const [, closeModal] = useModal()
-  const deleteResumeModalStore = useDeleteResumeModalStore()
+  const modalStore = useModalStore()
 
-  const closeHandler = () => closeModal(() => deleteResumeModalStore.close())
+  const closeModal = () => modalStore.close(ModalName.DeleteResume)
 
   const deleteResumeMut = api.resume.delete.useMutation({
     onSuccess() {
       toast.success("Резюме успешно удалено!")
-      closeHandler()
+      closeModal()
 
       if (props.successCallback) props.successCallback()
     },
@@ -30,13 +29,13 @@ const DeleteResumeModal: React.FC<DeleteResumeModalProps> = (props) => {
 
   return (
     <Modal.Root
-      aria-hidden={!deleteResumeModalStore.isOpen}
-      closeHandler={closeHandler}
+      aria-hidden={!modalStore.activeModals.includes(ModalName.DeleteResume)}
+      closeHandler={closeModal}
     >
       <Modal.Wrapper>
         <Modal.Header>
           <Modal.Title>Удаление резюме</Modal.Title>
-          <Modal.Close handler={closeHandler} />
+          <Modal.Close handler={closeModal} />
         </Modal.Header>
         <Modal.Content>
           После удалние резюме, вы станите невидимы для работодателей! Однако,
@@ -46,7 +45,7 @@ const DeleteResumeModal: React.FC<DeleteResumeModalProps> = (props) => {
         <Modal.Actions>
           <Button
             variant="elevated"
-            onClick={closeHandler}
+            onClick={closeModal}
             disabled={deleteResumeMut.isLoading}
           >
             Отменить
@@ -64,6 +63,15 @@ const DeleteResumeModal: React.FC<DeleteResumeModalProps> = (props) => {
       </Modal.Wrapper>
     </Modal.Root>
   )
+}
+
+export const useDeleteResumeModal = () => {
+  const modalStore = useModalStore()
+
+  return {
+    open: () => modalStore.open(ModalName.DeleteResume),
+    close: () => modalStore.close(ModalName.DeleteResume),
+  }
 }
 
 export default DeleteResumeModal

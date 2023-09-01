@@ -1,6 +1,7 @@
 import {
   MdAdd,
   MdDeleteOutline,
+  MdEdit,
   MdOutlineArchive,
   MdOutlineEdit,
 } from "react-icons/md"
@@ -12,13 +13,10 @@ import LoadingSkeletItemList from "~/components/Loading/ItemList"
 import Order from "~/components/Order"
 import Resume from "~/components/Resume"
 import * as Section from "~/components/Section"
-import { useModal } from "~/hooks/modal.hook"
 import MainLayout from "~/layouts/Main"
 import ProfileLayout from "~/layouts/Profile"
-import ArchiveOrderModal from "~/modals/ArchiveOrder"
-import DeleteResumeModal from "~/modals/DeleteResume"
-import { useArchiveOrderModalStore } from "~/store/#modals/archiveOrder"
-import { useDeleteResumeModalStore } from "~/store/#modals/deleteResume"
+import ArchiveOrderModal, { useArchiveOrderModal } from "~/modals/ArchiveOrder"
+import DeleteResumeModal, { useDeleteResumeModal } from "~/modals/DeleteResume"
 import { useAuthStore } from "~/store/auth"
 import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
@@ -26,9 +24,8 @@ import { type NextPageWithLayout } from "~/utils/types"
 
 const Profile: NextPageWithLayout = () => {
   const authStore = useAuthStore()
-  const [openModal] = useModal()
-  const deleteResumeModalStore = useDeleteResumeModalStore()
-  const deleteOrderModalStore = useArchiveOrderModalStore()
+  const archiveOrderModal = useArchiveOrderModal()
+  const deleteResumeModal = useDeleteResumeModal()
 
   const getResumeQuery = api.resume.getByUserId.useQuery(undefined, {
     enabled: authStore.user?.role === "PERFORMER",
@@ -61,7 +58,7 @@ const Profile: NextPageWithLayout = () => {
                   key={crypto.randomUUID()}
                   clrType="danger"
                   isIcon
-                  onClick={() => openModal(() => deleteResumeModalStore.open())}
+                  onClick={deleteResumeModal.open}
                   title="Удалить"
                 >
                   <MdDeleteOutline fontSize="1.5em" />
@@ -72,6 +69,7 @@ const Profile: NextPageWithLayout = () => {
                   variant="filled"
                   title="Изменит"
                 >
+                  <MdEdit fontSize="1.3rem" />
                   Изменить
                 </Link>,
               ]}
@@ -106,28 +104,28 @@ const Profile: NextPageWithLayout = () => {
                       data={data}
                       backgrounded
                       reduced
-                      footerActions={[
-                        <Button
-                          key={crypto.randomUUID()}
-                          clrType="danger"
-                          isIcon
-                          onClick={() =>
-                            openModal(() => deleteOrderModalStore.open(data.id))
-                          }
-                          title="Архивировать заказ"
-                        >
-                          <MdOutlineArchive fontSize="1.5em" />
-                        </Button>,
-                        <Link
-                          key={crypto.randomUUID()}
-                          href={PagePaths.OrderEdit + "/" + data.id}
-                          variant="filled"
-                          title="Изменить"
-                        >
-                          <MdOutlineEdit fontSize="1.3rem" />
-                          Изменить
-                        </Link>,
-                      ]}
+                      footerActions={
+                        <>
+                          <Button
+                            clrType="danger"
+                            isIcon
+                            title="Архивировать заказ"
+                            onClick={() => {
+                              archiveOrderModal.open({ id: data.id })
+                            }}
+                          >
+                            <MdOutlineArchive fontSize="1.5em" />
+                          </Button>
+                          <Link
+                            href={PagePaths.OrderEdit + "/" + data.id}
+                            variant="filled"
+                            title="Изменить"
+                          >
+                            <MdOutlineEdit fontSize="1.3rem" />
+                            Изменить
+                          </Link>
+                        </>
+                      }
                     />
                   )}
                   loading={getOrdersQuery.isLoading}

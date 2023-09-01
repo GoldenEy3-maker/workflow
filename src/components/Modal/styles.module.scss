@@ -9,9 +9,6 @@
 
   padding: var(--safe-area-pd);
 
-  opacity: 0;
-  visibility: hidden;
-
   width: 100%;
   min-height: 100%;
 
@@ -19,12 +16,12 @@
 
   transition: 200ms ease;
 
-  &[aria-hidden="false"] {
-    opacity: 1;
-    visibility: visible;
+  &[aria-hidden="true"] {
+    opacity: 0;
+    visibility: hidden;
 
     .wrapper {
-      transform: scale(1);
+      scale: 0.9;
     }
   }
 }
@@ -39,9 +36,28 @@
 
   overflow: hidden;
 
-  transform: scale(0.9);
-
   transition: 150ms ease;
+}
+
+@keyframes openRoot {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes openWrapper {
+  from {
+    scale: 0.9;
+  }
+  to {
+    scale: 1;
+  }
 }
 
 .header {

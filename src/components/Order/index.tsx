@@ -15,7 +15,7 @@ type OrderProps = {
   reduced?: boolean
   backgrounded?: boolean
   empty?: string | React.ReactNode
-  footerActions?: React.ReactNode[]
+  footerActions?: React.ReactNode
 }
 
 const Order: React.FC<OrderProps> = (props) => {
@@ -111,11 +111,9 @@ const Order: React.FC<OrderProps> = (props) => {
                     <span>22</span>
                   </div>
                 </div>
-                <div className={styles.actions}>
-                  {props.footerActions &&
-                    props.footerActions.length > 0 &&
-                    props.footerActions.map((action) => action)}
-                </div>
+                {props.footerActions ? (
+                  <div className={styles.actions}>{props.footerActions}</div>
+                ) : null}
               </footer>
             </>
           )

@@ -16,12 +16,12 @@ import * as Form from "~/components/Form"
 import Input from "~/components/Input"
 import Logo from "~/components/Logo"
 import * as Tabs from "~/components/Tabs"
-import { useModal } from "~/hooks/modal.hook"
 import AuthLayout from "~/layouts/Auth"
-import ConfirmSignUpModal from "~/modals/ConfirmSignUp"
+import ConfirmSignUpModal, {
+  useConfirmSignUpModal,
+} from "~/modals/ConfirmSignUp"
 import dateService from "~/services/date.service"
 import validationService from "~/services/validation.service"
-import { useConfirmSignUpModalStore } from "~/store/#modals/confirmSingUp"
 import { api } from "~/utils/api"
 import { PagePaths, QueryKeys } from "~/utils/enums"
 import { type NextPageWithLayout, type ValueOf } from "~/utils/types"
@@ -72,8 +72,7 @@ const useQueryToInitializeRole = (setter: UseFormSetValue<FormState>) => {
 }
 
 const SignUp: NextPageWithLayout = () => {
-  const [openModal] = useModal()
-  const confirmSignUpModalStore = useConfirmSignUpModalStore()
+  const confirmSignUpModal = useConfirmSignUpModal()
 
   const signUpMut = api.user.signUp.useMutation({
     onError(error) {
@@ -82,7 +81,7 @@ const SignUp: NextPageWithLayout = () => {
     onSuccess() {
       hookForm.reset()
 
-      openModal(confirmSignUpModalStore.open)
+      confirmSignUpModal.open()
     },
   })
 
