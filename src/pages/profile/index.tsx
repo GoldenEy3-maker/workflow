@@ -53,26 +53,26 @@ const Profile: NextPageWithLayout = () => {
               data={getResumeQuery.data}
               loading={getResumeQuery.isLoading}
               error={getResumeQuery.error?.message}
-              footerActions={[
-                <Button
-                  key={crypto.randomUUID()}
-                  clrType="danger"
-                  isIcon
-                  onClick={deleteResumeModal.open}
-                  title="Удалить"
-                >
-                  <MdDeleteOutline fontSize="1.5em" />
-                </Button>,
-                <Link
-                  key={crypto.randomUUID()}
-                  href={PagePaths.EditResume}
-                  variant="filled"
-                  title="Изменит"
-                >
-                  <MdEdit fontSize="1.3rem" />
-                  Изменить
-                </Link>,
-              ]}
+              footerActions={
+                <>
+                  <Button
+                    clrType="danger"
+                    isIcon
+                    onClick={deleteResumeModal.open}
+                    title="Удалить"
+                  >
+                    <MdDeleteOutline fontSize="1.5em" />
+                  </Button>
+                  <Link
+                    href={PagePaths.EditResume}
+                    variant="filled"
+                    title="Изменит"
+                  >
+                    <MdEdit fontSize="1.3rem" />
+                    Изменить
+                  </Link>
+                </>
+              }
             />
           )
 

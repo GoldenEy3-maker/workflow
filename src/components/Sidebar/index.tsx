@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
               </div>
               <div className={styles.navItem}>
                 <Link
-                  href="#"
+                  href={PagePaths.Favorites}
                   title="Избранное"
                   onPointerDown={rippleEffectEvent}
                 >

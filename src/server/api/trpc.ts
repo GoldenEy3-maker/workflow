@@ -67,6 +67,14 @@ const isAuthed = middleware(async (opts) => {
     where: {
       email: accessTokenPayload.email,
     },
+    include: {
+      favoriteOrders: {
+        include: {
+          order: true,
+        },
+      },
+      favoriteResumes: true,
+    },
   })
 
   if (!user) throw ApiError.Unauthorized()

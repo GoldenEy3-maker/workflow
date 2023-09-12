@@ -52,7 +52,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading || isSubmitDisabled ? (
           <span className={styles.loader}>
-            <MdSync fontSize="1.5em" />
+            <MdSync fontSize="1.3rem" />
           </span>
         ) : null}
         {(isLoading && isIcon) || (isSubmitDisabled && isIcon)

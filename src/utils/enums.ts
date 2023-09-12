@@ -10,7 +10,7 @@ export const PagePaths = {
   Orders: "/orders",
   OrderCreate: "/profile/order/create",
   OrderEdit: "/profile/order/edit",
-  Favorite: "/favorites",
+  Favorites: "/favorites",
   ActivateUser: "/activate",
 } as const
 

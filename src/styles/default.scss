@@ -13,6 +13,7 @@
 
 html {
   color-scheme: dark;
+  scrollbar-gutter: stable;
 }
 
 html,
@@ -33,7 +34,6 @@ body {
 
   &[data-lock="true"] {
     overflow: hidden;
-    padding-right: var(--scrollbar-width);
   }
 }
 

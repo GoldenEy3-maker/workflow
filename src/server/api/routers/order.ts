@@ -34,6 +34,7 @@ export const orderRouter = createTRPCRouter({
       },
       include: {
         skills: true,
+        favoritedBy: true,
       },
       orderBy: {
         updatedAt: "desc",

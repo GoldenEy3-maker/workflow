@@ -1,9 +1,14 @@
 import { Order } from "@prisma/client"
 import dayjs from "dayjs"
 import Link from "next/link"
+import { useState } from "react"
+import toast from "react-hot-toast"
 import { BsShieldCheck, BsShieldExclamation } from "react-icons/bs"
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md"
+import { api } from "~/utils/api"
 import { PagePaths } from "~/utils/enums"
 import { cls } from "~/utils/helpers"
+import Button from "../Button"
 import LoadingSkeletItemList from "../Loading/ItemList"
 import SlateEditor from "../Slate"
 import styles from "./styles.module.scss"
@@ -19,6 +24,35 @@ type OrderProps = {
 }
 
 const Order: React.FC<OrderProps> = (props) => {
+  const getCurretUserQuery = api.user.getCurrent.useQuery()
+
+  const [isFavorite, setIsFavorite] = useState(() => {
+    if (!getCurretUserQuery.data) return false
+
+    return (
+      getCurretUserQuery.data.favoriteOrders.filter(
+        (favorite) => favorite.orderId === props.data?.id
+      ).length !== 0
+    )
+  })
+
+  const toggleFavoriteOrder = api.user.toggleFavoriteOrder.useMutation({
+    onSuccess(result) {
+      toast.success(
+        result.process === "favorite"
+          ? "Заказ успешно добавлен в избранное!"
+          : "Заказ успешно удален из избранного!"
+      )
+      void getCurretUserQuery.refetch()
+    },
+    onError(error) {
+      console.log("🚀 ~ file: index.tsx:43 ~ onError ~ error:", error)
+      toast.error("Произошла неожиданная ошибка!")
+      setIsFavorite(false)
+      void getCurretUserQuery.refetch()
+    },
+  })
+
   const renderClicks = (value: number) => {
     let suffix = "откликов"
 
@@ -111,9 +145,26 @@ const Order: React.FC<OrderProps> = (props) => {
                     <span>22</span>
                   </div>
                 </div>
-                {props.footerActions ? (
-                  <div className={styles.actions}>{props.footerActions}</div>
-                ) : null}
+                <div className={styles.actions}>
+                  {
+                    <Button
+                      isIcon
+                      type="button"
+                      disabled={toggleFavoriteOrder.isLoading}
+                      onClick={() => {
+                        setIsFavorite((state) => !state)
+                        toggleFavoriteOrder.mutate({ id: props.data!.id })
+                      }}
+                    >
+                      {isFavorite ? (
+                        <MdFavorite fontSize="1.5rem" />
+                      ) : (
+                        <MdFavoriteBorder fontSize="1.5rem" />
+                      )}
+                    </Button>
+                  }
+                  {props.footerActions}
+                </div>
               </footer>
             </>
           )

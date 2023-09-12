@@ -24,8 +24,8 @@ type ResumeProps = {
   error?: string | undefined
   reduced?: boolean
   backgrounded?: boolean
-  headerActions?: React.ReactNode[]
-  footerActions?: React.ReactNode[]
+  headerActions?: React.ReactNode
+  footerActions?: React.ReactNode
   userProfile?: { name: string; image: string }
 }
 
@@ -53,7 +53,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
                 </p>
                 {props.headerActions ? (
                   <div className={styles.headerActions}>
-                    {props.headerActions.map((action) => action)}
+                    {props.headerActions}
                   </div>
                 ) : null}
                 {props.userProfile ? (
@@ -83,7 +83,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
                 </div>
                 {props.footerActions ? (
                   <div className={styles.footerActions}>
-                    {props.footerActions.map((action) => action)}
+                    {props.footerActions}
                   </div>
                 ) : null}
               </footer>

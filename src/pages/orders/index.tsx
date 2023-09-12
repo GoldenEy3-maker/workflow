@@ -36,6 +36,8 @@ const Orders: NextPageWithLayout = () => {
     refetchOnWindowFocus: false,
   })
 
+  const getCurrentUserQuery = api.user.getCurrent.useQuery()
+
   const fzf = useMemo(
     () =>
       getOrdersQuery.data &&
@@ -172,15 +174,10 @@ const Orders: NextPageWithLayout = () => {
                   ? b.updatedAt.getTime() - a.updatedAt.getTime()
                   : a.updatedAt.getTime() - b.updatedAt.getTime()
               })}
-            loading={getOrdersQuery.isLoading}
+            loading={getOrdersQuery.isLoading || getCurrentUserQuery.isLoading}
             error={getOrdersQuery.error?.message}
             render={(data) => (
-              <Order
-                key={crypto.randomUUID()}
-                data={data}
-                backgrounded
-                reduced
-              />
+              <Order key={data.id} data={data} backgrounded reduced />
             )}
             empty={
               <Order

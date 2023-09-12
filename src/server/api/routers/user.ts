@@ -19,6 +19,38 @@ export const userRouter = createTRPCRouter({
   getCurrent: authedProcedure.query((opts) => {
     return { ...opts.ctx.user }
   }),
+  toggleFavoriteOrder: authedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      const alreadyFavoritedOrder = opts.ctx.user.favoriteOrders.filter(
+        (favorite) => favorite.orderId === opts.input.id
+      )[0]
+
+      if (alreadyFavoritedOrder) {
+        const unfavoritedOrder = await opts.ctx.prisma.favoriteOrder.delete({
+          where: {
+            id: alreadyFavoritedOrder.id,
+          },
+        })
+
+        return {
+          process: "unfavorite" as const,
+          data: unfavoritedOrder,
+        }
+      }
+
+      const favoritedOrder = await opts.ctx.prisma.favoriteOrder.create({
+        data: {
+          orderId: opts.input.id,
+          userId: opts.ctx.user.id,
+        },
+      })
+
+      return {
+        process: "favorite" as const,
+        data: favoritedOrder,
+      }
+    }),
   uploadAvatar: authedProcedure
     .input(
       z.object({
